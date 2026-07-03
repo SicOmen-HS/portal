@@ -1,0 +1,23 @@
+[
+  {
+    "id": "monitoring-sales-load-alarm-demo",
+    "name": "Exempellarm för laddning – Försäljning",
+    "description": "Larmar om den dagliga laddningen till Demo Information Mart – Försäljning uteblir eller misslyckas.",
+    "relatedInformationMartId": "mart-sales-demo",
+    "relatedBusinessApplicationId": "bi-app-sales-dashboard-demo",
+    "triggerCondition": "Utebliven laddning inom 2 timmar efter schemalagd tid (exempel).",
+    "notificationChannelKey": "TEAM_CHANNEL_BI",
+    "ownerTeamId": "team-bi-visualisering",
+    "active": true
+  },
+  {
+    "id": "monitoring-customer-load-alarm-demo",
+    "name": "Exempellarm för laddning – Kund",
+    "description": "Larmar vid fel i laddningen av Demo Information Mart – Kund.",
+    "relatedInformationMartId": "mart-customer-demo",
+    "triggerCondition": "Felstatus i laddningsjobb (exempel).",
+    "notificationChannelKey": "TEAM_CHANNEL_DATA_PLATFORM",
+    "ownerTeamId": "team-data-platform",
+    "active": true
+  }
+]

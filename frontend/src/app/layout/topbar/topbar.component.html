@@ -1,0 +1,18 @@
+<button
+  type="button"
+  class="topbar-menu-btn"
+  aria-label="Öppna navigationsmeny"
+  (click)="menuToggle.emit()"
+>
+  <i class="bi bi-list" aria-hidden="true"></i>
+</button>
+
+<span class="topbar-brand">Data- och analysportalen</span>
+
+<div class="topbar-search">
+  <app-search-box
+    placeholder="Sök tjänster, guider, system..."
+    ariaLabel="Sök i portalen"
+    (searchSubmit)="onSearch($event)"
+  />
+</div>

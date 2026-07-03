@@ -1,0 +1,118 @@
+@if (orderType(); as order) {
+  <nav class="breadcrumb-nav" aria-label="Brödsmulor">
+    <a routerLink="/bestall">Beställ & få tillgång</a>
+    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+    <span>{{ order.name }}</span>
+  </nav>
+
+  <header class="order-detail-header">
+    <p class="app-card-eyebrow">{{ order.category }}</p>
+    <h1>{{ order.name }}</h1>
+    <p class="order-detail-lead">{{ order.description }}</p>
+    <div class="order-detail-meta">
+      <span class="order-card-chip"><i class="bi bi-gear" aria-hidden="true"></i> {{ fulfillmentLabels[order.fulfillmentMode] }}</span>
+      <span class="order-card-chip">
+        <i class="bi {{ order.requiresApproval ? 'bi-person-check' : 'bi-lightning' }}" aria-hidden="true"></i>
+        {{ order.requiresApproval ? 'Kräver godkännande' : 'Kräver inte godkännande' }}
+      </span>
+      @if (relatedService$ | async; as service) {
+        <a class="order-card-chip" [routerLink]="['/tjanster', service.id]">
+          <i class="bi bi-link-45deg" aria-hidden="true"></i> Kopplad tjänst: {{ service.name }}
+        </a>
+      }
+    </div>
+  </header>
+
+  <div class="row g-5">
+    <div class="col-12 col-lg-7">
+      <section class="section">
+        <h2 class="section-title">Steg i beställningen</h2>
+        <ol class="step-timeline">
+          @for (step of order.steps; track step.id) {
+            <li>
+              <div class="step-marker" [class.internal]="!step.userVisible">{{ step.stepOrder }}</div>
+              <div class="step-content">
+                <p class="step-name">
+                  {{ step.name }}
+                  @if (!step.userVisible) {
+                    <span class="step-internal-tag">Internt steg</span>
+                  }
+                </p>
+                <p class="step-description">{{ step.description }}</p>
+                <span class="order-card-chip">{{ stepModeLabels[step.executionMode] }}</span>
+              </div>
+            </li>
+          }
+        </ol>
+      </section>
+
+      @if (order.dependencies.length > 0) {
+        <section class="section">
+          <h2 class="section-title">Beroenden</h2>
+          <div class="row g-3">
+            @for (dependency of order.dependencies; track dependency.id) {
+              <div class="col-12">
+                <div class="dependency-item" [class.optional]="!dependency.mandatory">
+                  <i class="bi {{ dependency.mandatory ? 'bi-exclamation-diamond-fill' : 'bi-info-circle' }}" aria-hidden="true"></i>
+                  <div>
+                    <p class="dependency-title">
+                      {{ dependency.name }}
+                      <span class="order-card-chip">{{ dependency.mandatory ? 'Obligatoriskt' : 'Valfritt' }}</span>
+                    </p>
+                    <p class="dependency-description">{{ dependency.description }}</p>
+                    <p class="dependency-impact">Om beroendet saknas: {{ dependency.impactIfMissing }}</p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <aside class="service-detail-sidebar">
+        @if (order.prerequisites.length > 0) {
+          <section>
+            <h2 class="section-title-sm">Förutsättningar</h2>
+            <ul class="plain-list">
+              @for (prerequisite of order.prerequisites; track prerequisite) {
+                <li><i class="bi bi-check2" aria-hidden="true"></i> {{ prerequisite }}</li>
+              }
+            </ul>
+          </section>
+        }
+
+        @if (orderFlow$ | async; as flow) {
+          <section>
+            <h2 class="section-title-sm">Hantering</h2>
+            <p>{{ flow.handlingInfo ?? 'Handläggs enligt standardflöde.' }}</p>
+            <p class="text-muted-custom small-note">
+              Beställningsformulär: <code>&lt;{{ flow.linkKey }}&gt;</code> (platshållare i denna mockup)
+            </p>
+          </section>
+        }
+
+        @if (order.documentationUrl) {
+          <section>
+            <h2 class="section-title-sm">Dokumentation</h2>
+            <a [href]="order.documentationUrl" target="_blank" rel="noopener">
+              Öppna dokumentation <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </section>
+        }
+
+        <section>
+          <h2 class="section-title-sm">Målgrupp</h2>
+          <p>{{ order.targetAudience.join(', ') }}</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+} @else {
+  <app-empty-state
+    icon="bi-question-circle"
+    title="Beställningen kunde inte hittas"
+    description="Den efterfrågade beställningen finns inte i denna mockup."
+  />
+}

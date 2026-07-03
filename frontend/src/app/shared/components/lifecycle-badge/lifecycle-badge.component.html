@@ -1,0 +1,9 @@
+<span class="lifecycle-badge" [class]="'tone-' + tone()">
+  <i class="bi" [ngClass]="{
+    'bi-check-circle-fill': tone() === 'success',
+    'bi-info-circle-fill': tone() === 'info',
+    'bi-exclamation-triangle-fill': tone() === 'warning',
+    'bi-dash-circle': tone() === 'neutral'
+  }" aria-hidden="true"></i>
+  <span>{{ label() }}</span>
+</span>

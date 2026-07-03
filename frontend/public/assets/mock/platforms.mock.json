@@ -1,0 +1,62 @@
+[
+  {
+    "id": "platform-data",
+    "name": "Dataplattform",
+    "description": "Samlar in, lagrar, bearbetar och tillgängliggör data för verksamheten.",
+    "businessArea": "Data",
+    "ownerTeamId": "team-data-platform",
+    "contactPointId": "contact-data-platform-support",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "platform-bi",
+    "name": "BI-plattform",
+    "description": "Stödjer analys, visualisering och rapportering av verksamhetsdata.",
+    "businessArea": "Business Intelligence",
+    "ownerTeamId": "team-bi-visualisering",
+    "contactPointId": "contact-bi-support",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "platform-ai",
+    "name": "AI-plattform",
+    "description": "Erbjuder utvecklingsytor, verktyg och stöd för AI och Machine Learning.",
+    "businessArea": "AI och Machine Learning",
+    "ownerTeamId": "team-ai-platform",
+    "contactPointId": "contact-ai-advisory",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "platform-automation",
+    "name": "Automationsplattform",
+    "description": "Stödjer processautomation, formulärlösningar och självbetjäning.",
+    "businessArea": "Automation",
+    "ownerTeamId": "team-automation",
+    "contactPointId": "contact-automation-support",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "platform-metadata",
+    "name": "Metadata- och datakatalogplattform",
+    "description": "Hjälper användare att hitta, förstå och lita på tillgängliga datamängder.",
+    "businessArea": "Metadata",
+    "ownerTeamId": "team-data-platform",
+    "contactPointId": "contact-data-platform-support",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "platform-genai",
+    "name": "Generativ AI-plattform",
+    "description": "Verksamhetsnära AI-stöd via Generativ AI Chattportal, baserat på interna informationskällor.",
+    "businessArea": "Generativ AI",
+    "ownerTeamId": "team-ai-platform",
+    "contactPointId": "contact-ai-advisory",
+    "lifecycleStatus": "under-introduction",
+    "visibility": "all-users"
+  }
+]

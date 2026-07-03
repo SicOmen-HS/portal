@@ -1,0 +1,25 @@
+<article class="app-card dataset-card">
+  <div class="app-card-icon">
+    <i class="bi bi-database" aria-hidden="true"></i>
+  </div>
+  <div class="app-card-body">
+    <p class="app-card-eyebrow">{{ dataset().dataDomain }}</p>
+    <h3 class="app-card-title">{{ dataset().name }}</h3>
+    <p class="app-card-description">{{ dataset().description }}</p>
+    <dl class="dataset-card-meta">
+      <div>
+        <dt>Ägare</dt>
+        <dd>{{ dataset().owner }}</dd>
+      </div>
+      <div>
+        <dt>Klassning</dt>
+        <dd>{{ classificationLabels[dataset().classification] }}</dd>
+      </div>
+      <div>
+        <dt>Uppdateras</dt>
+        <dd>{{ dataset().updateFrequency }}</dd>
+      </div>
+    </dl>
+    <app-lifecycle-badge [status]="dataset().lifecycleStatus" />
+  </div>
+</article>

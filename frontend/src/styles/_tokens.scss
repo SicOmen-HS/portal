@@ -1,0 +1,64 @@
+// Design tokens för Data- och analysportalen.
+// Källa: docs/12_Designsystem_och_UI.md
+
+:root {
+  // Röd accentfärg (används sparsamt, enligt designdokumentet)
+  --color-brand-red: #D70000;
+  --color-brand-red-strong: #FF0000;
+  --color-brand-red-hover: #AF0000;
+  --color-brand-red-dark: #870000;
+  --color-brand-red-deep: #5F0000;
+
+  // Gråskala – bär huvuddelen av gränssnittet
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #EBEBEB;
+  --color-gray-300: #D2D2D2;
+  --color-gray-400: #A0A0A0;
+  --color-gray-500: #787878;
+  --color-gray-600: #505050;
+  --color-gray-900: #1F1F1F;
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  // Kompletterande, funktionella färger
+  --color-status-success: #005F37;
+  --color-status-success-bg: #E4F1EC;
+  --color-status-info: #00375F;
+  --color-status-info-bg: #E4ECF2;
+  --color-status-warning: #FF5F00;
+  --color-status-warning-bg: #FFEEE4;
+  --color-status-highlight: #FFD700;
+  --color-status-neutral: #787878;
+  --color-status-neutral-bg: #EBEBEB;
+
+  // Typografi
+  --font-family-base: "Open Sans", Arial, sans-serif;
+
+  // Spacing-skala
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  // Layout
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  --sidenav-width: 264px;
+  --topbar-height: 64px;
+
+  // Bootstrap-anpassning till varumärkesprofilen
+  --bs-primary: var(--color-brand-red);
+  --bs-primary-rgb: 215, 0, 0;
+  --bs-link-color: var(--color-brand-red);
+  --bs-link-hover-color: var(--color-brand-red-hover);
+  --bs-body-font-family: var(--font-family-base);
+  --bs-body-color: var(--color-gray-900);
+  --bs-border-color: var(--color-gray-300);
+}

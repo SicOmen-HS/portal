@@ -1,0 +1,33 @@
+# Se docs/05_Konfiguration.md för fullständiga principer.
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+
+# Lokal, ej versionshanterad konfiguration
+**/appsettings.Local.json
+**/appsettings.Development.json
+**/appsettings.Production.json
+**/environment.ts
+**/environment.local.ts
+**/runtime-config.local.json
+**/secrets.json
+.env
+.env.*
+
+# Certifikat och nycklar
+*.pfx
+*.pem
+*.key
+*.crt
+*.cer
+
+# IDE / systemfiler
+.vscode/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db

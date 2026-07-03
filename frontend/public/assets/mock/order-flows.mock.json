@@ -1,0 +1,88 @@
+[
+  {
+    "id": "orderflow-new-dataset",
+    "name": "Beställningsflöde för ny datamängd",
+    "description": "Flöde för att beställa att en ny datamängd görs tillgänglig i dataplattformen.",
+    "ownerTeamId": "team-data-platform",
+    "targetAudience": ["Analytiker", "Data engineers"],
+    "linkKey": "ORDER_FORM_NEW_DATASET",
+    "handlingInfo": "Handläggs av dataplattformsteamet (exempel).",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "orderflow-change-dataset",
+    "name": "Beställningsflöde för förändring av datamängd",
+    "description": "Flöde för att beställa ändring av en befintlig datamängd.",
+    "ownerTeamId": "team-data-platform",
+    "targetAudience": ["Analytiker", "Data engineers"],
+    "linkKey": "ORDER_FORM_CHANGE_DATASET",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "orderflow-new-bi-app",
+    "name": "Beställningsflöde för ny BI-tillämpning",
+    "description": "Flöde som samordnar accessgrupp, Information Mart-koppling och utveckling av en ny BI-tillämpning.",
+    "relatedServiceId": "service-order-dashboard",
+    "ownerTeamId": "team-bi-visualisering",
+    "targetAudience": ["Verksamhetsanvändare", "Analytiker", "Beställare"],
+    "linkKey": "ORDER_FORM_NEW_BI_APP",
+    "handlingInfo": "Handläggs av BI-teamet i samverkan med dataplattformsteamet (exempel).",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "orderflow-access-group",
+    "name": "Beställningsflöde för behörighet/accessgrupp",
+    "description": "Flöde för att beställa ny eller ändrad accessgrupp.",
+    "ownerTeamId": "team-data-platform",
+    "targetAudience": ["Alla användare"],
+    "linkKey": "ORDER_FORM_ACCESS_GROUP",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "orderflow-alarm",
+    "name": "Beställningsflöde för larm",
+    "description": "Flöde för att beställa ett larm kopplat till en Information Mart eller BI-tillämpning.",
+    "ownerTeamId": "team-data-platform",
+    "targetAudience": ["Analytiker", "Förvaltare"],
+    "linkKey": "ORDER_FORM_ALARM",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "orderflow-devspace",
+    "name": "Beställningsflöde för utvecklingsyta",
+    "description": "Flöde för att beställa en paketerad devspace-miljö.",
+    "relatedServiceId": "service-order-devspace",
+    "ownerTeamId": "team-ai-platform",
+    "targetAudience": ["Data scientists"],
+    "linkKey": "ORDER_FORM_DEVSPACE",
+    "lifecycleStatus": "active",
+    "visibility": "data-scientists"
+  },
+  {
+    "id": "orderflow-ai-ml-yta",
+    "name": "Beställningsflöde för AI- eller ML-yta",
+    "description": "Flöde för att beställa en yta för AI- och ML-experiment.",
+    "relatedServiceId": "service-order-ai-ml-yta",
+    "ownerTeamId": "team-ai-platform",
+    "targetAudience": ["Data scientists", "Utvecklare"],
+    "linkKey": "ORDER_FORM_AI_ML",
+    "lifecycleStatus": "active",
+    "visibility": "data-scientists"
+  },
+  {
+    "id": "orderflow-nintex-k2",
+    "name": "Beställningsflöde för K2- eller Nintex-yta",
+    "description": "Flöde för att beställa en självbetjäningsyta för formulär och workflow.",
+    "relatedServiceId": "service-order-nintex-k2",
+    "ownerTeamId": "team-nintex-k2",
+    "targetAudience": ["Verksamhetsanvändare", "Utvecklare"],
+    "linkKey": "ORDER_FORM_NINTEX_K2",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  }
+]

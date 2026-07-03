@@ -1,0 +1,89 @@
+<section class="hero">
+  <h1>Data, analys och AI för bättre beslut</h1>
+  <p>
+    Hitta tillförlitlig data, tjänster, guider och system som skapar nytta i din vardag –
+    utan att behöva känna till organisationen bakom.
+  </p>
+  <app-search-box
+    placeholder="Sök data, tjänster, guider och system..."
+    ariaLabel="Sök i portalen"
+    (searchSubmit)="onSearch($event)"
+  />
+</section>
+
+<section class="section">
+  <h2 class="section-title">Genvägar</h2>
+  <div class="row g-4">
+    @for (shortcut of shortcuts; track shortcut.title) {
+      <div class="col-12 col-sm-6 col-lg-3">
+        <a class="shortcut-tile" [routerLink]="shortcut.routerLink">
+          <i class="bi {{ shortcut.icon }}" aria-hidden="true"></i>
+          <h3>{{ shortcut.title }}</h3>
+          <p>{{ shortcut.description }}</p>
+          <span class="shortcut-tile-arrow"><i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+        </a>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-heading-row">
+    <h2 class="section-title">Prioriterade tjänster</h2>
+    <a routerLink="/tjanster">Visa alla tjänster <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+  </div>
+  <div class="row g-4">
+    @for (service of (featuredServices$ | async); track service.id) {
+      <div class="col-12 col-sm-6 col-lg-3">
+        <app-service-card [service]="service" />
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-heading-row">
+    <h2 class="section-title">Beställ & självbetjäning</h2>
+    <a routerLink="/bestall">Visa alla beställningar <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+  </div>
+  <div class="row g-4">
+    @for (order of (highlightedOrders$ | async); track order.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-order-card [orderType]="order" />
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <div class="row g-4">
+    <div class="col-12 col-md-4">
+      @if (status$ | async; as status) {
+        <a class="mini-panel" routerLink="/status">
+          <app-status-badge
+            [tone]="status.overall.operational ? 'success' : 'danger'"
+            [label]="status.overall.headline"
+          />
+          <p>{{ status.overall.description }}</p>
+          <span class="mini-panel-link">Visa fullständig status <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+        </a>
+      }
+    </div>
+    <div class="col-12 col-md-4">
+      <a class="mini-panel" routerLink="/guider">
+        <i class="bi bi-book mini-panel-icon" aria-hidden="true"></i>
+        <h3>Kunskap & styrning</h3>
+        <p>Guider, riktlinjer och informationsmodell.</p>
+        <span class="mini-panel-link">Till guider <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+      </a>
+    </div>
+    <div class="col-12 col-md-4">
+      <a class="mini-panel" routerLink="/kontakt">
+        <i class="bi bi-headset mini-panel-icon" aria-hidden="true"></i>
+        <h3>Support</h3>
+        <p>Hjälp och support för dina frågor och ärenden.</p>
+        <span class="mini-panel-link">Till supportportalen <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+      </a>
+    </div>
+  </div>
+</section>

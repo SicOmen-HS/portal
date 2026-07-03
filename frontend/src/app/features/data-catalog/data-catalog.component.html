@@ -1,0 +1,77 @@
+<app-page-header
+  title="Data & katalog"
+  description="Utforska exempel på datamängder och Information Marts. Ägare, förvaltare och klassning är fiktiva exempelvärden."
+/>
+
+<div class="filter-bar">
+  <app-search-box
+    placeholder="Sök på namn eller beskrivning..."
+    ariaLabel="Sök datamängder"
+    (queryChange)="onSearchChange($event)"
+  />
+  <select class="form-select" aria-label="Filtrera på datadomän" (change)="onDomainChange($any($event.target).value)">
+    <option value="">Alla domäner</option>
+    @for (domain of domains(); track domain) {
+      <option [value]="domain">{{ domain }}</option>
+    }
+  </select>
+  <select class="form-select" aria-label="Filtrera på klassning" (change)="onClassificationChange($any($event.target).value)">
+    <option value="">Alla klassningar</option>
+    @for (entry of classificationLabels | keyvalue; track entry.key) {
+      <option [value]="entry.key">{{ entry.value }}</option>
+    }
+  </select>
+</div>
+
+<section class="section">
+  <h2 class="section-title">Datamängder</h2>
+  @if (filteredDatasets().length > 0) {
+    <div class="row g-4">
+      @for (dataset of filteredDatasets(); track dataset.id) {
+        <div class="col-12 col-sm-6 col-lg-4">
+          <app-dataset-card [dataset]="dataset" />
+        </div>
+      }
+    </div>
+  } @else {
+    <app-empty-state icon="bi-search" title="Inga datamängder matchade din sökning" />
+  }
+</section>
+
+<section class="section">
+  <h2 class="section-title">Information Marts</h2>
+  <div class="row g-4">
+    @for (mart of informationMarts(); track mart.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <article class="app-card">
+          <div class="app-card-icon"><i class="bi bi-layers" aria-hidden="true"></i></div>
+          <div class="app-card-body">
+            <p class="app-card-eyebrow">{{ mart.dataDomain }}</p>
+            <h3 class="app-card-title">{{ mart.name }}</h3>
+            <p class="app-card-description">{{ mart.description }}</p>
+            <p class="text-muted-custom small-note">Ägare: {{ mart.owner }}</p>
+            <app-lifecycle-badge [status]="mart.lifecycleStatus" />
+          </div>
+        </article>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">BI-tillämpningar</h2>
+  <div class="row g-4">
+    @for (app of businessApplications(); track app.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <article class="app-card">
+          <div class="app-card-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></div>
+          <div class="app-card-body">
+            <h3 class="app-card-title">{{ app.name }}</h3>
+            <p class="app-card-description">{{ app.description }}</p>
+            <app-lifecycle-badge [status]="app.lifecycleStatus" />
+          </div>
+        </article>
+      </div>
+    }
+  </div>
+</section>

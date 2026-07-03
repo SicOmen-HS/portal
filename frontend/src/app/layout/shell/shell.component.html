@@ -1,0 +1,19 @@
+<a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
+
+<div class="shell">
+  <div class="shell-sidenav" [class.open]="mobileNavOpen()">
+    <app-sidenav (linkActivated)="closeMobileNav()" />
+  </div>
+
+  @if (mobileNavOpen()) {
+    <div class="shell-backdrop" (click)="closeMobileNav()"></div>
+  }
+
+  <div class="shell-content">
+    <app-topbar (menuToggle)="toggleMobileNav()" />
+    <main id="main-content" class="page-container">
+      <router-outlet></router-outlet>
+    </main>
+    <app-footer />
+  </div>
+</div>

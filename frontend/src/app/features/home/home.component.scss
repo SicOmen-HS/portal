@@ -1,0 +1,121 @@
+.hero {
+  padding: var(--space-7) var(--space-6);
+  margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) var(--space-7);
+  background: linear-gradient(180deg, var(--color-gray-100) 0%, var(--color-white) 100%);
+  border-bottom: 1px solid var(--color-gray-200);
+
+  h1 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    max-width: 40rem;
+    margin-bottom: var(--space-3);
+  }
+
+  p {
+    max-width: 36rem;
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-5);
+  }
+
+  @media (max-width: 768px) {
+    margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) var(--space-6);
+    padding: var(--space-6) var(--space-4);
+  }
+}
+
+.section-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+
+  .section-title {
+    margin-bottom: 0;
+  }
+
+  a {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+.shortcut-tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  color: var(--color-gray-900);
+  position: relative;
+
+  &:hover {
+    text-decoration: none;
+    border-color: var(--color-brand-red);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  i {
+    color: var(--color-brand-red);
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+  }
+}
+
+.shortcut-tile-arrow {
+  margin-top: auto;
+  color: var(--color-brand-red);
+}
+
+.mini-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  height: 100%;
+  padding: var(--space-5);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  color: var(--color-gray-900);
+
+  &:hover {
+    text-decoration: none;
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-gray-600);
+    font-size: 0.9rem;
+  }
+}
+
+.mini-panel-icon {
+  font-size: 1.3rem;
+  color: var(--color-brand-red);
+}
+
+.mini-panel-link {
+  margin-top: auto;
+  font-weight: 600;
+  color: var(--color-brand-red);
+  font-size: 0.9rem;
+}

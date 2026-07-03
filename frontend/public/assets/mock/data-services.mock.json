@@ -1,0 +1,41 @@
+[
+  {
+    "id": "dataservice-consume-data-platform",
+    "name": "Konsumera data från dataplattformen",
+    "description": "Åtkomstväg för att läsa och kombinera datamängder från dataplattformen via frågemotor.",
+    "targetAudience": ["Analytiker", "Data engineers", "Data scientists"],
+    "relatedDatasetIds": ["dataset-sales-transactions-demo", "dataset-customer-interactions-demo"],
+    "relatedPlatformCapabilityIds": ["platform-data"],
+    "technicalComponentIds": ["component-trino", "component-lakekeeper"],
+    "orderTypeId": "order-type-access-group",
+    "contactPointId": "contact-data-platform-support",
+    "accessRequirements": "Kräver godkänd accessgrupp för respektive datamängd.",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "dataservice-use-trino",
+    "name": "Använd data via Trino",
+    "description": "Teknisk åtkomstväg för att köra frågor direkt mot dataplattformens frågemotor.",
+    "targetAudience": ["Data engineers", "Utvecklare"],
+    "relatedDatasetIds": ["dataset-sensor-readings-demo"],
+    "relatedPlatformCapabilityIds": ["platform-data"],
+    "technicalComponentIds": ["component-trino", "component-dell-objectscale"],
+    "contactPointId": "contact-data-platform-support",
+    "accessRequirements": "Kräver teknisk åtkomst och godkänd accessgrupp.",
+    "lifecycleStatus": "active",
+    "visibility": "developers"
+  },
+  {
+    "id": "dataservice-metadata-search",
+    "name": "Hitta metadata i OpenMetadata",
+    "description": "Sök och utforska metadata för datamängder, ägare och klassning.",
+    "targetAudience": ["Alla användare"],
+    "relatedDatasetIds": ["dataset-reference-geography-demo"],
+    "relatedPlatformCapabilityIds": ["platform-metadata"],
+    "technicalComponentIds": [],
+    "contactPointId": "contact-data-platform-support",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  }
+]

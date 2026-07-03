@@ -1,0 +1,14 @@
+<article class="app-card service-card">
+  <div class="app-card-icon">
+    <i class="bi {{ icon() }}" aria-hidden="true"></i>
+  </div>
+  <div class="app-card-body">
+    <p class="app-card-eyebrow">{{ service().category }}</p>
+    <h3 class="app-card-title">{{ service().name }}</h3>
+    <p class="app-card-description">{{ service().shortDescription }}</p>
+    <app-lifecycle-badge [status]="service().lifecycleStatus" />
+  </div>
+  <a class="app-card-link stretched-link" [routerLink]="['/tjanster', service().id]">
+    Läs mer <i class="bi bi-arrow-right" aria-hidden="true"></i>
+  </a>
+</article>

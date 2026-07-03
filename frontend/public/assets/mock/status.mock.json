@@ -1,0 +1,61 @@
+{
+  "overall": {
+    "operational": true,
+    "headline": "Alla tjänster fungerar normalt",
+    "description": "Ingen pågående incident är registrerad i denna mockup. Nedan visas exempel på planerat underhåll och tidigare händelser.",
+    "lastUpdated": "2026-07-04T07:30:00+02:00"
+  },
+  "items": [
+    {
+      "id": "status-planned-maintenance-data-platform",
+      "title": "Planerat underhåll av dataplattformen",
+      "description": "Exempel på planerat underhållsfönster för uppgradering av frågemotorn. Kortare avbrott i vissa datatjänster kan förekomma.",
+      "statusType": "maintenance",
+      "severity": "low",
+      "startTime": "2026-07-10T20:00:00+02:00",
+      "endTime": "2026-07-10T23:00:00+02:00",
+      "impact": "Vissa datatjänster kan vara tillfälligt otillgängliga under fönstret.",
+      "relatedSystemIds": ["system-openmetadata"],
+      "ownerTeamId": "team-data-platform",
+      "lastUpdated": "2026-07-03T10:00:00+02:00"
+    },
+    {
+      "id": "status-informational-genai-rollout",
+      "title": "Utökad kapacitet i Generativ AI Chattportal",
+      "description": "Exempel på informationsmeddelande om planerad kapacitetsutökning i chattportalen.",
+      "statusType": "informational",
+      "severity": "low",
+      "startTime": "2026-07-08T00:00:00+02:00",
+      "impact": "Ingen förväntad påverkan på användare.",
+      "relatedSystemIds": ["system-genai-chatportal"],
+      "ownerTeamId": "team-ai-platform",
+      "lastUpdated": "2026-07-01T09:15:00+02:00"
+    },
+    {
+      "id": "status-resolved-qlik-incident",
+      "title": "Tidigare driftstörning i Qlik Sense (löst)",
+      "description": "Exempel på en tidigare, nu löst incident där vissa dashboards var tillfälligt otillgängliga.",
+      "statusType": "resolved",
+      "severity": "medium",
+      "startTime": "2026-06-18T13:10:00+02:00",
+      "endTime": "2026-06-18T14:05:00+02:00",
+      "impact": "Ett fåtal dashboards svarade långsamt eller inte alls under cirka 55 minuter.",
+      "relatedSystemIds": ["system-qlik-sense"],
+      "relatedServiceIds": ["service-order-dashboard"],
+      "ownerTeamId": "team-bi-visualisering",
+      "lastUpdated": "2026-06-18T14:20:00+02:00"
+    },
+    {
+      "id": "status-informational-powerbi-retiring",
+      "title": "Power BI och QlikView fasas successivt ut",
+      "description": "Exempel på informationsmeddelande om att äldre BI-verktyg är under avveckling till förmån för Qlik Sense.",
+      "statusType": "informational",
+      "severity": "low",
+      "startTime": "2026-05-01T00:00:00+02:00",
+      "impact": "Nya BI-tillämpningar bör byggas i Qlik Sense.",
+      "relatedSystemIds": ["system-powerbi", "system-qlikview"],
+      "ownerTeamId": "team-bi-visualisering",
+      "lastUpdated": "2026-05-01T00:00:00+02:00"
+    }
+  ]
+}

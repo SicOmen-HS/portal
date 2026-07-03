@@ -1,0 +1,21 @@
+<article class="app-card system-card">
+  <div class="app-card-icon">
+    <i class="bi bi-diagram-3" aria-hidden="true"></i>
+  </div>
+  <div class="app-card-body">
+    <p class="app-card-eyebrow">{{ system().systemType }}</p>
+    <h3 class="app-card-title">{{ system().name }}</h3>
+    <p class="app-card-description">{{ system().description }}</p>
+    <app-lifecycle-badge [status]="system().lifecycleStatus" />
+  </div>
+  @if (primaryLink(); as link) {
+    <a
+      class="app-card-link"
+      [href]="link.url"
+      [target]="link.opensInNewWindow ? '_blank' : '_self'"
+      rel="noopener"
+    >
+      Öppna {{ system().name }} <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+    </a>
+  }
+</article>

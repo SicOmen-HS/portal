@@ -1,0 +1,22 @@
+<article class="app-card contact-card">
+  <div class="app-card-icon">
+    <i class="bi bi-headset" aria-hidden="true"></i>
+  </div>
+  <div class="app-card-body">
+    <p class="app-card-eyebrow">{{ contactTypeLabels[contact().contactType] }}</p>
+    <h3 class="app-card-title">{{ contact().name }}</h3>
+    <p class="app-card-description">{{ contact().description }}</p>
+    <p class="contact-card-detail">
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
+      Kontaktuppgift: <code>&lt;{{ contact().contactValueKey }}&gt;</code>
+      <span class="contact-card-hint">tillförs via konfiguration i intern miljö</span>
+    </p>
+    @if (contact().expectedResponseTime) {
+      <p class="contact-card-detail">
+        <i class="bi bi-clock" aria-hidden="true"></i>
+        {{ contact().expectedResponseTime }}
+      </p>
+    }
+    <p class="contact-card-detail text-muted-custom">{{ contact().targetAudience }}</p>
+  </div>
+</article>

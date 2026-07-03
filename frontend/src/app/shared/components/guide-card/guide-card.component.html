@@ -1,0 +1,18 @@
+<article class="app-card guide-card">
+  <div class="app-card-icon">
+    <i class="bi bi-book" aria-hidden="true"></i>
+  </div>
+  <div class="app-card-body">
+    <p class="app-card-eyebrow">{{ guideTypeLabels[guide().guideType] }} · {{ guide().category }}</p>
+    <h3 class="app-card-title">{{ guide().title }}</h3>
+    <p class="app-card-description">{{ guide().description }}</p>
+  </div>
+  <a
+    class="app-card-link"
+    [href]="guide().documentationUrl"
+    target="_blank"
+    rel="noopener"
+  >
+    Öppna guide <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+  </a>
+</article>

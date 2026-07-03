@@ -1,0 +1,27 @@
+[
+  {
+    "id": "access-group-bi-sales-demo",
+    "name": "Fiktiv accessgrupp – BI Försäljning",
+    "description": "Exempelgrupp som ger läsbehörighet till försäljningsrelaterade dashboards.",
+    "relatedSystemId": "system-qlik-sense",
+    "relatedInformationMartId": "mart-sales-demo",
+    "ownerTeamId": "team-bi-visualisering",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "access-group-data-platform-demo",
+    "name": "Fiktiv accessgrupp – Dataplattform läsare",
+    "description": "Exempelgrupp för läsbehörighet till utvalda datamängder i dataplattformen.",
+    "relatedSystemId": "system-openmetadata",
+    "ownerTeamId": "team-data-platform",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "access-group-ai-devspace-demo",
+    "name": "Fiktiv accessgrupp – AI-devspace",
+    "description": "Exempelgrupp som ger åtkomst till paketerade AI/ML-utvecklingsytor.",
+    "relatedSystemId": "system-devspace-platform",
+    "ownerTeamId": "team-ai-platform",
+    "lifecycleStatus": "active"
+  }
+]

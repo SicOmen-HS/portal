@@ -1,0 +1,38 @@
+<app-page-header title="Om portalen" />
+
+<section class="section about-lead">
+  <p>
+    Denna portal är en lokal, körbar <strong>mockup</strong> av den framtida Data- och analysportalen.
+    Den visar hur portalen kan struktureras, kännas och fungera – inte en färdig produktionslösning.
+  </p>
+  <p>
+    Portalen ska vara den naturliga ingången till leveransens tjänster, system, dokumentation,
+    datamängder, beställningar och kontaktvägar, så att användaren kan utgå från sitt behov istället
+    för att behöva känna till organisationen eller tekniken bakom.
+  </p>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Status</h2>
+  <p>Version: <strong>{{ version }}</strong></p>
+  <ul class="plain-list">
+    <li>All data i mockupen är fiktiv exempeldata.</li>
+    <li>Systemlänkar pekar mot exempel-URL:er (<code>example.local</code>) eller platshållare.</li>
+    <li>Ingen backend eller riktig integration ingår i denna iteration.</li>
+  </ul>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Styrande dokumentation</h2>
+  <p class="text-muted-custom">
+    Portalen följer projektets dokumentation i <code>docs/</code>-katalogen i repot. Ett urval:
+  </p>
+  <ul class="doc-list">
+    @for (doc of docs; track doc.file) {
+      <li>
+        <code>{{ doc.file }}</code>
+        <span>{{ doc.description }}</span>
+      </li>
+    }
+  </ul>
+</section>

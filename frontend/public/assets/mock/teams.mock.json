@@ -1,0 +1,42 @@
+[
+  {
+    "id": "team-data-platform",
+    "name": "Exempelteam Dataplattform",
+    "description": "Ansvarar fiktivt för dataplattformens ingest, lagring och åtkomstvägar i denna mockup.",
+    "responsibilityArea": "Dataplattform",
+    "contactPointId": "contact-data-platform-support",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "team-bi-visualisering",
+    "name": "Exempelteam BI och visualisering",
+    "description": "Ansvarar fiktivt för dashboards, rapporter och visualiseringsstöd i denna mockup.",
+    "responsibilityArea": "Business Intelligence",
+    "contactPointId": "contact-bi-support",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "team-ai-platform",
+    "name": "Exempelteam AI-plattform",
+    "description": "Ansvarar fiktivt för AI-plattform, utvecklingsytor och rådgivning i denna mockup.",
+    "responsibilityArea": "AI och Machine Learning",
+    "contactPointId": "contact-ai-advisory",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "team-automation",
+    "name": "Exempelteam Automation",
+    "description": "Ansvarar fiktivt för automationslösningar och robotisering i denna mockup.",
+    "responsibilityArea": "Automation",
+    "contactPointId": "contact-automation-support",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "team-nintex-k2",
+    "name": "Exempelteam Nintex/K2",
+    "description": "Ansvarar fiktivt för formulär- och workflowlösningar i denna mockup.",
+    "responsibilityArea": "Automation, självbetjäning",
+    "contactPointId": "contact-automation-support",
+    "lifecycleStatus": "active"
+  }
+]

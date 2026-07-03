@@ -1,0 +1,54 @@
+[
+  {
+    "id": "mart-sales-demo",
+    "name": "Demo Information Mart – Försäljning",
+    "description": "Strukturerad konsumtionsyta för försäljningsrapportering, byggd på Data Vault 2.1 (exempel).",
+    "dataDomain": "Försäljning",
+    "owner": "Exempelteam Försäljningsanalys",
+    "ownerTeamId": "team-data-platform",
+    "relatedDatasetIds": ["dataset-sales-transactions-demo"],
+    "relatedBusinessApplicationIds": ["bi-app-sales-dashboard-demo"],
+    "relatedAccessGroupIds": ["access-group-bi-sales-demo"],
+    "documentationUrl": "https://example.local/docs/mart-sales",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "mart-customer-demo",
+    "name": "Demo Information Mart – Kund",
+    "description": "Konsumtionsyta för kundinsikter, används av flera exempelrapporter.",
+    "dataDomain": "Kund",
+    "owner": "Exempelteam Kundinsikt",
+    "ownerTeamId": "team-data-platform",
+    "relatedDatasetIds": ["dataset-customer-interactions-demo"],
+    "relatedBusinessApplicationIds": ["bi-app-customer-demo"],
+    "documentationUrl": "https://example.local/docs/mart-customer",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "mart-finance-demo",
+    "name": "Demo Information Mart – Ekonomi",
+    "description": "Aggregerad konsumtionsyta för ekonomisk uppföljning (exempel, ej verkliga belopp).",
+    "dataDomain": "Ekonomi",
+    "owner": "Exempelteam Ekonomi",
+    "ownerTeamId": "team-data-platform",
+    "relatedDatasetIds": ["dataset-finance-ledger-demo"],
+    "documentationUrl": "https://example.local/docs/mart-finance",
+    "lifecycleStatus": "active",
+    "visibility": "maintainers"
+  },
+  {
+    "id": "mart-legacy-reporting-demo",
+    "name": "Äldre Information Mart – Rapportering (exempel)",
+    "description": "Äldre konsumtionsyta som gradvis ersätts av nyare Information Marts.",
+    "dataDomain": "Försäljning",
+    "owner": "Exempelteam Försäljningsanalys",
+    "ownerTeamId": "team-data-platform",
+    "relatedDatasetIds": ["dataset-legacy-reporting-extract-demo"],
+    "relatedBusinessApplicationIds": ["bi-app-legacy-powerbi-demo"],
+    "documentationUrl": "https://example.local/docs/mart-legacy-reporting",
+    "lifecycleStatus": "retiring",
+    "visibility": "all-users"
+  }
+]

@@ -1,0 +1,134 @@
+@if (service(); as svc) {
+  <nav class="breadcrumb-nav" aria-label="Brödsmulor">
+    <a routerLink="/tjanster">Tjänster</a>
+    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+    <span>{{ svc.name }}</span>
+  </nav>
+
+  <header class="service-detail-header">
+    <div>
+      <p class="app-card-eyebrow">{{ svc.category }}</p>
+      <h1>{{ svc.name }}</h1>
+      <p class="service-detail-lead">{{ svc.longDescription }}</p>
+      <div class="service-detail-badges">
+        <app-lifecycle-badge [status]="svc.lifecycleStatus" />
+        @for (audience of svc.targetAudience; track audience) {
+          <span class="target-audience-chip">{{ audience }}</span>
+        }
+      </div>
+    </div>
+  </header>
+
+  <div class="row g-5">
+    <div class="col-12 col-lg-8">
+      <section class="section">
+        <h2 class="section-title">Beställ &amp; kom igång</h2>
+        @if ((relatedOrderTypes$ | async)?.length) {
+          <div class="row g-4">
+            @for (order of (relatedOrderTypes$ | async); track order.id) {
+              <div class="col-12 col-md-6">
+                <app-order-card [orderType]="order" />
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="text-muted-custom">Ingen beställning krävs – tjänsten nås direkt via relaterat system.</p>
+        }
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Relaterade guider</h2>
+        @if ((relatedGuides$ | async)?.length) {
+          <div class="row g-4">
+            @for (guide of (relatedGuides$ | async); track guide.id) {
+              <div class="col-12 col-md-6">
+                <app-guide-card [guide]="guide" />
+              </div>
+            }
+          </div>
+        } @else {
+          <app-empty-state icon="bi-book" title="Inga guider kopplade ännu" />
+        }
+      </section>
+
+      @if ((relatedServices$ | async)?.length) {
+        <section class="section">
+          <h2 class="section-title">Relaterade tjänster</h2>
+          <ul class="related-list">
+            @for (related of (relatedServices$ | async); track related.id) {
+              <li><a [routerLink]="['/tjanster', related.id]">{{ related.name }}</a></li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <aside class="service-detail-sidebar">
+        <section>
+          <h2 class="section-title-sm">Målgrupp</h2>
+          <p>{{ svc.targetAudience.join(', ') }}</p>
+        </section>
+
+        <section>
+          <h2 class="section-title-sm">Relaterade system</h2>
+          @if ((relatedSystems$ | async)?.length) {
+            <ul class="plain-list">
+              @for (system of (relatedSystems$ | async); track system.id) {
+                <li><a routerLink="/system">{{ system.name }}</a></li>
+              }
+            </ul>
+          } @else {
+            <p class="text-muted-custom">Inga systemkopplingar registrerade.</p>
+          }
+        </section>
+
+        <section>
+          <h2 class="section-title-sm">Plattform</h2>
+          @if ((platforms$ | async)?.length) {
+            <ul class="plain-list">
+              @for (platform of (platforms$ | async); track platform.id) {
+                <li>{{ platform.name }}</li>
+              }
+            </ul>
+          }
+        </section>
+
+        <section>
+          <h2 class="section-title-sm">Kontaktväg</h2>
+          @if (contact$ | async; as contact) {
+            <p class="fw-semibold mb-1">{{ contact.name }}</p>
+            <p class="text-muted-custom">{{ contact.description }}</p>
+          } @else {
+            <p class="text-muted-custom">Ingen specifik kontaktväg – se <a routerLink="/kontakt">Kontakt &amp; support</a>.</p>
+          }
+        </section>
+
+        @if ((technicalComponents$ | async)?.length) {
+          <section>
+            <h2 class="section-title-sm">Teknisk metadata</h2>
+            <p class="text-muted-custom small-note">Visas för utvecklare och förvaltare, inte för alla användare.</p>
+            <ul class="plain-list">
+              @for (component of (technicalComponents$ | async); track component.id) {
+                <li>{{ component.name }}</li>
+              }
+            </ul>
+          </section>
+        }
+
+        <section>
+          <h2 class="section-title-sm">Om informationen</h2>
+          <p class="text-muted-custom small-note">
+            Källa: {{ svc.source }} · Senast uppdaterad {{ svc.lastUpdated }} · Synlighet: {{ visibilityLabels[svc.visibility] }}
+          </p>
+        </section>
+      </aside>
+    </div>
+  </div>
+} @else {
+  <app-empty-state
+    icon="bi-question-circle"
+    title="Tjänsten kunde inte hittas"
+    description="Den efterfrågade tjänsten finns inte i denna mockup, eller så har länken skrivits fel."
+  />
+}

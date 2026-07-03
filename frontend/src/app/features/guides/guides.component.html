@@ -1,0 +1,30 @@
+<app-page-header
+  title="Guider & dokumentation"
+  description="Kom igång-guider, referensmaterial och riktlinjer kopplade till tjänster och system."
+/>
+
+<div class="filter-bar">
+  <app-search-box
+    placeholder="Sök på titel eller beskrivning..."
+    ariaLabel="Sök guider"
+    (queryChange)="onSearchChange($event)"
+  />
+  <select class="form-select" aria-label="Filtrera på kategori" (change)="onCategoryChange($any($event.target).value)">
+    <option value="">Alla kategorier</option>
+    @for (category of categories(); track category) {
+      <option [value]="category">{{ category }}</option>
+    }
+  </select>
+</div>
+
+@if (filteredGuides().length > 0) {
+  <div class="row g-4">
+    @for (guide of filteredGuides(); track guide.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-guide-card [guide]="guide" />
+      </div>
+    }
+  </div>
+} @else {
+  <app-empty-state icon="bi-search" title="Inga guider matchade din sökning" />
+}

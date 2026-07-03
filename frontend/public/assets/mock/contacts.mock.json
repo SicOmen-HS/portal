@@ -1,0 +1,71 @@
+[
+  {
+    "id": "contact-service-desk",
+    "name": "Exempel Servicedesk",
+    "description": "Första kontaktväg för allmänna frågor om portalens tjänster.",
+    "contactType": "ticket-queue",
+    "contactValueKey": "SERVICE_DESK_CONTACT",
+    "targetAudience": "Alla användare",
+    "expectedResponseTime": "Inom 1 arbetsdag (exempel)",
+    "visibility": "all-users",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "contact-bi-support",
+    "name": "Exempel BI-support",
+    "description": "Support och rådgivning kring dashboards, rapporter och BI-tillämpningar.",
+    "contactType": "support-channel",
+    "contactValueKey": "BI_SUPPORT_CONTACT",
+    "targetAudience": "Verksamhetsanvändare, analytiker",
+    "expectedResponseTime": "Inom 2 arbetsdagar (exempel)",
+    "relatedTeamId": "team-bi-visualisering",
+    "visibility": "all-users",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "contact-data-platform-support",
+    "name": "Exempel Dataplattform-support",
+    "description": "Funktionsbrevlåda för frågor om datamängder, datatjänster och dataplattformen.",
+    "contactType": "mailbox",
+    "contactValueKey": "DATA_PLATFORM_MAILBOX",
+    "targetAudience": "Data engineers, analytiker, förvaltare",
+    "expectedResponseTime": "Inom 2 arbetsdagar (exempel)",
+    "relatedTeamId": "team-data-platform",
+    "visibility": "all-users",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "contact-ai-advisory",
+    "name": "Exempel AI-rådgivning",
+    "description": "Teamkontakt för rådgivning kring AI-plattform, devspaces och Generativ AI Chattportal.",
+    "contactType": "team-contact",
+    "contactValueKey": "AI_ADVISORY_CONTACT",
+    "targetAudience": "Data scientists, utvecklare",
+    "expectedResponseTime": "Inom 3 arbetsdagar (exempel)",
+    "relatedTeamId": "team-ai-platform",
+    "visibility": "all-users",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "contact-automation-support",
+    "name": "Exempel Automationssupport",
+    "description": "Supportkanal för Nintex-, K2- och UiPath-relaterade frågor.",
+    "contactType": "support-channel",
+    "contactValueKey": "AUTOMATION_SUPPORT_CONTACT",
+    "targetAudience": "Verksamhetsanvändare, utvecklare",
+    "expectedResponseTime": "Inom 2 arbetsdagar (exempel)",
+    "relatedTeamId": "team-automation",
+    "visibility": "all-users",
+    "lifecycleStatus": "active"
+  },
+  {
+    "id": "contact-docs-portal",
+    "name": "Exempel Dokumentationsyta",
+    "description": "Central dokumentationsyta med guider, riktlinjer och kontaktinformation.",
+    "contactType": "documentation",
+    "contactValueKey": "DOCUMENTATION_SITE",
+    "targetAudience": "Alla användare",
+    "visibility": "all-users",
+    "lifecycleStatus": "active"
+  }
+]

@@ -1,0 +1,43 @@
+<app-page-header
+  title="Tjänster"
+  description="Sök och filtrera bland leveransens tjänster – oavsett vilket team eller vilken teknik som ligger bakom."
+/>
+
+<div class="filter-bar">
+  <app-search-box
+    placeholder="Sök på namn, beskrivning eller tagg..."
+    ariaLabel="Sök tjänster"
+    [initialValue]="searchTerm()"
+    (queryChange)="onSearchChange($event)"
+  />
+
+  <select class="form-select" aria-label="Filtrera på kategori" (change)="onCategoryChange($any($event.target).value)">
+    <option value="">Alla kategorier</option>
+    @for (category of categories(); track category) {
+      <option [value]="category">{{ category }}</option>
+    }
+  </select>
+
+  <select class="form-select" aria-label="Filtrera på livscykelstatus" (change)="onLifecycleChange($any($event.target).value)">
+    <option value="">Alla livscykelstatusar</option>
+    @for (entry of lifecycleLabels | keyvalue; track entry.key) {
+      <option [value]="entry.key">{{ entry.value }}</option>
+    }
+  </select>
+</div>
+
+@if (filteredServices().length > 0) {
+  <div class="row g-4">
+    @for (service of filteredServices(); track service.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-service-card [service]="service" />
+      </div>
+    }
+  </div>
+} @else {
+  <app-empty-state
+    icon="bi-search"
+    title="Inga tjänster matchade din sökning"
+    description="Prova att ändra sökord eller filter."
+  />
+}

@@ -1,0 +1,13 @@
+<form class="search-box" role="search" (ngSubmit)="onSubmit()">
+  <i class="bi bi-search search-box-icon" aria-hidden="true"></i>
+  <input
+    type="search"
+    class="form-control"
+    [attr.aria-label]="ariaLabel()"
+    [placeholder]="placeholder()"
+    [ngModel]="value"
+    name="query"
+    (ngModelChange)="onInput($event)"
+  />
+  <button type="submit" class="btn btn-primary">{{ buttonLabel() }}</button>
+</form>

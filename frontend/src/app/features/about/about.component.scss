@@ -1,0 +1,41 @@
+.about-lead p {
+  max-width: 48rem;
+  color: var(--color-gray-700, var(--color-gray-600));
+}
+
+.plain-list {
+  list-style: disc;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--color-gray-600);
+}
+
+.doc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 40rem;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  code {
+    color: var(--color-brand-red-dark);
+    white-space: nowrap;
+  }
+
+  span {
+    color: var(--color-gray-600);
+    text-align: right;
+  }
+}

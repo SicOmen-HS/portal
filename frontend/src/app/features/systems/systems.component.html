@@ -1,0 +1,24 @@
+<app-page-header
+  title="System & länkar"
+  description="Snabba länkar till system och plattformar som används inom leveransen. Länkarna är exempel-URL:er i denna mockup."
+/>
+
+<div class="filter-bar">
+  <app-search-box
+    placeholder="Sök på systemnamn, typ eller beskrivning..."
+    ariaLabel="Sök system"
+    (queryChange)="onSearchChange($event)"
+  />
+</div>
+
+@if (filteredSystems().length > 0) {
+  <div class="row g-4">
+    @for (system of filteredSystems(); track system.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-system-card [system]="system" [primaryLink]="primaryLinkFor(system.id, system.linkIds)" />
+      </div>
+    }
+  </div>
+} @else {
+  <app-empty-state icon="bi-search" title="Inga system matchade din sökning" />
+}

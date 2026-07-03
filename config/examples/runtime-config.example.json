@@ -1,0 +1,12 @@
+{
+  "apiBaseUrl": "<API_BASE_URL>",
+  "applicationName": "Data- och analysportalen",
+  "environmentLabel": "<ENVIRONMENT_NAME>",
+  "features": {
+    "showStatusPanel": true,
+    "showDataCatalog": true,
+    "showOrderFlows": true,
+    "showTechnicalMetadata": false,
+    "useMockData": false
+  }
+}

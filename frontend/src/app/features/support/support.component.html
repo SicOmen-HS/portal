@@ -1,0 +1,36 @@
+<app-page-header
+  title="Kontakt & support"
+  description="Hitta rätt kontaktväg utifrån ditt behov. Kontaktuppgifter tillförs via konfiguration i intern miljö."
+/>
+
+<section class="section">
+  <h2 class="section-title">Kontaktvägar</h2>
+  <div class="row g-4">
+    @for (contact of contacts(); track contact.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-contact-card [contact]="contact" />
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Vanliga frågor</h2>
+  <div class="faq-list">
+    @for (item of faqItems; track item.question) {
+      <details class="faq-item">
+        <summary>{{ item.question }}</summary>
+        <p>{{ item.answer }}</p>
+      </details>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Länkar</h2>
+  <ul class="plain-list">
+    <li><a routerLink="/guider">Guider & dokumentation</a></li>
+    <li><a href="https://example.local/docs" target="_blank" rel="noopener">Central dokumentationsyta (exempel-URL) <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a></li>
+    <li><a href="#">Ärendesystem (platshållare i denna mockup)</a></li>
+  </ul>
+</section>

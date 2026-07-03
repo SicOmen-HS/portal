@@ -1,0 +1,30 @@
+<app-page-header
+  title="Beställ & få tillgång"
+  description="Beställ datamängder, BI-tillämpningar, behörigheter, larm och utvecklingsytor. Vissa beställningar har flera steg och beroenden."
+/>
+
+<div class="filter-bar">
+  <app-search-box
+    placeholder="Sök på namn eller beskrivning..."
+    ariaLabel="Sök beställningar"
+    (queryChange)="onSearchChange($event)"
+  />
+  <select class="form-select" aria-label="Filtrera på kategori" (change)="onCategoryChange($any($event.target).value)">
+    <option value="">Alla kategorier</option>
+    @for (category of categories(); track category) {
+      <option [value]="category">{{ category }}</option>
+    }
+  </select>
+</div>
+
+@if (filteredOrderTypes().length > 0) {
+  <div class="row g-4">
+    @for (order of filteredOrderTypes(); track order.id) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-order-card [orderType]="order" />
+      </div>
+    }
+  </div>
+} @else {
+  <app-empty-state icon="bi-search" title="Inga beställningar matchade din sökning" />
+}

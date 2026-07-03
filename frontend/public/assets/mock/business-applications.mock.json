@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bi-app-sales-dashboard-demo",
+    "name": "Exempel BI-tillämpning – Försäljningsöversikt",
+    "description": "Fiktiv Qlik Sense-applikation som visar försäljningsutveckling på övergripande nivå.",
+    "systemId": "system-qlik-sense",
+    "informationMartIds": ["mart-sales-demo"],
+    "ownerTeamId": "team-bi-visualisering",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "bi-app-customer-demo",
+    "name": "Exempel BI-tillämpning – Kundinsikt",
+    "description": "Fiktiv dashboard för att förstå kundinteraktioner över tid.",
+    "systemId": "system-qlik-sense",
+    "informationMartIds": ["mart-customer-demo"],
+    "ownerTeamId": "team-bi-visualisering",
+    "lifecycleStatus": "active",
+    "visibility": "all-users"
+  },
+  {
+    "id": "bi-app-ops-monitoring-demo",
+    "name": "Exempel Driftöversikt (Grafana)",
+    "description": "Fiktiv Grafana-dashboard för att övervaka drift och tekniska metrics.",
+    "systemId": "system-grafana",
+    "informationMartIds": [],
+    "ownerTeamId": "team-data-platform",
+    "lifecycleStatus": "active",
+    "visibility": "developers"
+  },
+  {
+    "id": "bi-app-legacy-powerbi-demo",
+    "name": "Exempel äldre BI-tillämpning (Power BI)",
+    "description": "Fiktiv äldre rapport under avveckling, ersätts av Qlik Sense-tillämpning.",
+    "systemId": "system-powerbi",
+    "informationMartIds": ["mart-legacy-reporting-demo"],
+    "ownerTeamId": "team-bi-visualisering",
+    "lifecycleStatus": "retiring",
+    "visibility": "all-users"
+  }
+]

@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.contact-card-detail {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--color-gray-600);
+
+  code {
+    color: var(--color-brand-red-dark);
+    background: var(--color-gray-100);
+    padding: 1px var(--space-2);
+    border-radius: 4px;
+  }
+}
+
+.contact-card-hint {
+  color: var(--color-gray-500);
+  font-size: 0.78rem;
+}

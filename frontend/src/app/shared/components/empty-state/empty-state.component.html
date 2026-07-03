@@ -1,0 +1,7 @@
+<div class="empty-state">
+  <i class="bi {{ icon() }}" aria-hidden="true"></i>
+  <p class="empty-state-title">{{ title() }}</p>
+  @if (description()) {
+    <p class="empty-state-description">{{ description() }}</p>
+  }
+</div>

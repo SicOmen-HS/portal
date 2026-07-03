@@ -1,0 +1,16 @@
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-6);
+
+  app-search-box {
+    flex: 1;
+    min-width: 16rem;
+  }
+
+  select {
+    max-width: 14rem;
+  }
+}

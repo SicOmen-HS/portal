@@ -1,0 +1,12 @@
+{
+  "apiBaseUrl": "/api",
+  "applicationName": "Data- och analysportalen",
+  "environmentLabel": "Lokal mockup",
+  "features": {
+    "showStatusPanel": true,
+    "showDataCatalog": true,
+    "showOrderFlows": true,
+    "showTechnicalMetadata": true,
+    "useMockData": true
+  }
+}

@@ -1,0 +1,167 @@
+// Grundläggande, återanvändbara stilar för portalen.
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+  color: var(--color-gray-900);
+  background-color: var(--color-gray-100);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Tydlig, konsekvent fokusmarkering (tillgänglighet)
+:focus-visible {
+  outline: 2px solid var(--color-brand-red);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--color-brand-red);
+  --bs-btn-border-color: var(--color-brand-red);
+  --bs-btn-hover-bg: var(--color-brand-red-hover);
+  --bs-btn-hover-border-color: var(--color-brand-red-hover);
+  --bs-btn-active-bg: var(--color-brand-red-dark);
+  --bs-btn-active-border-color: var(--color-brand-red-dark);
+  --bs-btn-disabled-bg: var(--color-gray-400);
+  --bs-btn-disabled-border-color: var(--color-gray-400);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--color-brand-red);
+  --bs-btn-border-color: var(--color-brand-red);
+  --bs-btn-hover-bg: var(--color-brand-red);
+  --bs-btn-hover-border-color: var(--color-brand-red);
+  --bs-btn-active-bg: var(--color-brand-red-dark);
+}
+
+.text-muted-custom {
+  color: var(--color-gray-500);
+}
+
+.card {
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.section {
+  margin-bottom: var(--space-7);
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: var(--space-4);
+}
+
+.page-container {
+  padding: var(--space-6) var(--space-6) var(--space-7);
+
+  @media (max-width: 768px) {
+    padding: var(--space-4) var(--space-4) var(--space-6);
+  }
+}
+
+// Gemensamt kortspråk, återanvänds av ServiceCard/SystemCard/GuideCard/OrderCard/DatasetCard/ContactCard.
+.app-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-5);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-gray-400);
+  }
+}
+
+.app-card-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-status-info-bg);
+  color: var(--color-brand-red);
+  font-size: 1.25rem;
+}
+
+.app-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.app-card-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-gray-500);
+}
+
+.app-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.app-card-description {
+  margin: 0;
+  color: var(--color-gray-600);
+  font-size: 0.92rem;
+}
+
+.app-card-link {
+  align-self: flex-start;
+  font-weight: 600;
+  color: var(--color-brand-red);
+  z-index: 1;
+
+  i {
+    margin-left: var(--space-1);
+    transition: transform 0.15s ease;
+  }
+
+  &:hover i {
+    transform: translateX(2px);
+  }
+}
+
+// Skiplänk för tangentbordsanvändare
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-white);
+  color: var(--color-gray-900);
+  padding: var(--space-3) var(--space-4);
+  z-index: 2000;
+  border-radius: 0 0 var(--radius-sm) 0;
+
+  &:focus {
+    left: 0;
+  }
+}

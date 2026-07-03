@@ -1,0 +1,60 @@
+<app-page-header
+  title="Status & drift"
+  description="Samlad status för portalens tjänster och system. All statusinformation nedan är fiktiv exempeldata."
+/>
+
+@if (statusOverview(); as overview) {
+  <div class="overall-status-panel" [class.incident]="!overview.overall.operational">
+    <app-status-badge
+      [tone]="overview.overall.operational ? 'success' : 'danger'"
+      [label]="overview.overall.headline"
+    />
+    <p>{{ overview.overall.description }}</p>
+    <p class="text-muted-custom small-note">Senast uppdaterad: {{ overview.overall.lastUpdated }}</p>
+  </div>
+
+  <section class="section">
+    <h2 class="section-title">Pågående och planerat</h2>
+    @if (activeItems().length > 0) {
+      <ul class="status-list">
+        @for (item of activeItems(); track item.id) {
+          <li class="status-list-item">
+            <app-status-badge [tone]="typeTone[item.statusType]" [label]="typeLabels[item.statusType]" />
+            <div class="status-list-content">
+              <p class="status-list-title">{{ item.title }}</p>
+              <p class="status-list-description">{{ item.description }}</p>
+              <p class="status-list-meta">
+                {{ item.startTime | date: 'yyyy-MM-dd HH:mm' }}
+                @if (item.endTime) { – {{ item.endTime | date: 'yyyy-MM-dd HH:mm' }} }
+                · {{ severityLabels[item.severity] }} · {{ item.impact }}
+              </p>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <app-empty-state icon="bi-check2-circle" title="Inga pågående incidenter eller planerade avbrott" />
+    }
+  </section>
+
+  @if (historyItems().length > 0) {
+    <section class="section">
+      <h2 class="section-title">Tidigare händelser</h2>
+      <ul class="status-list">
+        @for (item of historyItems(); track item.id) {
+          <li class="status-list-item">
+            <app-status-badge [tone]="typeTone[item.statusType]" [label]="typeLabels[item.statusType]" />
+            <div class="status-list-content">
+              <p class="status-list-title">{{ item.title }}</p>
+              <p class="status-list-description">{{ item.description }}</p>
+              <p class="status-list-meta">
+                {{ item.startTime | date: 'yyyy-MM-dd HH:mm' }} – {{ item.endTime | date: 'HH:mm' }}
+                · {{ item.impact }}
+              </p>
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+}
