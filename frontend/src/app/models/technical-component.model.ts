@@ -15,6 +15,7 @@ export interface TechnicalComponent {
   ownerTeamId?: string;
   lifecycleStatus: LifecycleStatus;
   version?: string;
-  documentationUrl?: string;
+  /** Nyckel som slås upp mot systemUrls i runtime-config, se SystemUrlService. */
+  documentationUrlKey?: string;
   visibility: Visibility;
 }

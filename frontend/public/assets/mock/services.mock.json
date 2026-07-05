@@ -127,7 +127,7 @@
     "id": "service-combine-datasets-report",
     "name": "Kombinera datamängder till rapport",
     "shortDescription": "Få stöd med att kombinera flera datamängder i en rapport eller dashboard.",
-    "longDescription": "Tjänsten hjälper dig komma i kontakt med rätt stöd för att kombinera flera datamängder till en samlad rapport, exempelvis via en Information Mart.",
+    "longDescription": "Tjänsten hjälper dig komma i kontakt med rätt stöd för att kombinera flera datamängder till en samlad rapport, exempelvis via en dataprodukt.",
     "category": "Business Intelligence",
     "targetAudience": ["Analytiker", "Verksamhetsanvändare"],
     "ownerTeamId": "team-bi-visualisering",

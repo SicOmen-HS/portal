@@ -1,0 +1,20 @@
+{
+  "name": "data-och-analysportalen",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Repository root for Data- och analysportalen: documentation, project administration (Worksmith) and the frontend mockup.",
+  "scripts": {
+    "project": "tsx scripts/project-administration/cli.ts",
+    "project:test": "tsx --test --test-concurrency=1 scripts/project-administration/tests/project-administration.test.ts",
+    "project:allocate-id": "tsx scripts/allocate-work-item-id.ts",
+    "project:complete": "tsx scripts/complete-work-item.ts",
+    "project:create-work-item": "tsx scripts/create-work-item.ts",
+    "project:transition": "tsx scripts/transition-work-item.ts",
+    "project:validate": "tsx scripts/validate-project-administration.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  // Rekommenderade extensions för att arbeta i hela Data- och analysportalen-repot
+  // (docs/, config/, frontend/). Se docs/14_Rekommenderade_extensions.md för
+  // motivering av varje extension. Innehåller inga secrets eller interna sökvägar.
+  "recommendations": [
+    "angular.ng-template",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "mrmlnc.vscode-scss",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

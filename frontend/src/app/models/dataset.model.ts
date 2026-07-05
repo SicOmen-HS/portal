@@ -28,6 +28,8 @@ export interface Dataset {
   updateFrequency: string;
   relatedDataServiceIds?: string[];
   relatedSystemIds?: string[];
+  relatedGuideIds?: string[];
+  relatedOrderTypeIds?: string[];
   metadataSource: string;
   lifecycleStatus: LifecycleStatus;
   visibility: Visibility;

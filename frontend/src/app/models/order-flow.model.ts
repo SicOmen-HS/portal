@@ -13,7 +13,7 @@ export interface OrderFlow {
   relatedServiceId?: string;
   ownerTeamId?: string;
   targetAudience: string[];
-  /** Konfigurationsnyckel/platshållare för länk till formulär – aldrig en verklig intern URL. */
+  /** Nyckel som slås upp mot systemUrls i runtime-config, se SystemUrlService – aldrig en verklig intern URL. */
   linkKey?: string;
   handlingInfo?: string;
   lifecycleStatus: LifecycleStatus;

@@ -1,3 +1,7 @@
+// Barrel-export för portalens informationsmodell (docs/03_Informationsmodell.md).
+// Varje fil motsvarar ett informationsobjekt i modellen med samma namn –
+// lägg inte till ett nytt objekt här utan att först kontrollera om ett
+// befintligt objekt redan täcker behovet (docs/07_AI_Instruktioner.md).
 export * from './lifecycle-status.model';
 export * from './visibility.model';
 export * from './team.model';

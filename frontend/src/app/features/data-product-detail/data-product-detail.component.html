@@ -1,0 +1,128 @@
+@if (view$ | async; as view) {
+  @if (view.product; as product) {
+    <nav class="breadcrumb-small" aria-label="Brödsmulor"><a routerLink="/data">Data & katalog</a><i class="bi bi-chevron-right" aria-hidden="true"></i><span>{{ product.name }}</span></nav>
+
+    <header class="detail-header">
+      <div>
+        <p class="eyebrow">Dataprodukt · {{ product.dataDomain }}</p>
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.purpose ?? product.description }}</p>
+        <ul class="trust-row" aria-label="Tillit och åtkomst">
+          @if (product.trust) {
+            <li [class]="'trust-level trust-' + trustLevelTone[product.trust.level]">
+              <i class="bi bi-shield-check" aria-hidden="true"></i>Tillit: {{ trustLevelLabels[product.trust.level] }}
+            </li>
+          }
+          @if (product.updateFrequency) {
+            <li><i class="bi bi-arrow-repeat" aria-hidden="true"></i>{{ product.updateFrequency }}</li>
+          }
+          @if (product.accessModel) {
+            <li><i class="bi bi-lock" aria-hidden="true"></i>{{ product.accessModel }}</li>
+          }
+        </ul>
+      </div>
+      <a class="btn btn-primary" routerLink="/bestall/order-type-access-group">Begär åtkomst</a>
+    </header>
+
+    <div class="detail-layout">
+      <main>
+        <section>
+          <h2>Vad är detta?</h2>
+          <p>{{ product.description }}</p>
+        </section>
+
+        <section>
+          <h2>Vem är det till för?</h2>
+          <p>{{ product.targetAudience?.length ? product.targetAudience!.join(', ') : 'Analytiker och andra som behöver kvalitetssäkrad data för ' + product.dataDomain.toLowerCase() + '.' }}</p>
+        </section>
+
+        <section>
+          <h2>Bygger på datamängder</h2>
+          @if (view.datasets.length) {
+            <div class="related-grid">
+              @for (dataset of view.datasets; track dataset.id) {
+                <a class="related-tile" [routerLink]="['/data', dataset.id]"><p>Datamängd</p><h3>{{ dataset.name }}</h3><span>{{ dataset.description }}</span></a>
+              }
+            </div>
+          } @else {
+            <p class="text-muted-custom">Inga datamängder är registrerade för denna dataprodukt i denna mockup.</p>
+          }
+        </section>
+
+        <section>
+          <h2>Används av dashboards/rapporter</h2>
+          @if (view.applications.length) {
+            <div class="related-grid">
+              @for (app of view.applications; track app.id) {
+                <article><p>BI-tillämpning</p><h3>{{ app.name }}</h3><span>{{ app.description }}</span></article>
+              }
+            </div>
+            <a class="section-next-step" routerLink="/bestall/order-type-new-bi-app">Beställ rapport på denna data <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+          } @else {
+            <p class="text-muted-custom">Inga dashboards eller rapporter använder denna dataprodukt ännu.</p>
+          }
+        </section>
+
+        @if (view.relatedGuides.length || view.relatedOrderTypes.length) {
+          <section>
+            <h2>Relaterade guider och beställningar</h2>
+            <div class="related-grid">
+              @for (guide of view.relatedGuides; track guide.id) {
+                <a class="related-tile" routerLink="/guider"><p>Guide</p><h3>{{ guide.title }}</h3><span>{{ guide.summary }}</span></a>
+              }
+              @for (order of view.relatedOrderTypes; track order.id) {
+                <a class="related-tile" [routerLink]="['/bestall', order.id]"><p>Beställning</p><h3>{{ order.name }}</h3><span>{{ order.description }}</span></a>
+              }
+            </div>
+          </section>
+        }
+
+        @if (product.trust; as trust) {
+          <section class="quality-section">
+            <h2>Tillit och kvalitet</h2>
+            <p class="quality-lead">Tillit visas som nivå och delsignaler – inte som ett ensamt kvalitetstal.</p>
+            <dl class="quality-grid">
+              <div><dt>Dokumentation</dt><dd>{{ trust.documentationCoverage }} %</dd></div>
+              <div><dt>Kvalitetskontroller</dt><dd>{{ trust.qualityChecksPassed }} av {{ trust.qualityChecksTotal }} godkända</dd></div>
+              <div><dt>Ägare</dt><dd>{{ trust.ownerAssigned ? 'Angiven' : 'Ej angiven' }}</dd></div>
+              <div><dt>Lineage</dt><dd>{{ trust.lineageAvailable ? 'Finns' : 'Saknas' }}</dd></div>
+              <div><dt>Klassning</dt><dd>{{ trust.classificationAssigned ? 'Angiven' : 'Ej angiven' }}</dd></div>
+              <div><dt>Senast granskad</dt><dd>{{ trust.lastReviewed }}</dd></div>
+            </dl>
+          </section>
+        }
+
+        <details class="technical-details">
+          <summary>Tekniska detaljer</summary>
+          <dl>
+            <div><dt>Teknisk implementation</dt><dd>{{ technicalLabel }}</dd></div>
+            @if (product.modelType) {
+              <div><dt>Modelltyp</dt><dd>{{ product.modelType }}</dd></div>
+            }
+            <div><dt>Datadomän</dt><dd>{{ product.dataDomain }}</dd></div>
+            <div><dt>Livscykel</dt><dd>{{ product.lifecycleStatus }}</dd></div>
+            <div><dt>Synlighet</dt><dd>{{ product.visibility }}</dd></div>
+          </dl>
+        </details>
+      </main>
+
+      <aside class="owner-card">
+        <p class="eyebrow">Ägare och support</p>
+        <h2>{{ product.owner }}</h2>
+        @if (view.team) {
+          <p>Ansvarigt team: {{ view.team.name }}</p>
+        }
+        <a routerLink="/kontakt">Kontakta ägare <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+        @if (view.contact) {
+          <div class="owner-contact"><app-contact-card [contact]="view.contact" /></div>
+        }
+        <hr />
+        @if (systemUrlService.isConfigured(product.documentationUrlKey)) {
+          <p><a [href]="systemUrlService.getUrl(product.documentationUrlKey)" target="_blank" rel="noopener">Öppna dokumentation <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a></p>
+        }
+      </aside>
+    </div>
+  } @else {
+    <p>Dataprodukten kunde inte hittas.</p>
+  }
+}

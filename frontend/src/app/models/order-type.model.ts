@@ -32,7 +32,8 @@ export interface OrderType {
   fulfillmentMode: FulfillmentMode;
   steps: OrderStep[];
   relatedResources?: string[];
-  documentationUrl?: string;
+  /** Nyckel som slås upp mot systemUrls i runtime-config, se SystemUrlService. */
+  documentationUrlKey?: string;
   lifecycleStatus: LifecycleStatus;
   visibility: Visibility;
 }

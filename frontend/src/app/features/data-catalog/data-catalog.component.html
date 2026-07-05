@@ -1,6 +1,6 @@
 <app-page-header
   title="Data & katalog"
-  description="Utforska exempel på datamängder och Information Marts. Ägare, förvaltare och klassning är fiktiva exempelvärden."
+  description="Utforska exempel på datamängder och dataprodukter. Ägare, förvaltare och klassning är fiktiva exempelvärden."
 />
 
 <div class="filter-bar">
@@ -39,7 +39,7 @@
 </section>
 
 <section class="section">
-  <h2 class="section-title">Information Marts</h2>
+  <h2 class="section-title">Dataprodukter</h2>
   <div class="row g-4">
     @for (mart of informationMarts(); track mart.id) {
       <div class="col-12 col-sm-6 col-lg-4">
@@ -50,7 +50,21 @@
             <h3 class="app-card-title">{{ mart.name }}</h3>
             <p class="app-card-description">{{ mart.description }}</p>
             <p class="text-muted-custom small-note">Ägare: {{ mart.owner }}</p>
+            <p class="text-muted-custom small-note">Teknisk implementation: Information Mart</p>
             <app-lifecycle-badge [status]="mart.lifecycleStatus" />
+            <a class="app-card-link" [routerLink]="['/data/dataprodukt', mart.id]">
+              Visa dataprodukt <i class="bi bi-arrow-right" aria-hidden="true"></i>
+            </a>
+            @if (systemUrlService.isConfigured(mart.documentationUrlKey)) {
+              <a
+                class="app-card-link"
+                [href]="systemUrlService.getUrl(mart.documentationUrlKey)"
+                target="_blank"
+                rel="noopener"
+              >
+                Dokumentation <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+              </a>
+            }
           </div>
         </article>
       </div>

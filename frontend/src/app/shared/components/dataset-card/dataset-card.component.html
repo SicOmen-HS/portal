@@ -21,5 +21,8 @@
       </div>
     </dl>
     <app-lifecycle-badge [status]="dataset().lifecycleStatus" />
+    <a class="app-card-link" [routerLink]="['/data', dataset().id]">
+      Förstå och använd datan <i class="bi bi-arrow-right" aria-hidden="true"></i>
+    </a>
   </div>
 </article>

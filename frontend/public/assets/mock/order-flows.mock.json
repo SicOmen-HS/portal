@@ -23,7 +23,7 @@
   {
     "id": "orderflow-new-bi-app",
     "name": "Beställningsflöde för ny BI-tillämpning",
-    "description": "Flöde som samordnar accessgrupp, Information Mart-koppling och utveckling av en ny BI-tillämpning.",
+    "description": "Flöde som samordnar accessgrupp, dataproduktkoppling och utveckling av en ny BI-tillämpning.",
     "relatedServiceId": "service-order-dashboard",
     "ownerTeamId": "team-bi-visualisering",
     "targetAudience": ["Verksamhetsanvändare", "Analytiker", "Beställare"],
@@ -45,7 +45,7 @@
   {
     "id": "orderflow-alarm",
     "name": "Beställningsflöde för larm",
-    "description": "Flöde för att beställa ett larm kopplat till en Information Mart eller BI-tillämpning.",
+    "description": "Flöde för att beställa ett larm kopplat till en dataprodukt eller BI-tillämpning.",
     "ownerTeamId": "team-data-platform",
     "targetAudience": ["Analytiker", "Förvaltare"],
     "linkKey": "ORDER_FORM_ALARM",

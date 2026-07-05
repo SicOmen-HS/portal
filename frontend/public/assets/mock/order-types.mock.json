@@ -19,7 +19,7 @@
       { "id": "step-new-dataset-3", "name": "Ingest och katalogisera", "description": "Datamängden tas in i ingestzonen och registreras i datakatalogen.", "stepOrder": 3, "executionMode": "partially-automated", "userVisible": false, "systemsAffected": ["system-openmetadata"] }
     ],
     "relatedResources": ["OpenMetadata"],
-    "documentationUrl": "https://example.local/docs/order-new-dataset",
+    "documentationUrlKey": "ORDER_DOC_NEW_DATASET_URL",
     "lifecycleStatus": "active",
     "visibility": "all-users"
   },
@@ -41,14 +41,14 @@
       { "id": "step-change-dataset-1", "name": "Beskriv önskad ändring", "description": "Beställaren beskriver vad som ska ändras och varför.", "stepOrder": 1, "executionMode": "manual", "userVisible": true },
       { "id": "step-change-dataset-2", "name": "Bedöm konsekvens", "description": "Ansvarigt team bedömer påverkan på befintliga konsumenter.", "stepOrder": 2, "executionMode": "manual", "userVisible": false, "ownerTeamId": "team-data-platform" }
     ],
-    "documentationUrl": "https://example.local/docs/order-change-dataset",
+    "documentationUrlKey": "ORDER_DOC_CHANGE_DATASET_URL",
     "lifecycleStatus": "active",
     "visibility": "all-users"
   },
   {
     "id": "order-type-new-bi-app",
     "name": "Ny BI-tillämpning",
-    "description": "Beställ en ny dashboard eller rapport. Kan kräva ny accessgrupp och koppling till en Information Mart innan tillämpningen kan publiceras.",
+    "description": "Beställ en ny dashboard eller rapport. Kan kräva ny accessgrupp och koppling till en dataprodukt innan tillämpningen kan publiceras.",
     "category": "Business Intelligence",
     "relatedServiceId": "service-order-dashboard",
     "relatedPlatformCapabilityId": "platform-bi",
@@ -57,7 +57,7 @@
     "orderFlowId": "orderflow-new-bi-app",
     "prerequisites": [
       "Behovet är beskrivet i form av målgrupp och beslut som ska stödjas",
-      "Källdata eller Information Mart är identifierad, alternativt behöver skapas"
+      "Källdata eller dataprodukt är identifierad, alternativt behöver skapas"
     ],
     "dependencies": [
       {
@@ -72,11 +72,11 @@
       },
       {
         "id": "dep-new-bi-app-information-mart",
-        "name": "BI-tillämpning behöver kopplas till Information Mart",
-        "description": "Om ingen lämplig Information Mart finns måste en ny skapas innan tillämpningen kan byggas klart.",
+        "name": "BI-tillämpning behöver kopplas till en dataprodukt",
+        "description": "Om ingen lämplig dataprodukt finns måste en ny skapas innan tillämpningen kan byggas klart.",
         "dependencyType": "Data",
         "from": "Ny BI-tillämpning",
-        "to": "Information Mart",
+        "to": "Dataprodukt",
         "mandatory": true,
         "impactIfMissing": "Tillämpningen saknar en stabil datakälla att rapportera från."
       },
@@ -96,12 +96,12 @@
     "steps": [
       { "id": "step-new-bi-app-1", "name": "Beskriv behov och målgrupp", "description": "Beställaren beskriver vad tillämpningen ska visa och för vem.", "stepOrder": 1, "executionMode": "manual", "userVisible": true },
       { "id": "step-new-bi-app-2", "name": "Skapa eller uppdatera accessgrupp", "description": "En accessgrupp skapas eller uppdateras för att styra vem som ska se tillämpningen.", "stepOrder": 2, "executionMode": "manual", "userVisible": false, "ownerTeamId": "team-bi-visualisering", "systemsAffected": ["system-qlik-sense"] },
-      { "id": "step-new-bi-app-3", "name": "Koppla till Information Mart", "description": "Tillämpningen kopplas till en befintlig eller ny Information Mart.", "stepOrder": 3, "executionMode": "partially-automated", "userVisible": false, "ownerTeamId": "team-data-platform" },
+      { "id": "step-new-bi-app-3", "name": "Koppla till dataprodukt", "description": "Tillämpningen kopplas till en befintlig eller ny dataprodukt.", "stepOrder": 3, "executionMode": "partially-automated", "userVisible": false, "ownerTeamId": "team-data-platform" },
       { "id": "step-new-bi-app-4", "name": "Utveckla BI-tillämpning", "description": "Dashboard eller rapport byggs i Qlik Sense.", "stepOrder": 4, "executionMode": "manual", "userVisible": false, "ownerTeamId": "team-bi-visualisering", "systemsAffected": ["system-qlik-sense"] },
       { "id": "step-new-bi-app-5", "name": "Publicera och informera beställare", "description": "Tillämpningen publiceras och beställaren informeras om att den är klar.", "stepOrder": 5, "executionMode": "automated", "userVisible": true }
     ],
-    "relatedResources": ["Qlik Sense", "Information Mart", "Accessgrupp"],
-    "documentationUrl": "https://example.local/docs/order-new-bi-app",
+    "relatedResources": ["Qlik Sense", "Dataprodukt", "Accessgrupp"],
+    "documentationUrlKey": "ORDER_DOC_NEW_BI_APP_URL",
     "lifecycleStatus": "active",
     "visibility": "all-users"
   },
@@ -122,14 +122,14 @@
       { "id": "step-access-group-1", "name": "Ange resurs och motivering", "description": "Beställaren anger vilken resurs och varför åtkomst behövs.", "stepOrder": 1, "executionMode": "manual", "userVisible": true },
       { "id": "step-access-group-2", "name": "Godkännande från ägare", "description": "Resursens ägare eller förvaltare godkänner beställningen.", "stepOrder": 2, "executionMode": "manual", "userVisible": false }
     ],
-    "documentationUrl": "https://example.local/docs/order-access-group",
+    "documentationUrlKey": "ORDER_DOC_ACCESS_GROUP_URL",
     "lifecycleStatus": "active",
     "visibility": "all-users"
   },
   {
     "id": "order-type-alarm",
     "name": "Larm",
-    "description": "Beställ ett larm kopplat till en BI-tillämpning, Information Mart eller laddningsflöde.",
+    "description": "Beställ ett larm kopplat till en BI-tillämpning, dataprodukt eller laddningsflöde.",
     "category": "Drift",
     "targetAudience": ["Analytiker", "Förvaltare"],
     "ownerTeamId": "team-data-platform",
@@ -139,10 +139,10 @@
       {
         "id": "dep-alarm-resource",
         "name": "Larm kräver befintlig resurs",
-        "description": "Ett larm kan bara kopplas till en resurs som redan finns, t.ex. en Information Mart eller BI-tillämpning.",
+        "description": "Ett larm kan bara kopplas till en resurs som redan finns, t.ex. en dataprodukt eller BI-tillämpning.",
         "dependencyType": "Data",
         "from": "Larm",
-        "to": "Information Mart eller BI-tillämpning",
+        "to": "Dataprodukt eller BI-tillämpning",
         "mandatory": true,
         "impactIfMissing": "Larmet kan inte skapas eftersom det saknar en resurs att övervaka."
       }
@@ -153,7 +153,7 @@
       { "id": "step-alarm-1", "name": "Välj resurs och villkor", "description": "Beställaren väljer vilken resurs och vilket villkor larmet ska bevaka.", "stepOrder": 1, "executionMode": "manual", "userVisible": true },
       { "id": "step-alarm-2", "name": "Konfigurera larm", "description": "Larmet konfigureras och kopplas till vald notifieringskanal.", "stepOrder": 2, "executionMode": "partially-automated", "userVisible": false, "ownerTeamId": "team-data-platform" }
     ],
-    "documentationUrl": "https://example.local/docs/order-alarm",
+    "documentationUrlKey": "ORDER_DOC_ALARM_URL",
     "lifecycleStatus": "active",
     "visibility": "all-users"
   },
@@ -187,7 +187,7 @@
       { "id": "step-devspace-2", "name": "Tilldela accessgrupp", "description": "Beställaren läggs till i rätt accessgrupp.", "stepOrder": 2, "executionMode": "partially-automated", "userVisible": false, "ownerTeamId": "team-ai-platform" },
       { "id": "step-devspace-3", "name": "Starta miljö", "description": "Devspace-miljön startas automatiskt i containerplattformen.", "stepOrder": 3, "executionMode": "automated", "userVisible": true, "systemsAffected": ["system-devspace-platform"] }
     ],
-    "documentationUrl": "https://example.local/docs/order-devspace",
+    "documentationUrlKey": "ORDER_DOC_DEVSPACE_URL",
     "lifecycleStatus": "active",
     "visibility": "data-scientists"
   },
@@ -209,7 +209,7 @@
       { "id": "step-ai-ml-1", "name": "Beskriv experiment", "description": "Beställaren beskriver syfte, data och förväntat resultat.", "stepOrder": 1, "executionMode": "manual", "userVisible": true },
       { "id": "step-ai-ml-2", "name": "Tilldela resurser", "description": "Beräkningsresurser och lagringsyta tilldelas.", "stepOrder": 2, "executionMode": "partially-automated", "userVisible": false, "ownerTeamId": "team-ai-platform" }
     ],
-    "documentationUrl": "https://example.local/docs/order-ai-ml",
+    "documentationUrlKey": "ORDER_DOC_AI_ML_URL",
     "lifecycleStatus": "active",
     "visibility": "data-scientists"
   },
@@ -231,7 +231,7 @@
       { "id": "step-nintex-1", "name": "Beskriv process", "description": "Beställaren beskriver processen som ska stödjas med formulär eller workflow.", "stepOrder": 1, "executionMode": "manual", "userVisible": true },
       { "id": "step-nintex-2", "name": "Sätt upp yta", "description": "En yta i Nintex sätts upp åt beställaren.", "stepOrder": 2, "executionMode": "manual", "userVisible": false, "ownerTeamId": "team-nintex-k2", "systemsAffected": ["system-nintex"] }
     ],
-    "documentationUrl": "https://example.local/docs/order-nintex-k2",
+    "documentationUrlKey": "ORDER_DOC_NINTEX_K2_URL",
     "lifecycleStatus": "active",
     "visibility": "all-users"
   }

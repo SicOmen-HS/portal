@@ -8,5 +8,56 @@
     "showOrderFlows": true,
     "showTechnicalMetadata": true,
     "useMockData": true
+  },
+  "systemUrls": {
+    "QLIK_SENSE_URL": "https://example.local/qlik",
+    "QLIK_SENSE_DOCS_URL": "https://example.local/docs/qlik-sense",
+    "GRAFANA_URL": "https://example.local/grafana",
+    "GRAFANA_STATUS_URL": "https://example.local/grafana/status",
+    "OPENMETADATA_URL": "https://example.local/openmetadata",
+    "OPENMETADATA_DOCS_URL": "https://example.local/docs/openmetadata",
+    "CHAT_PORTAL_URL": "https://example.local/chatportal",
+    "UIPATH_URL": "https://example.local/uipath",
+    "NINTEX_URL": "https://example.local/nintex",
+    "NINTEX_ORDER_FORM_URL": "https://example.local/nintex/order",
+    "DEVSPACE_PLATFORM_URL": "https://example.local/openshift-ai",
+    "POWERBI_URL": "https://example.local/powerbi",
+    "QLIKVIEW_URL": "https://example.local/qlikview",
+
+    "GUIDE_ORDER_DASHBOARD_URL": "https://example.local/docs/guide-order-dashboard",
+    "GUIDE_FIND_DATASETS_URL": "https://example.local/docs/guide-find-datasets",
+    "GUIDE_OPENMETADATA_URL": "https://example.local/docs/guide-openmetadata",
+    "GUIDE_DEVSPACE_URL": "https://example.local/docs/guide-devspace",
+    "GUIDE_ACCESS_URL": "https://example.local/docs/guide-access",
+    "GUIDE_DATA_PLATFORM_DEV_URL": "https://example.local/docs/guide-data-platform-dev",
+    "GUIDE_NINTEX_URL": "https://example.local/docs/guide-nintex",
+    "GUIDE_ORDER_ALARM_URL": "https://example.local/docs/guide-order-alarm",
+    "GUIDE_GENAI_CHATPORTAL_URL": "https://example.local/docs/guide-genai-chatportal",
+    "GUIDE_LIFECYCLE_URL": "https://example.local/docs/guide-lifecycle",
+
+    "ORDER_DOC_NEW_DATASET_URL": "https://example.local/docs/order-new-dataset",
+    "ORDER_DOC_CHANGE_DATASET_URL": "https://example.local/docs/order-change-dataset",
+    "ORDER_DOC_NEW_BI_APP_URL": "https://example.local/docs/order-new-bi-app",
+    "ORDER_DOC_ACCESS_GROUP_URL": "https://example.local/docs/order-access-group",
+    "ORDER_DOC_ALARM_URL": "https://example.local/docs/order-alarm",
+    "ORDER_DOC_DEVSPACE_URL": "https://example.local/docs/order-devspace",
+    "ORDER_DOC_AI_ML_URL": "https://example.local/docs/order-ai-ml",
+    "ORDER_DOC_NINTEX_K2_URL": "https://example.local/docs/order-nintex-k2",
+
+    "ORDER_FORM_NEW_DATASET": "https://example.local/forms/new-dataset",
+    "ORDER_FORM_CHANGE_DATASET": "https://example.local/forms/change-dataset",
+    "ORDER_FORM_NEW_BI_APP": "https://example.local/forms/new-bi-app",
+    "ORDER_FORM_ACCESS_GROUP": "https://example.local/forms/access-group",
+    "ORDER_FORM_ALARM": "https://example.local/forms/alarm",
+    "ORDER_FORM_DEVSPACE": "https://example.local/forms/devspace",
+    "ORDER_FORM_AI_ML": "https://example.local/forms/ai-ml",
+    "ORDER_FORM_NINTEX_K2": "https://example.local/forms/nintex-k2",
+
+    "MART_SALES_DOC_URL": "https://example.local/docs/mart-sales",
+    "MART_CUSTOMER_DOC_URL": "https://example.local/docs/mart-customer",
+    "MART_FINANCE_DOC_URL": "https://example.local/docs/mart-finance",
+    "MART_LEGACY_REPORTING_DOC_URL": "https://example.local/docs/mart-legacy-reporting",
+
+    "DOCUMENTATION_SITE_URL": "https://example.local/docs"
   }
 }

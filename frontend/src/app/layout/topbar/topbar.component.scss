@@ -46,4 +46,31 @@
     width: 100%;
     max-width: 28rem;
   }
+
+  @media (max-width: 640px) {
+    display: none;
+  }
+}
+
+.home-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: .82rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 40px;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-gray-700);
+    border-radius: var(--radius-sm);
+
+    &:hover { background: var(--color-gray-100); text-decoration: none; }
+    i { color: var(--color-status-info); }
+  }
+
+  @media (max-width: 640px) { a:first-child { display: none; } }
 }

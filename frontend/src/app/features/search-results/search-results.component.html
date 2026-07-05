@@ -1,0 +1,122 @@
+<header class="results-header">
+  <p class="context-label">Sök i hela portalen</p>
+  <h1>Hitta rätt väg vidare</h1>
+  <p>Sök efter det du vill göra – du behöver inte känna till systemet bakom.</p>
+  <app-search-box [initialValue]="query()" placeholder="Prova: rapport försäljning" (searchSubmit)="onSearch($event)" />
+</header>
+
+<p class="result-count"><strong>{{ results().length }} träffar</strong> @if (query()) { <span>för ”{{ query() }}”</span> }</p>
+
+@if (types().length) {
+<form class="filter-bar" aria-label="Filtrera sökresultat">
+
+  <div class="filter-field">
+    <label for="type-filter">Typ</label>
+    <select id="type-filter" class="form-select" [value]="selectedType()" (change)="selectType($any($event.target).value)">
+      <option value="">Alla</option>
+      @for (type of types(); track type) { <option [value]="type">{{ type }}</option> }
+    </select>
+  </div>
+
+  <div class="filter-field">
+    <label for="category-filter">Behov/kategori</label>
+    <select id="category-filter" class="form-select" [value]="selectedCategory()" (change)="selectCategory($any($event.target).value)">
+      <option value="">Alla</option>
+      @for (category of categories(); track category) { <option [value]="category">{{ category }}</option> }
+    </select>
+  </div>
+
+  <div class="filter-field">
+    <label for="status-filter">Status/livscykel</label>
+    <select id="status-filter" class="form-select" [value]="selectedStatus()" (change)="selectStatus($any($event.target).value)">
+      <option value="">Alla</option>
+      @for (status of statuses(); track status) { <option [value]="status">{{ lifecycleLabels[status] }}</option> }
+    </select>
+  </div>
+
+  <div class="filter-field">
+    <label for="access-filter">Åtkomst</label>
+    <select id="access-filter" class="form-select" [value]="selectedAccess()" (change)="selectAccess($any($event.target).value)">
+      <option value="">Alla</option>
+      @for (access of accessOptions(); track access) { <option [value]="access">{{ access }}</option> }
+    </select>
+  </div>
+
+  <div class="filter-field">
+    <label for="owner-filter">Ägare/kontaktfunktion</label>
+    <select id="owner-filter" class="form-select" [value]="selectedOwner()" (change)="selectOwner($any($event.target).value)">
+      <option value="">Alla</option>
+      @for (owner of owners(); track owner) { <option [value]="owner">{{ owner }}</option> }
+    </select>
+  </div>
+
+  @if (hasActiveFilters()) {
+    <button type="button" class="filter-reset" (click)="resetFilters()">Nollställ filter <i class="bi bi-x-circle" aria-hidden="true"></i></button>
+  }
+</form>
+}
+
+@if (results().length) {
+  <div class="results-workspace">
+    <section class="result-list" aria-label="Sökresultat" aria-live="polite">
+      @for (item of results(); track item.type + item.id) {
+        <app-typed-result-card [item]="item" [selected]="selectedResult()?.id === item.id" (previewRequested)="selectedResult.set($event)" />
+      }
+    </section>
+
+    @if (selectedResult(); as item) {
+      <aside class="preview-panel" aria-label="Förhandsvisning av valt resultat">
+        <p class="preview-type">{{ item.type }} · {{ item.category }}</p>
+        <h2>{{ item.title }}</h2>
+        <p class="preview-description">{{ item.description }}</p>
+        <section><h3>Varför är detta relevant?</h3><p>Matchar ditt behov och ger en tydlig väg vidare utan att du behöver välja teknisk plattform först.</p></section>
+        <dl>
+          <div><dt>Ägare/kontaktfunktion</dt><dd>{{ item.owner }}</dd></div>
+          <div><dt>Status/tillit</dt><dd>{{ lifecycleLabels[item.lifecycleStatus] }}</dd></div>
+          <div><dt>Åtkomst</dt><dd>{{ item.access }}</dd></div>
+          <div><dt>Aktualitet</dt><dd>{{ item.freshness }}</dd></div>
+          @if (item.technicalImplementation) {
+            <div><dt>Teknisk implementation</dt><dd>{{ item.technicalImplementation }}</dd></div>
+          }
+        </dl>
+        @if (item.relatedGuides.length || item.relatedOrders.length || item.relatedSystems.length) {
+          <section class="related-section">
+            <h3>Relaterat</h3>
+            @if (item.relatedGuides.length) {
+              <p class="related-group-label">Guider</p>
+              <ul>@for (ref of item.relatedGuides; track ref.id) { <li><a [routerLink]="ref.routerLink">{{ ref.title }}</a></li> }</ul>
+            }
+            @if (item.relatedOrders.length) {
+              <p class="related-group-label">Beställningar</p>
+              <ul>@for (ref of item.relatedOrders; track ref.id) { <li><a [routerLink]="ref.routerLink">{{ ref.title }}</a></li> }</ul>
+            }
+            @if (item.relatedSystems.length) {
+              <p class="related-group-label">System</p>
+              <ul>@for (ref of item.relatedSystems; track ref.id) { <li><a [routerLink]="ref.routerLink">{{ ref.title }}</a></li> }</ul>
+            }
+          </section>
+        }
+        <a class="btn btn-primary preview-primary" [routerLink]="item.routerLink">{{ primaryActionLabel(item) }}</a>
+        <a class="preview-secondary" routerLink="/kontakt">Fråga ansvarig funktion</a>
+      </aside>
+    }
+  </div>
+} @else {
+  <section class="empty-result" aria-live="polite">
+    <div class="empty-icon"><i class="bi bi-search" aria-hidden="true"></i></div>
+    <p class="context-label">Inga träffar</p>
+    <h2>Vi hittade inget på ”{{ query() }}”</h2>
+    <p>Prova ett enklare ord eller välj en närliggande väg.</p>
+    <div class="suggested-terms" aria-label="Sökförslag">
+      @for (term of ['kunddata', 'försäljningsrapport', 'dashboard', 'Qlik Sense']; track term) {
+        <button type="button" (click)="onSearch(term)">{{ term }}</button>
+      }
+    </div>
+    <div class="empty-actions">
+      <a routerLink="/behov/rapport">Hitta data</a>
+      <a routerLink="/bestall/order-type-new-bi-app">Beställ rapport</a>
+      <a routerLink="/kontakt">Kontakta support</a>
+      <a routerLink="/sok">Öppna hela katalogen</a>
+    </div>
+  </section>
+}

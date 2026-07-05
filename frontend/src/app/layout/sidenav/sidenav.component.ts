@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_ITEMS } from '../nav-items';
 
@@ -11,6 +11,8 @@ import { NAV_ITEMS } from '../nav-items';
 })
 export class SidenavComponent {
   protected readonly navItems = NAV_ITEMS;
+  readonly collapsed = input(false);
 
   readonly linkActivated = output<void>();
+  readonly collapsedToggle = output<void>();
 }

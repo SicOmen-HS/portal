@@ -30,7 +30,19 @@
   <h2 class="section-title">Länkar</h2>
   <ul class="plain-list">
     <li><a routerLink="/guider">Guider & dokumentation</a></li>
-    <li><a href="https://example.local/docs" target="_blank" rel="noopener">Central dokumentationsyta (exempel-URL) <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a></li>
-    <li><a href="#">Ärendesystem (platshållare i denna mockup)</a></li>
+    <li>
+      <a [href]="systemUrlService.getUrl(documentationSiteUrlKey)" target="_blank" rel="noopener">
+        Central dokumentationsyta <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li>
+      @if (systemUrlService.isConfigured(ticketingSystemUrlKey)) {
+        <a [href]="systemUrlService.getUrl(ticketingSystemUrlKey)" target="_blank" rel="noopener">
+          Ärendesystem <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+        </a>
+      } @else {
+        <span class="text-muted-custom">Ärendesystem (inte konfigurerat i denna miljö)</span>
+      }
+    </li>
   </ul>
 </section>

@@ -8,6 +8,8 @@
     [ngModel]="value"
     name="query"
     (ngModelChange)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
   />
   <button type="submit" class="btn btn-primary">{{ buttonLabel() }}</button>
 </form>

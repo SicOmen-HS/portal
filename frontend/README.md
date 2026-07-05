@@ -7,6 +7,10 @@ principer och informationsmodell.
 Detta är en visuell och funktionell prototyp. Det finns ingen backend – all data läses från fiktiv
 mockdata under `public/assets/mock/`.
 
+För en fullständig genomgång av arkitektur, routing, mockdataflöde, runtime-konfiguration och
+hur du lägger till en ny sida/tjänst/systemlänk, se
+[`docs/13_Utvecklarguide.md`](../docs/13_Utvecklarguide.md).
+
 ## Köra lokalt
 
 ```bash
@@ -15,6 +19,27 @@ npm start
 ```
 
 Öppna `http://localhost:4200/` i webbläsaren. Sidan laddas om automatiskt vid ändringar.
+
+### Jämför nästa mockupiteration
+
+Startsidan öppnar Variant B som huvudriktning och innehåller fortsatt en variantväljare
+för tre uttryck som delar samma data och funktionella kärna:
+
+- `/?variant=a` – behovsstyrd katalogarbetsyta
+- `/?variant=b` – minimalistisk sökportal
+- `/?variant=c` – data product-inspirerad datamarknad
+
+Variant B visar typade sökförslag vid fokus, en trestegsintroduktion för nya användare
+och kompakta behovsingångar. Den samlade sökningen behåller resultatlistan och visar en
+previewpanel på desktop; på mindre skärm staplas panelen under listan.
+På startsidan minimeras huvudnavigationen till ett ikonrail och toppsöket döljs så att
+den centrala sökningen är entydig. På arbetsvyer visas full navigation och toppsök igen.
+Variant B använder adaptiva maxbredder för hero (1280 px), vanliga uppgifter (1344 px)
+och rekommenderat/status/support (1408 px). Ikonrailens etiketter visas vid hover och
+tangentbordsfokus, och sökförslag kan flyttas med Tab eller upp-/nerpil.
+
+Nya kärnresor finns under `/sok`, `/behov/rapport` och `/data/:id`. Prova exempelvis
+`/sok?q=rapport` och `/data/dataset-sales-transactions-demo`.
 
 ## Struktur
 
@@ -28,9 +53,15 @@ src/app/
 └── services/       Angular services som läser mockdata per informationsobjekt
 ```
 
-Mockdata ligger under `public/assets/mock/*.json` och runtime-konfiguration under
-`public/assets/config/runtime-config.json`. Inget av innehållet är känsligt – se
+Mockdata ligger under `public/assets/mock/*.json` (se `public/assets/mock/README.md` för en
+filöversikt) och runtime-konfiguration under `public/assets/config/runtime-config.json` (se
+`public/assets/config/README.md`). Inget av innehållet är känsligt – se
 [`docs/05_Konfiguration.md`](../docs/05_Konfiguration.md).
+
+Systemlänkar och dokumentationslänkar hårdkodas aldrig – de beskrivs som en nyckel
+(`urlKey`/`documentationUrlKey`/`linkKey`) i mockdata och slås upp mot `systemUrls` i
+runtime-konfigurationen via `core/links/system-url.service.ts`. Se
+[`docs/13_Utvecklarguide.md#variabelstyrda-urler-och-urlkey`](../docs/13_Utvecklarguide.md#variabelstyrda-urler-och-urlkey).
 
 ## Bygga
 

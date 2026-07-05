@@ -1,89 +1,89 @@
-<section class="hero">
-  <h1>Data, analys och AI för bättre beslut</h1>
-  <p>
-    Hitta tillförlitlig data, tjänster, guider och system som skapar nytta i din vardag –
-    utan att behöva känna till organisationen bakom.
-  </p>
-  <app-search-box
-    placeholder="Sök data, tjänster, guider och system..."
-    ariaLabel="Sök i portalen"
-    (searchSubmit)="onSearch($event)"
-  />
-</section>
+@if (variant() !== 'b') { <nav class="variant-picker" aria-label="Välj mockupvariant">
+  <span>Jämför design:</span>
+  <a routerLink="/" [queryParams]="{ variant: 'a' }" [class.active]="variant() === 'a'"><strong>A</strong> Behovsstyrd</a>
+  <a routerLink="/" [queryParams]="{ variant: 'b' }" [class.active]="variant() === 'b'"><strong>B</strong> Minimal sök</a>
+  <a routerLink="/" [queryParams]="{ variant: 'c' }" [class.active]="variant() === 'c'"><strong>C</strong> Datamarknad</a>
+</nav> }
 
-<section class="section">
-  <h2 class="section-title">Genvägar</h2>
-  <div class="row g-4">
-    @for (shortcut of shortcuts; track shortcut.title) {
-      <div class="col-12 col-sm-6 col-lg-3">
-        <a class="shortcut-tile" [routerLink]="shortcut.routerLink">
-          <i class="bi {{ shortcut.icon }}" aria-hidden="true"></i>
-          <h3>{{ shortcut.title }}</h3>
-          <p>{{ shortcut.description }}</p>
-          <span class="shortcut-tile-arrow"><i class="bi bi-arrow-right" aria-hidden="true"></i></span>
-        </a>
-      </div>
-    }
-  </div>
-</section>
-
-<section class="section">
-  <div class="section-heading-row">
-    <h2 class="section-title">Prioriterade tjänster</h2>
-    <a routerLink="/tjanster">Visa alla tjänster <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-  </div>
-  <div class="row g-4">
-    @for (service of (featuredServices$ | async); track service.id) {
-      <div class="col-12 col-sm-6 col-lg-3">
-        <app-service-card [service]="service" />
-      </div>
-    }
-  </div>
-</section>
-
-<section class="section">
-  <div class="section-heading-row">
-    <h2 class="section-title">Beställ & självbetjäning</h2>
-    <a routerLink="/bestall">Visa alla beställningar <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-  </div>
-  <div class="row g-4">
-    @for (order of (highlightedOrders$ | async); track order.id) {
-      <div class="col-12 col-sm-6 col-lg-4">
-        <app-order-card [orderType]="order" />
-      </div>
-    }
-  </div>
-</section>
-
-<section class="section">
-  <div class="row g-4">
-    <div class="col-12 col-md-4">
-      @if (status$ | async; as status) {
-        <a class="mini-panel" routerLink="/status">
-          <app-status-badge
-            [tone]="status.overall.operational ? 'success' : 'danger'"
-            [label]="status.overall.headline"
-          />
-          <p>{{ status.overall.description }}</p>
-          <span class="mini-panel-link">Visa fullständig status <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
-        </a>
+<div class="home-workspace variant-{{ variant() }}">
+  <section class="hero">
+    <div class="hero-main">
+    <p class="hero-kicker">{{ variantLabel() }}</p>
+    <h1>Vad försöker du göra?</h1>
+    <p>{{ variant() === 'b' ? 'Beskriv ditt behov med egna ord. Vi söker över data, tjänster, guider och beställningar.' : variant() === 'c' ? 'Hitta tillförlitlig data och färdiga informationsprodukter för analys och rapportering.' : 'Hitta rätt data, tjänst eller nästa steg utan att känna till organisationen eller tekniken bakom.' }}</p>
+    <div class="search-experience" (keydown)="onSuggestionKeydown($event)">
+      <app-search-box placeholder="Prova: Jag vill skapa en rapport om försäljning" ariaLabel="Sök efter det du vill göra" buttonLabel="Hitta rätt" (queryChange)="suggestionQuery.set($event)" (focusChange)="searchFocused.set($event)" (searchSubmit)="onSearch($event)" />
+      @if (searchFocused() && filteredSuggestions().length) {
+        <div class="suggestions" role="region" aria-label="Sökförslag">
+          @for (suggestion of filteredSuggestions(); track suggestion.type + suggestion.title) {
+            <button type="button" (click)="openSuggestion(suggestion)">
+              <span class="suggestion-type">{{ suggestion.type }}</span>
+              <span><strong>{{ suggestion.title }}</strong><small>{{ suggestion.description }}</small></span>
+              <span class="suggestion-action">{{ suggestion.action }} <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+            </button>
+          }
+        </div>
       }
     </div>
-    <div class="col-12 col-md-4">
-      <a class="mini-panel" routerLink="/guider">
-        <i class="bi bi-book mini-panel-icon" aria-hidden="true"></i>
-        <h3>Kunskap & styrning</h3>
-        <p>Guider, riktlinjer och informationsmodell.</p>
-        <span class="mini-panel-link">Till guider <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
-      </a>
+    <div class="audience-paths">
+      <button type="button" (click)="showIntroduction.set(!showIntroduction())" [attr.aria-expanded]="showIntroduction()"><i class="bi bi-compass" aria-hidden="true"></i><span><strong>Ny här?</strong><small>Se hur du går från behov till åtkomst</small></span><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+      <a routerLink="/sok"><i class="bi bi-funnel" aria-hidden="true"></i><span><strong>Jag vet vad jag söker</strong><small>Öppna hela katalogen med filter</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a>
     </div>
-    <div class="col-12 col-md-4">
-      <a class="mini-panel" routerLink="/kontakt">
-        <i class="bi bi-headset mini-panel-icon" aria-hidden="true"></i>
-        <h3>Support</h3>
-        <p>Hjälp och support för dina frågor och ärenden.</p>
-        <span class="mini-panel-link">Till supportportalen <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
-      </a>
+    @if (showIntroduction()) {
+      <ol class="introduction" aria-label="Så fungerar portalen">
+        <li><span>1</span><div><strong>Hitta</strong><small>Beskriv behovet eller välj en vanlig uppgift.</small></div></li>
+        <li><span>2</span><div><strong>Förstå</strong><small>Jämför typ, ägare, tillit och åtkomst.</small></div></li>
+        <li><span>3</span><div><strong>Beställ eller få tillgång</strong><small>Följ det rekommenderade nästa steget.</small></div></li>
+      </ol>
+    }
     </div>
-  </div>
-</section>
+    @if (variant() === 'b') {
+      <aside class="catalog-illustration" aria-label="Portalens resa: hitta, förstå och få tillgång">
+        <div class="illustration-search"><i class="bi bi-search" aria-hidden="true"></i><span>rapport försäljning</span></div>
+        <div class="illustration-results">
+          <div><span class="node-icon data"><i class="bi bi-database" aria-hidden="true"></i></span><span><strong>Hitta</strong><small>Data och guider</small></span><i class="bi bi-check-circle-fill" aria-hidden="true"></i></div>
+          <div><span class="node-icon context"><i class="bi bi-diagram-3" aria-hidden="true"></i></span><span><strong>Förstå</strong><small>Ägare och tillit</small></span><i class="bi bi-check-circle-fill" aria-hidden="true"></i></div>
+          <div class="action-node"><span class="node-icon action"><i class="bi bi-arrow-right-circle" aria-hidden="true"></i></span><span><strong>Få tillgång</strong><small>Rekommenderat nästa steg</small></span><i class="bi bi-chevron-right" aria-hidden="true"></i></div>
+        </div>
+        <div class="illustration-caption"><span><i class="bi bi-shield-check" aria-hidden="true"></i> Verifierad metadata</span><span>Exempelvy</span></div>
+      </aside>
+    }
+  </section>
+
+  @if (variant() !== 'b') {
+    <section class="needs-section">
+      <div class="section-heading-row"><div><p class="section-kicker">Vanliga behov</p><h2>Välj en väg in</h2></div><p>Du når rekommenderade resurser på högst två val.</p></div>
+      <div class="needs-grid">
+        @for (need of needs; track need.title) {
+          <a class="need-card" [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><div><h3>{{ need.title }}</h3><p>{{ need.description }}</p></div><i class="bi bi-arrow-right arrow" aria-hidden="true"></i></a>
+        }
+      </div>
+    </section>
+  } @else {
+    <section class="minimal-shortcuts" aria-labelledby="common-needs-title">
+      <div class="minimal-heading"><h2 id="common-needs-title">Vanliga uppgifter</h2><span>Snabba vägar till rätt nästa steg</span></div>
+      @for (need of needs.slice(0, 4); track need.title) { <a [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><span><strong>{{ need.title }}</strong><small>{{ need.description }}</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a> }
+      <details><summary>Visa fler vanliga behov</summary><p class="secondary-label">Sekundära behov</p><div>@for (need of needs.slice(4); track need.title) { <a [routerLink]="need.routerLink">{{ need.title }} <i class="bi bi-arrow-right" aria-hidden="true"></i></a> }</div></details>
+    </section>
+  }
+
+  @if (variant() === 'c') {
+    <section class="market-section">
+      <div class="section-heading-row"><div><p class="section-kicker">Utvalt för dig</p><h2>Data products redo att utforska</h2></div><a routerLink="/data">Visa datakatalogen</a></div>
+      <div class="market-grid">
+        <a routerLink="/data/dataset-sales-transactions-demo" class="product-card featured"><div class="product-icon"><i class="bi bi-database-check" aria-hidden="true"></i></div><p>Datamängd · Försäljning</p><h3>Exempel Försäljningstransaktioner</h3><span>Fiktiv data för rapportering och analys.</span><ul><li><i class="bi bi-patch-check"></i>Verifierad</li><li><i class="bi bi-arrow-repeat"></i>Daglig</li><li><i class="bi bi-lock"></i>Åtkomst krävs</li></ul></a>
+        <a routerLink="/data/dataprodukt/mart-customer-demo" class="product-card"><div class="product-icon"><i class="bi bi-layers" aria-hidden="true"></i></div><p>Dataprodukt · Kund</p><h3>Kund – interaktioner och insikt</h3><span>Ägd dataprodukt för flera exempelrapporter. Teknisk implementation: Information Mart.</span><ul><li><i class="bi bi-patch-check"></i>Verifierad</li><li><i class="bi bi-activity"></i>I drift</li></ul></a>
+      </div>
+    </section>
+  } @else {
+    <section class="resource-section">
+      <div class="section-heading-row"><div><p class="section-kicker">Rekommenderat</p><h2>Fortsätt där det ger mest nytta</h2></div></div>
+      <div class="resource-grid"><a routerLink="/behov/rapport"><span>Samlad behovsväg · Guide + data + beställning</span><h3>Skapa eller ändra en rapport</h3><p>Från verksamhetsbehov till rätt data, guide och beställning.</p><small>Rekommenderas när du vill ta fram en rapport eller dashboard.</small><strong class="resource-next">Nästa steg: Visa väg <i class="bi bi-arrow-right" aria-hidden="true"></i></strong></a><a routerLink="/data/dataset-sales-transactions-demo"><span>Datamängd</span><h3>Exempel Försäljningstransaktioner</h3><ul class="resource-signals"><li><i class="bi bi-lock" aria-hidden="true"></i>Åtkomst krävs</li><li><i class="bi bi-patch-check" aria-hidden="true"></i>Verifierad</li></ul><p>Se tillit, åtkomst och relaterade resurser före tekniska detaljer.</p><strong class="resource-next">Nästa steg: Se datamängd <i class="bi bi-arrow-right" aria-hidden="true"></i></strong></a></div>
+    </section>
+  }
+
+  <section class="utility-row">
+    @if (status$ | async; as status) { <a routerLink="/status" class="utility-card"><app-status-badge [tone]="status.overall.operational ? 'success' : 'danger'" [label]="status.overall.headline" /><div><h2>Status i korthet</h2><p>1 planerat underhåll · Exempelstatus uppdaterad 07:30</p><strong>Visa status</strong></div><i class="bi bi-arrow-right" aria-hidden="true"></i></a> }
+    <a routerLink="/kontakt" class="utility-card"><i class="bi bi-headset utility-icon" aria-hidden="true"></i><div><h2>Behöver du hjälp?</h2><p>Beskriv vad du försöker göra så hittar vi rätt kontaktväg.</p><strong>Kontakta support</strong></div><i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+  </section>
+</div>

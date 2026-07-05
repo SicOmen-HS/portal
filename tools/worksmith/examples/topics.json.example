@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "topics": [
+    { "id": "example-topic-one", "label": "Example Topic One" },
+    { "id": "example-topic-two", "label": "Example Topic Two" },
+    { "id": "example-topic-three", "label": "Example Topic Three" }
+  ]
+}

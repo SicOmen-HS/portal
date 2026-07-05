@@ -31,6 +31,20 @@
   gap: var(--space-2);
 }
 
+.order-detail-primary-action {
+  margin-top: var(--space-4);
+}
+
+.order-owner-team {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+
+  i { color: var(--color-gray-500); }
+}
+
 .order-card-chip {
   display: inline-flex;
   align-items: center;

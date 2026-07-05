@@ -2,3 +2,11 @@
   display: block;
   height: 100%;
 }
+
+// Visas när urlKey saknas i runtime-config.systemUrls – ett medvetet,
+// säkert degraderat läge istället för en trasig länk.
+.app-card-link-disabled {
+  color: var(--color-gray-500);
+  font-weight: 600;
+  cursor: default;
+}

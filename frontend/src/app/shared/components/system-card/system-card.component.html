@@ -9,13 +9,19 @@
     <app-lifecycle-badge [status]="system().lifecycleStatus" />
   </div>
   @if (primaryLink(); as link) {
-    <a
-      class="app-card-link"
-      [href]="link.url"
-      [target]="link.opensInNewWindow ? '_blank' : '_self'"
-      rel="noopener"
-    >
-      Öppna {{ system().name }} <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
-    </a>
+    @if (isLinkConfigured()) {
+      <a
+        class="app-card-link"
+        [href]="resolvedUrl()"
+        [target]="link.opensInNewWindow ? '_blank' : '_self'"
+        rel="noopener"
+      >
+        Öppna {{ system().name }} <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+      </a>
+    } @else {
+      <span class="app-card-link app-card-link-disabled">
+        Länk inte konfigurerad i denna miljö
+      </span>
+    }
   }
 </article>

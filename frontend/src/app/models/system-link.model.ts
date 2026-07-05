@@ -13,15 +13,20 @@ export const SYSTEM_LINK_TYPE_LABELS: Record<SystemLinkType, string> = {
 
 /**
  * SystemLink representerar en länk till ett system eller en resurs.
- * Repot innehåller endast platshållar-URL:er, se 05_Konfiguration.md.
+ *
+ * Länken pekar aldrig direkt på en URL. Istället beskriver `urlKey` vilken
+ * konfigurationsnyckel som ska slås upp i runtime-konfigurationens
+ * `systemUrls` (se SystemUrlService och docs/13_Utvecklarguide.md). Det gör
+ * att samma mockdata kan återanvändas i alla miljöer – bara `systemUrls`
+ * behöver bytas när portalen flyttas.
  */
 export interface SystemLink {
   id: string;
   name: string;
   description: string;
   linkType: SystemLinkType;
-  /** Exempel-URL (t.ex. https://example.local/...) eller "#" – aldrig en verklig intern URL. */
-  url: string;
+  /** Nyckel som slås upp mot systemUrls i runtime-config, t.ex. "OPENMETADATA_URL". */
+  urlKey: string;
   opensInNewWindow: boolean;
   relatedSystemId?: string;
   targetAudience?: string;

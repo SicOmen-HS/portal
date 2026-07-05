@@ -1,5 +1,14 @@
 import { Routes } from '@angular/router';
 
+/**
+ * Varje sida lazy-loadas som en fristående standalone-komponent
+ * (`loadComponent`) istället för att samlas i en NgModule. Det håller den
+ * initiala bundlen liten och gör att en ny sida kan läggas till utan att
+ * andra sidor påverkas – se docs/13_Utvecklarguide.md#lägga-till-ny-sida.
+ *
+ * Svenska URL-segment (t.ex. "tjanster", "bestall") används eftersom
+ * portalens målgrupp är intern och UI-språket är svenska.
+ */
 export const routes: Routes = [
   {
     path: '',
@@ -28,10 +37,33 @@ export const routes: Routes = [
     title: 'System & länkar – Data- och analysportalen',
   },
   {
+    path: 'sok',
+    loadComponent: () => import('./features/search-results/search-results.component').then((m) => m.SearchResultsComponent),
+    title: 'Sök – Data- och analysportalen',
+  },
+  {
+    path: 'behov/rapport',
+    loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
+    title: 'Skapa eller ändra en rapport – Data- och analysportalen',
+  },
+  {
     path: 'data',
     loadComponent: () =>
       import('./features/data-catalog/data-catalog.component').then((m) => m.DataCatalogPageComponent),
     title: 'Data & katalog – Data- och analysportalen',
+  },
+  {
+    path: 'data/dataprodukt/:id',
+    loadComponent: () =>
+      import('./features/data-product-detail/data-product-detail.component').then(
+        (m) => m.DataProductDetailComponent
+      ),
+    title: 'Dataprodukt – Data- och analysportalen',
+  },
+  {
+    path: 'data/:id',
+    loadComponent: () => import('./features/data-detail/data-detail.component').then((m) => m.DataDetailComponent),
+    title: 'Datamängd – Data- och analysportalen',
   },
   {
     path: 'guider',

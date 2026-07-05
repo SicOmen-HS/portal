@@ -115,7 +115,7 @@ De viktigaste objekten är:
 * `TechnicalComponent`
 * `Dataset`
 * `DataService`
-* `InformationMart`
+* `InformationMart` (visas i användargränssnittet som **Dataprodukt**, se `docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`)
 * `BusinessApplication`
 * `Guide`
 * `OrderFlow`
@@ -464,6 +464,61 @@ En datatjänst bör kunna innehålla:
 Datatjänster ska beskrivas utifrån hur användaren kan använda data, inte bara vilken teknik som används bakom.
 
 ---
+
+## Dataprodukt (användarbegrepp)
+
+> Se `docs/adr/0001-dataprodukt-som-anvandarbegrepp.md` för det fullständiga beslutet,
+> alternativen som övervägdes och externa referenser.
+
+En **dataprodukt** är portalens primära användarbegrepp för en ägd, dokumenterad,
+kvalitetssäkrad och konsumtionsbar datapaketering med ett tydligt syfte.
+
+Detta skiljer sig från `Dataset`, som beskriver en bredare, upptäckbar datatillgång
+eller ett byggblock. En dataprodukt bygger normalt på en eller flera datamängder.
+
+I kod och mockdata modelleras en dataprodukt i denna iteration tekniskt som en
+`InformationMart` (se nedan) – det finns inget separat `DataProduct`-objekt i
+informationsmodellen ännu. Gränssnittet ska däremot alltid visa den som "Dataprodukt",
+inte som "Information Mart".
+
+### Exempel
+
+* Dataprodukt för försäljningsanalys, byggd på flera datamängder om kundorder och fakturarader
+* Dataprodukt som källa till en dashboard eller rapport
+* Ny dataprodukt eller ny datakombination
+* Förändring av befintlig dataprodukt
+
+### Typiska egenskaper
+
+En dataprodukt bör kunna kommunicera:
+
+* id, namn och beskrivning (syfte)
+* målgrupp
+* ägare/ansvarigt team och kontaktväg
+* vilka datamängder den bygger på
+* vilka dashboards/rapporter/BI-tillämpningar som använder den
+* åtkomstmodell
+* aktualitet (uppdateringsfrekvens)
+* tillit och kvalitet, uttryckt som en nivå (hög/medel/låg) med delsignaler
+  (dokumentationsgrad, kvalitetskontroller, ägarskap, lineage, klassning, senaste
+  granskning) – inte som ett ensamt, falskt precist procenttal
+* dokumentation
+* relaterade guider och beställningar
+* teknisk implementation (t.ex. Information Mart, vy, tabellstruktur eller API) och
+  eventuell modelltyp (t.ex. star schema eller flat table), som sekundär, teknisk
+  information
+
+### Princip
+
+Användaren ska kunna hitta, förstå och bedöma en dataprodukt utan att först behöva
+förstå vilket tekniskt lager eller vilken arkitekturmodell den bygger på.
+
+Teknisk implementation ska vara tillgänglig för den som behöver den, men ska visas som
+sekundär metadata – till exempel under en "Tekniska detaljer"-sektion – inte som
+dataproduktens primära rubrik eller typmarkör.
+
+---
+
 ## InformationMart
 
 En `InformationMart` beskriver en strukturerad informationsprodukt eller konsumtionsyta som bygger på Data Vault 2.1 och används för rapportering, analys eller vidare konsumtion.
@@ -502,6 +557,12 @@ En Information Mart bör kunna innehålla:
 En Information Mart ska inte modelleras som en vanlig teknisk komponent.
 
 Den är en informationsprodukt eller konsumtionsyta som kan användas av flera tjänster, rapporter eller BI-tillämpningar.
+
+**Information Mart är ett tekniskt/arkitekturellt begrepp, inte en primär användarterm.**
+I portalens gränssnitt visas motsvarande objekt som **Dataprodukt** (se ovan). Information
+Mart ska bara visas där en teknisk eller förvaltande målgrupp uttryckligen behöver veta
+den faktiska implementationen, till exempel under "Tekniska detaljer" på en
+dataproduktsida (`docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`).
 
 ---
 
@@ -1203,6 +1264,34 @@ Exempel:
 * En Qlik Sense-applikation använder en Information Mart som källa.
 * En rapport kan kräva förändring av en befintlig Information Mart.
 * En ny BI-tillämpning kan kräva att en ny Information Mart skapas.
+
+---
+
+## Källsystem till datamängd till dataprodukt till dashboard/rapport
+
+Detta är dataproduktens grundkedja, se `docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`:
+
+```text
+Källsystem
+→ Datamängd
+→ Dataprodukt
+→ Dashboard / Rapport / BI-tillämpning
+```
+
+En dataprodukt kan bygga på flera datamängder:
+
+```text
+Flera datamängder
+→ ny analys / ny dataprodukt / ny dashboard
+```
+
+Exempel:
+
+* Kundorder-, fakturarad-, produkt- och kundregisterdatamängder kan tillsammans bygga en
+  dataprodukt för försäljningsanalys.
+* Dataprodukten kan i sin tur användas av en eller flera dashboards/BI-tillämpningar,
+  utan att dashboarden behöver känna till de enskilda datamängderna.
+* Samma datamängd kan ingå i flera olika dataprodukter.
 
 ---
 

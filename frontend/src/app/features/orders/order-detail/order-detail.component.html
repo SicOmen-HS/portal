@@ -21,6 +21,17 @@
         </a>
       }
     </div>
+    <div class="order-detail-primary-action">
+      @if (orderFlow$ | async; as flow) {
+        @if (systemUrlService.isConfigured(flow.linkKey)) {
+          <a class="btn btn-primary" [href]="systemUrlService.getUrl(flow.linkKey)" target="_blank" rel="noopener">
+            Starta beställning <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+          </a>
+        } @else {
+          <a class="btn btn-primary" routerLink="/kontakt">Kontakta ansvarig funktion för att starta</a>
+        }
+      }
+    </div>
   </header>
 
   <div class="row g-5">
@@ -87,16 +98,22 @@
           <section>
             <h2 class="section-title-sm">Hantering</h2>
             <p>{{ flow.handlingInfo ?? 'Handläggs enligt standardflöde.' }}</p>
-            <p class="text-muted-custom small-note">
-              Beställningsformulär: <code>&lt;{{ flow.linkKey }}&gt;</code> (platshållare i denna mockup)
-            </p>
+            @if (systemUrlService.isConfigured(flow.linkKey)) {
+              <a [href]="systemUrlService.getUrl(flow.linkKey)" target="_blank" rel="noopener">
+                Öppna beställningsformulär <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+              </a>
+            } @else {
+              <p class="text-muted-custom small-note">
+                Beställningsformulär: <code>&lt;{{ flow.linkKey }}&gt;</code> (ej konfigurerat i denna miljö)
+              </p>
+            }
           </section>
         }
 
-        @if (order.documentationUrl) {
+        @if (systemUrlService.isConfigured(order.documentationUrlKey)) {
           <section>
             <h2 class="section-title-sm">Dokumentation</h2>
-            <a [href]="order.documentationUrl" target="_blank" rel="noopener">
+            <a [href]="systemUrlService.getUrl(order.documentationUrlKey)" target="_blank" rel="noopener">
               Öppna dokumentation <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
             </a>
           </section>
@@ -106,6 +123,16 @@
           <h2 class="section-title-sm">Målgrupp</h2>
           <p>{{ order.targetAudience.join(', ') }}</p>
         </section>
+
+        @if (ownerTeam$ | async; as team) {
+          <section>
+            <h2 class="section-title-sm">Ansvar och kontaktväg</h2>
+            <p class="order-owner-team"><i class="bi bi-people" aria-hidden="true"></i> {{ team.name }}</p>
+            @if (responsibleContact$ | async; as contact) {
+              <app-contact-card [contact]="contact" />
+            }
+          </section>
+        }
       </aside>
     </div>
   </div>

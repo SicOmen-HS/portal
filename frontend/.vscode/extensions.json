@@ -1,0 +1,14 @@
+{
+  // Se docs/14_Rekommenderade_extensions.md för motivering av varje extension.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
+  "recommendations": [
+    "angular.ng-template",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "mrmlnc.vscode-scss",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

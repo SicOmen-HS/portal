@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "topics": [
+    { "id": "portal", "label": "Portalen (helhet)" },
+    { "id": "frontend", "label": "Frontend (Angular)" },
+    { "id": "backend", "label": "Backend (.NET Web API, framtida)" },
+    { "id": "configuration", "label": "Konfiguration och runtime-config" },
+    { "id": "documentation", "label": "Dokumentation" },
+    { "id": "design-system", "label": "Designsystem och UI" },
+    { "id": "mockdata", "label": "Mockdata" },
+    { "id": "services", "label": "Tjänster (ServiceOffering)" },
+    { "id": "systems", "label": "System och länkar" },
+    { "id": "orders", "label": "Beställningar" },
+    { "id": "data-catalog", "label": "Data och katalog" },
+    { "id": "drift-status", "label": "Status och drift" },
+    { "id": "ai", "label": "AI-stödd utveckling" },
+    { "id": "integration", "label": "Integrationer" },
+    { "id": "security", "label": "Säkerhet" },
+    { "id": "testing", "label": "Test och verifiering" },
+    { "id": "deployment", "label": "Release och deployment" },
+    { "id": "worksmith", "label": "Worksmith / projektadministration" }
+  ]
+}

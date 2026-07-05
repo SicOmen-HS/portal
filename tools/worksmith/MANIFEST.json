@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "core_files": [
+    {
+      "source_path": "scripts/allocate-work-item-id.ts",
+      "core_path": "core/allocate-work-item-id.ts",
+      "sha256": "29d5dc498ff2b4ddab4630bba1a5ae3c1f2c644f3d5cc8301a578734cdaa5f26"
+    },
+    {
+      "source_path": "scripts/complete-work-item.ts",
+      "core_path": "core/complete-work-item.ts",
+      "sha256": "789207b17b1827129b42cd094d1b0d5c76eb5e52902b994046ae2cefa887ea4b"
+    },
+    {
+      "source_path": "scripts/create-work-item.ts",
+      "core_path": "core/create-work-item.ts",
+      "sha256": "eec21b8a04211d96d4c32c91fbd7157b1e186734b3a1ba96e5530c2144751ffa"
+    },
+    {
+      "source_path": "scripts/draft-compile.ts",
+      "core_path": "core/draft-compile.ts",
+      "sha256": "a86a8c2b79e64ee98ffc6497bf23c1de4d02c7c4a6f4ef8751e3662bb19f3cfc"
+    },
+    {
+      "source_path": "scripts/project-administration/application.ts",
+      "core_path": "core/project-administration/application.ts",
+      "sha256": "e46a29abdd2bfd25786e4f26009bdc46b2de0fc42be1f10e4d7acbc4061abfe2"
+    },
+    {
+      "source_path": "scripts/project-administration/cli.ts",
+      "core_path": "core/project-administration/cli.ts",
+      "sha256": "cccabe1653cc312bffddfb60afbc96be638d8219cf2f4fa8c97b08fec9d2c6c4"
+    },
+    {
+      "source_path": "scripts/project-administration/configuration.ts",
+      "core_path": "core/project-administration/configuration.ts",
+      "sha256": "c9c168401ebba044e7e65d54de218e28a7c2d5a8ab558de1bed93547bead1c2b"
+    },
+    {
+      "source_path": "scripts/project-administration/disposition-report.ts",
+      "core_path": "core/project-administration/disposition-report.ts",
+      "sha256": "8077b115edabdcc0b2ed8984c8fb84708bd32dcc5054a549c80c0c4cfd4be70f"
+    },
+    {
+      "source_path": "scripts/project-administration/draft-compiler.ts",
+      "core_path": "core/project-administration/draft-compiler.ts",
+      "sha256": "e35a8a06e54cbd822f72afb7523915408442e313ee9085c01119ddb2dd3d42be"
+    },
+    {
+      "source_path": "scripts/project-administration/identifiers.ts",
+      "core_path": "core/project-administration/identifiers.ts",
+      "sha256": "01c203983391acbb1fd09ee0e77a609f2e9532fb187d28dc8d22045947656863"
+    },
+    {
+      "source_path": "scripts/project-administration/initialize-project.ts",
+      "core_path": "core/project-administration/initialize-project.ts",
+      "sha256": "e9a468b66343c336bf762c26ccfbc382331503dcc23a6a6d13310b3d445a3f4f"
+    },
+    {
+      "source_path": "scripts/project-administration/list-work-queue.ts",
+      "core_path": "core/project-administration/list-work-queue.ts",
+      "sha256": "715d93664106c790c887ac563e4a4bcaa51a2167924637fbbf32969dee1cee07"
+    },
+    {
+      "source_path": "scripts/project-administration/localization.ts",
+      "core_path": "core/project-administration/localization.ts",
+      "sha256": "ff5c5824badfc71ddff9b1bffc91e519a87aa6db7b0ac95a624fba41052ec577"
+    },
+    {
+      "source_path": "scripts/project-administration/markdown-sections.ts",
+      "core_path": "core/project-administration/markdown-sections.ts",
+      "sha256": "2a98be02eca74c2d30906199ba38559a39be9e2b911fdc65a53dc6bef73d48c3"
+    },
+    {
+      "source_path": "scripts/project-administration/mutation-lock.ts",
+      "core_path": "core/project-administration/mutation-lock.ts",
+      "sha256": "1e39bd771a47991243edab35a9caf712495b144f38e844a5c01d1b9ae4b05a46"
+    },
+    {
+      "source_path": "scripts/project-administration/presentation-configuration.ts",
+      "core_path": "core/project-administration/presentation-configuration.ts",
+      "sha256": "f320b0bed83e0b5f39ac52ab4898c9c65e15a2f1228025a0b817744eb275bc97"
+    },
+    {
+      "source_path": "scripts/project-administration/queue.ts",
+      "core_path": "core/project-administration/queue.ts",
+      "sha256": "681ee685b11178677d7efe5f18a936757563812681360599440e03093210fd99"
+    },
+    {
+      "source_path": "scripts/project-administration/show-presentation-configuration.ts",
+      "core_path": "core/project-administration/show-presentation-configuration.ts",
+      "sha256": "8b748cf5713e1629b26fa0d1b928dab501876aad4780bdf7b3ed3c9151ee6186"
+    },
+    {
+      "source_path": "scripts/project-administration/strict-json.ts",
+      "core_path": "core/project-administration/strict-json.ts",
+      "sha256": "25701a342732ca4f74780c9d0a20b63edae3cc4ad42d5d90dd6ee91705af4d6b"
+    },
+    {
+      "source_path": "scripts/project-administration/tests/project-administration.test.ts",
+      "core_path": "core/project-administration/tests/project-administration.test.ts",
+      "sha256": "d2c4a69c7b340b684a0e9a8d7be4e4d9968d85278ba3ded5562668d94b410deb"
+    },
+    {
+      "source_path": "scripts/project-administration/topic-catalog.ts",
+      "core_path": "core/project-administration/topic-catalog.ts",
+      "sha256": "7d11f30fd39d9720744480754e4e9a9dbf626d2f18227a76f7eeec8c6801cbc8"
+    },
+    {
+      "source_path": "scripts/project-administration/topic-convention.ts",
+      "core_path": "core/project-administration/topic-convention.ts",
+      "sha256": "3db28196073f1d9fe92253c6330e971cf86cd242ecbd0c0d6bae88b46fafdf7e"
+    },
+    {
+      "source_path": "scripts/project-administration/topic-discovery.ts",
+      "core_path": "core/project-administration/topic-discovery.ts",
+      "sha256": "63377dfbb8692f57acc111abf0e79d5584d5e7f8e549fafb48a2768d61f9a6ab"
+    },
+    {
+      "source_path": "scripts/project-administration/topic-taxonomy.ts",
+      "core_path": "core/project-administration/topic-taxonomy.ts",
+      "sha256": "cccbe8646cb05f08288c13ec979bd3da5aa1bde2878d59422d40b20182fad1e9"
+    },
+    {
+      "source_path": "scripts/project-administration/transaction-service.ts",
+      "core_path": "core/project-administration/transaction-service.ts",
+      "sha256": "99a4580956deba077ee6e10f095801258eaca4de45adf69c67d5a586e2c4122e"
+    },
+    {
+      "source_path": "scripts/project-administration/work-item-handoff.ts",
+      "core_path": "core/project-administration/work-item-handoff.ts",
+      "sha256": "fd3e36585b3cda63c822916b740354f01737e5a8217e3a978ae40dba690f752d"
+    },
+    {
+      "source_path": "scripts/project-administration/work-item-metadata.ts",
+      "core_path": "core/project-administration/work-item-metadata.ts",
+      "sha256": "01b7cdb4f04d80a94552740ccd05fee9e9d6c8e4717e635c9cad72bc4fefa03a"
+    },
+    {
+      "source_path": "scripts/project-administration/work-item-show.ts",
+      "core_path": "core/project-administration/work-item-show.ts",
+      "sha256": "f75c23e7490ffe3f4782366a25445bc671d9030bd0de3e030fd6cd6ad51ee128"
+    },
+    {
+      "source_path": "scripts/project-administration/worksmith-output.ts",
+      "core_path": "core/project-administration/worksmith-output.ts",
+      "sha256": "1ddb1389f06383ef819f7228532c34ce9eddcf5381736b159f6e07624d31f37e"
+    },
+    {
+      "source_path": "scripts/project-administration/worksmith-result.ts",
+      "core_path": "core/project-administration/worksmith-result.ts",
+      "sha256": "e4d48206d83d2c02f902ab86fab1e2acb92a4861719558ed36a69674a24de5be"
+    },
+    {
+      "source_path": "scripts/transition-work-item.ts",
+      "core_path": "core/transition-work-item.ts",
+      "sha256": "db5f6d7845306a1b78940ba758e0f50f372c26e6e3e3bce29f55e7e929c79875"
+    },
+    {
+      "source_path": "scripts/validate-project-administration.ts",
+      "core_path": "core/validate-project-administration.ts",
+      "sha256": "9c2e6fd7993da0b1b24bac2667e93fa9be8b0ee7bad12a8ffd7097614b37f715"
+    }
+  ]
+}

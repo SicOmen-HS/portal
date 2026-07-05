@@ -20,6 +20,7 @@ export class SearchBoxComponent implements OnInit {
 
   readonly queryChange = output<string>();
   readonly searchSubmit = output<string>();
+  readonly focusChange = output<boolean>();
 
   protected value = '';
 
@@ -35,4 +36,7 @@ export class SearchBoxComponent implements OnInit {
   onSubmit(): void {
     this.searchSubmit.emit(this.value);
   }
+
+  onFocus(): void { this.focusChange.emit(true); }
+  onBlur(): void { window.setTimeout(() => this.focusChange.emit(false), 120); }
 }

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "Data- och analysportalen",
+    "profile": "armbase-v1"
+  },
+  "output": {
+    "language": "sv",
+    "target": "terminal",
+    "shell": "powershell",
+    "color": "auto",
+    "warning_detail": "summary"
+  }
+}

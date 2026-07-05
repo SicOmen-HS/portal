@@ -42,6 +42,10 @@ export class DataCatalogService {
     return this.datasets$.pipe(map((items) => items.find((item) => item.id === id)));
   }
 
+  getDatasetsByIds(ids: string[]): Observable<Dataset[]> {
+    return this.datasets$.pipe(map((items) => items.filter((item) => ids.includes(item.id))));
+  }
+
   getAllDataServices(): Observable<DataServiceOffering[]> {
     return this.dataServices$;
   }
@@ -52,6 +56,10 @@ export class DataCatalogService {
 
   getInformationMartsByIds(ids: string[]): Observable<InformationMart[]> {
     return this.informationMarts$.pipe(map((items) => items.filter((item) => ids.includes(item.id))));
+  }
+
+  getInformationMartById(id: string): Observable<InformationMart | undefined> {
+    return this.informationMarts$.pipe(map((items) => items.find((item) => item.id === id)));
   }
 
   getAllBusinessApplications(): Observable<BusinessApplication[]> {

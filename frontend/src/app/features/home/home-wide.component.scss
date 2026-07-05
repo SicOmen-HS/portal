@@ -1,0 +1,26 @@
+.variant-b {
+  .hero {
+    width: min(100%, 80rem);
+    grid-template-columns: minmax(0, 1.4fr) minmax(18rem, .6fr);
+  }
+
+  .minimal-shortcuts { width: min(100%, 84rem); max-width: none; }
+  .resource-section, .utility-row { width: min(100%, 88rem); max-width: none; }
+}
+
+.catalog-illustration {
+  background: linear-gradient(145deg, #f8fafb, #f1f7f6);
+  border-color: #dfe9e7;
+  box-shadow: none;
+}
+
+.illustration-results {
+  > div { background: rgba(255, 255, 255, .76); }
+  .action-node { border-color: var(--color-gray-200); }
+}
+
+.node-icon.action { background: #edf3f5; color: var(--color-status-info); }
+
+@media (min-width: 1500px) {
+  .variant-b .hero { gap: clamp(3rem, 5vw, 5.5rem); }
+}

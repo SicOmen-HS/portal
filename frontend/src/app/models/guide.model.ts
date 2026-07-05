@@ -24,7 +24,8 @@ export interface Guide {
   relatedServiceIds?: string[];
   relatedSystemIds?: string[];
   relatedPlatformCapabilityIds?: string[];
-  documentationUrl: string;
+  /** Nyckel som slås upp mot systemUrls i runtime-config, se SystemUrlService. */
+  documentationUrlKey: string;
   summary: string;
   ownerTeamId?: string;
   lastUpdated: string;

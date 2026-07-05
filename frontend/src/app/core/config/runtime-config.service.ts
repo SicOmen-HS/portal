@@ -7,12 +7,20 @@ import { DEFAULT_RUNTIME_CONFIG, RuntimeConfig } from './runtime-config.model';
  * Läser portalens runtime-konfiguration från assets/config/runtime-config.json.
  * Gör det möjligt att bygga frontend en gång och ändra konfiguration per miljö
  * utan att bygga om (docs/05_Konfiguration.md, docs/04_Systemarkitektur.md).
+ *
+ * Detta är projektets motsvarighet till den "AppConfigService" som beskrivs i
+ * docs/13_Utvecklarguide.md – rollen (ladda och exponera publik frontend-
+ * konfiguration) är densamma, bara namnet skiljer sig.
+ *
+ * SystemUrlService (core/links/) bygger vidare på denna tjänst för att slå
+ * upp enskilda `urlKey`-värden mot `systemUrls`.
  */
 @Injectable({ providedIn: 'root' })
 export class RuntimeConfigService {
   private readonly http = inject(HttpClient);
   private readonly configSignal = signal<RuntimeConfig>(DEFAULT_RUNTIME_CONFIG);
 
+  /** Läsbar signal med aktuell konfiguration. Startar med säkra standardvärden innan load() slutförts. */
   readonly config = this.configSignal.asReadonly();
 
   async load(): Promise<void> {
@@ -22,7 +30,8 @@ export class RuntimeConfigService {
       );
       this.configSignal.set(config);
     } catch {
-      // Om runtime-konfiguration saknas används säkra standardvärden.
+      // Saknad eller trasig konfigurationsfil ska inte krascha appen –
+      // portalen fortsätter med säkra standardvärden (mockläge, inga länkar).
       this.configSignal.set(DEFAULT_RUNTIME_CONFIG);
     }
   }

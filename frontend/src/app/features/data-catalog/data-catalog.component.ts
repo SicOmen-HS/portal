@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { KeyValuePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../shared/components/search-box/search-box.component';
 import { DatasetCardComponent } from '../../shared/components/dataset-card/dataset-card.component';
@@ -8,10 +9,12 @@ import { LifecycleBadgeComponent } from '../../shared/components/lifecycle-badge
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { DataCatalogService } from '../../services/data-catalog.service';
 import { DATA_CLASSIFICATION_LABELS, DataClassification } from '../../models';
+import { SystemUrlService } from '../../core/links/system-url.service';
 
 @Component({
   selector: 'app-data-catalog-page',
   imports: [
+    RouterLink,
     PageHeaderComponent,
     SearchBoxComponent,
     DatasetCardComponent,
@@ -25,6 +28,9 @@ import { DATA_CLASSIFICATION_LABELS, DataClassification } from '../../models';
 })
 export class DataCatalogPageComponent {
   private readonly dataCatalog = inject(DataCatalogService);
+  // Injiceras direkt i templaten (protected) för att slå upp documentationUrlKey
+  // per dataprodukt (tekniskt InformationMart) – se SystemUrlService.
+  protected readonly systemUrlService = inject(SystemUrlService);
 
   private readonly datasets = toSignal(this.dataCatalog.getAllDatasets(), { initialValue: [] });
   protected readonly informationMarts = toSignal(this.dataCatalog.getAllInformationMarts(), {

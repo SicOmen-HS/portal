@@ -9,10 +9,17 @@
 
 <span class="topbar-brand">Data- och analysportalen</span>
 
-<div class="topbar-search">
+@if (!showSearch()) {
+  <nav class="home-actions" aria-label="Snabblänkar">
+    <a routerLink="/status"><i class="bi bi-activity" aria-hidden="true"></i> Visa status</a>
+    <a routerLink="/kontakt"><i class="bi bi-question-circle" aria-hidden="true"></i> Hjälp</a>
+  </nav>
+}
+
+@if (showSearch()) { <div class="topbar-search">
   <app-search-box
     placeholder="Sök tjänster, guider, system..."
     ariaLabel="Sök i portalen"
     (searchSubmit)="onSearch($event)"
   />
-</div>
+</div> }
