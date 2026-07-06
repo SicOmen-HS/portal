@@ -1,5 +1,28 @@
 [
   {
+    "id": "service-reports-dashboards",
+    "name": "Rapporter och dashboards",
+    "shortDescription": "Skapa, ändra eller få hjälp med rapporter och dashboards via ett samlat åtgärdsflöde.",
+    "longDescription": "Tjänsten samlar de vanligaste behoven kring rapporter och dashboards: skapa nytt, ändra innehåll eller utseende, lägga till eller ändra data, ändra behörighet, ändra ägare eller kontaktväg, och rapportera problem. Varje åtgärd visar process, förutsättningar och nästa steg innan du går vidare.",
+    "category": "Business Intelligence",
+    "targetAudience": ["Verksamhetsanvändare", "Analytiker", "Beställare"],
+    "ownerTeamId": "team-bi-visualisering",
+    "contactPointId": "contact-bi-support",
+    "platformCapabilityIds": ["platform-bi"],
+    "relatedSystemIds": ["system-qlik-sense"],
+    "technicalComponentIds": ["component-qlik-sense"],
+    "guideIds": ["guide-order-dashboard"],
+    "orderTypeIds": [],
+    "relatedServiceIds": ["service-order-dashboard", "service-combine-datasets-report"],
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "tags": ["rapport", "dashboard", "bi", "åtgärdsflöde"],
+    "lastUpdated": "2026-07-06",
+    "source": "Lokal portal-konfiguration",
+    "featured": true,
+    "detailRoute": ["/behov", "rapport"]
+  },
+  {
     "id": "service-order-dashboard",
     "name": "Beställ dashboard",
     "shortDescription": "Beställ en ny dashboard eller rapport baserad på befintlig eller ny data.",

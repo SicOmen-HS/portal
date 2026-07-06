@@ -9,17 +9,25 @@
 
 <span class="topbar-brand">Data- och analysportalen</span>
 
-@if (!showSearch()) {
-  <nav class="home-actions" aria-label="Snabblänkar">
-    <a routerLink="/status"><i class="bi bi-activity" aria-hidden="true"></i> Visa status</a>
-    <a routerLink="/kontakt"><i class="bi bi-question-circle" aria-hidden="true"></i> Hjälp</a>
-  </nav>
-}
+<div class="topbar-actions">
+  <div class="ops-status">
+    @if (opsStatus().linked) {
+      <a routerLink="/status" class="ops-status-link">
+        <app-status-badge [tone]="opsStatus().tone" [label]="opsStatus().message" />
+      </a>
+    } @else {
+      <app-status-badge [tone]="opsStatus().tone" [label]="opsStatus().message" />
+    }
+    <button
+      type="button"
+      class="ops-status-demo"
+      (click)="cycleDemoStatus()"
+      aria-label="Växla demo-driftläge (endast för mockupen)"
+      title="Växla demo-driftläge (endast för mockupen)"
+    >
+      <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+    </button>
+  </div>
 
-@if (showSearch()) { <div class="topbar-search">
-  <app-search-box
-    placeholder="Sök tjänster, guider, system..."
-    ariaLabel="Sök i portalen"
-    (searchSubmit)="onSearch($event)"
-  />
-</div> }
+  <a routerLink="/kontakt" class="help-link" aria-label="Hjälp"><i class="bi bi-question-circle" aria-hidden="true"></i> <span aria-hidden="true">Hjälp</span></a>
+</div>

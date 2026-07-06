@@ -3,6 +3,16 @@
   description="Sök och filtrera bland leveransens tjänster – oavsett vilket team eller vilken teknik som ligger bakom."
 />
 
+<div class="focus-toggle" role="group" aria-label="Fokusläge för tjänstekatalogen">
+  <button type="button" [class.active]="focusMode() === 'featured'" [attr.aria-pressed]="focusMode() === 'featured'" (click)="setFocusMode('featured')">
+    <i class="bi bi-star-fill" aria-hidden="true"></i> Prioriterade tjänster
+  </button>
+  <button type="button" [class.active]="focusMode() === 'all'" [attr.aria-pressed]="focusMode() === 'all'" (click)="setFocusMode('all')">
+    Alla tjänster
+  </button>
+</div>
+<p class="focus-toggle-help">Prioriterade tjänster är det vi fokuserar på just nu. Växla till alla tjänster för att se övriga spår som inte ska tappas bort.</p>
+
 <div class="filter-bar">
   <app-search-box
     placeholder="Sök på namn, beskrivning eller tagg..."

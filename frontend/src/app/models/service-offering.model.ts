@@ -28,4 +28,6 @@ export interface ServiceOffering {
   lastUpdated: string;
   source: string;
   featured?: boolean;
+  /** Egen ingångsväg när en fördjupad upplevelse redan finns, t.ex. ett tjänstesidesflöde under /behov. Om satt används den istället för den generiska /tjanster/:id-sidan. */
+  detailRoute?: string[];
 }

@@ -185,6 +185,8 @@ En tjänst bör kunna innehålla:
 * taggar
 * senast uppdaterad
 * källa för informationen
+* prioriterad/utvald (för att kunna fokusera katalogen på överenskomna tjänster utan att ta bort övriga)
+* egen ingångsväg, när en tjänst redan har ett fördjupat sidflöde istället för den generiska tjänstedetaljen
 
 ### Princip
 

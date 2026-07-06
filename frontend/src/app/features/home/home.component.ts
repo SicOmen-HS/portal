@@ -6,6 +6,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { SearchBoxComponent } from '../../shared/components/search-box/search-box.component';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { StatusService } from '../../services/status.service';
+import { navigateToGlobalSearch } from '../../core/search/search-navigation';
 
 type MockupVariant = 'a' | 'b' | 'c';
 
@@ -67,8 +68,7 @@ export class HomeComponent {
   });
 
   onSearch(query: string): void {
-    const trimmed = query.trim();
-    if (trimmed) this.router.navigate(['/sok'], { queryParams: { q: trimmed, variant: this.variant() } });
+    navigateToGlobalSearch(this.router, query, { variant: this.variant() });
   }
 
   openSuggestion(suggestion: SearchSuggestion): void {

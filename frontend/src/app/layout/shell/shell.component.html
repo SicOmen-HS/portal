@@ -14,7 +14,7 @@
   }
 
   <div class="shell-content">
-    <app-topbar [showSearch]="!isHome()" (menuToggle)="toggleMobileNav()" />
+    <app-topbar (menuToggle)="toggleMobileNav()" />
     <main id="main-content" class="page-container">
       <router-outlet></router-outlet>
     </main>

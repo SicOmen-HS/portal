@@ -1,25 +1,39 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { SearchBoxComponent } from '../../shared/components/search-box/search-box.component';
+import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { StatusBadgeComponent, StatusBadgeTone } from '../../shared/components/status-badge/status-badge.component';
+
+interface OpsDemoState {
+  tone: StatusBadgeTone;
+  message: string;
+  /** Om läget ska länka vidare till statussidan ("· Läs mer"). */
+  linked: boolean;
+}
+
+/**
+ * Mockade driftlägen för topbarens statusindikator. Ingen riktig
+ * driftstatusintegration finns ännu (docs/03_Informationsmodell.md: StatusItem),
+ * så demoläget cyklas lokalt i komponenten via `cycleDemoStatus()`.
+ */
+const OPS_DEMO_STATES: readonly OpsDemoState[] = [
+  { tone: 'success', message: 'Driftstatus: Normal', linked: false },
+  { tone: 'warning', message: 'Planerat underhåll · Läs mer', linked: true },
+  { tone: 'danger', message: 'Störning påverkar rapporter · Läs mer', linked: true },
+];
 
 @Component({
   selector: 'app-topbar',
-  imports: [RouterLink, SearchBoxComponent],
+  imports: [RouterLink, StatusBadgeComponent],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopbarComponent {
-  private readonly router = inject(Router);
-
   readonly menuToggle = output<void>();
-  readonly showSearch = input(true);
 
-  onSearch(query: string): void {
-    const trimmed = query.trim();
-    if (trimmed.length === 0) {
-      return;
-    }
-    this.router.navigate(['/sok'], { queryParams: { q: trimmed } });
+  private readonly demoIndex = signal(0);
+  protected readonly opsStatus = computed(() => OPS_DEMO_STATES[this.demoIndex()]);
+
+  cycleDemoStatus(): void {
+    this.demoIndex.update((index) => (index + 1) % OPS_DEMO_STATES.length);
   }
 }

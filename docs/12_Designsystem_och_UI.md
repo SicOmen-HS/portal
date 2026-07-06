@@ -407,15 +407,16 @@ Portalen bör använda konsekventa avstånd.
 
 Exempel på spacing-skala:
 
-| Token     | Exempelvärde | Användning                |
-| --------- | -----------: | ------------------------- |
-| `space-1` |         4 px | Små interna avstånd       |
-| `space-2` |         8 px | Tät placering             |
-| `space-3` |        12 px | Mindre komponentavstånd   |
-| `space-4` |        16 px | Standardavstånd           |
-| `space-5` |        24 px | Mellan sektioner          |
-| `space-6` |        32 px | Större sektioner          |
-| `space-7` |        48 px | Sidhuvud och större block |
+| Token     | Exempelvärde | Användning                          |
+| --------- | -----------: | ----------------------------------- |
+| `space-1` |         4 px | Små interna avstånd                 |
+| `space-2` |         8 px | Tät placering                       |
+| `space-3` |        12 px | Mindre komponentavstånd             |
+| `space-4` |        16 px | Standardavstånd                     |
+| `space-5` |        24 px | Mellan sektioner                    |
+| `space-6` |        32 px | Större sektioner                    |
+| `space-7` |        48 px | Sidhuvud och större block           |
+| `space-8` |        64 px | Stort mellanrum mellan större ytor  |
 
 ## Princip
 
@@ -479,6 +480,12 @@ Alternativt kan en mer applikationslik sidomeny användas med:
 Navigationen ska vara stabil och konsekvent.
 
 Tekniska komponenter ska inte dominera huvudnavigationen.
+
+## Topbar
+
+* Topbar på undersidor ska inte innehålla konkurrerande sökfält.
+* Global sök erbjuds via startsida, sökresultatsida och relevanta katalogvyer.
+* Topbar används för driftstatus, hjälp och eventuell användarkontext.
 
 ---
 
@@ -696,6 +703,12 @@ Primärt fokus är desktop och laptop, men gränssnittet ska kunna anpassas till
 * navigation ska kunna kollapsa
 * filter ska kunna visas i panel eller dropdown
 * viktiga åtgärder ska vara lätta att nå
+
+## Styrande princip för nya vyer
+
+* Nya vyer ska designas responsivt för mobil, tablet och desktop.
+* Centrala funktioner får inte vara beroende av hover.
+* Processer och formulär ska fungera med tangentbord, touch och smal skärm.
 
 ---
 

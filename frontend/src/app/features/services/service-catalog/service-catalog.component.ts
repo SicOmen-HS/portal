@@ -27,6 +27,14 @@ export class ServiceCatalogComponent {
   protected readonly selectedLifecycle = signal<LifecycleStatus | ''>('');
   protected readonly lifecycleLabels = LIFECYCLE_STATUS_LABELS;
 
+  /**
+   * Enkelt fokusläge för mockupen: 'featured' visar bara de tjänster som är
+   * överenskomna och prioriterade just nu, 'all' visar även övriga spår och
+   * idéer som inte ska tappas bort. Styrs enbart av mockdatans `featured`-fält,
+   * ingen egen modell krävs.
+   */
+  protected readonly focusMode = signal<'featured' | 'all'>('featured');
+
   protected readonly categories = computed(() =>
     Array.from(new Set(this.services().map((service) => service.category))).sort()
   );
@@ -35,17 +43,21 @@ export class ServiceCatalogComponent {
     const term = this.searchTerm().trim().toLowerCase();
     const category = this.selectedCategory();
     const lifecycle = this.selectedLifecycle();
+    const onlyFeatured = this.focusMode() === 'featured';
 
-    return this.services().filter((service) => {
-      const matchesTerm =
-        term.length === 0 ||
-        service.name.toLowerCase().includes(term) ||
-        service.shortDescription.toLowerCase().includes(term) ||
-        service.tags.some((tag) => tag.toLowerCase().includes(term));
-      const matchesCategory = category.length === 0 || service.category === category;
-      const matchesLifecycle = lifecycle.length === 0 || service.lifecycleStatus === lifecycle;
-      return matchesTerm && matchesCategory && matchesLifecycle;
-    });
+    return this.services()
+      .filter((service) => {
+        const matchesTerm =
+          term.length === 0 ||
+          service.name.toLowerCase().includes(term) ||
+          service.shortDescription.toLowerCase().includes(term) ||
+          service.tags.some((tag) => tag.toLowerCase().includes(term));
+        const matchesCategory = category.length === 0 || service.category === category;
+        const matchesLifecycle = lifecycle.length === 0 || service.lifecycleStatus === lifecycle;
+        const matchesFocus = !onlyFeatured || service.featured === true;
+        return matchesTerm && matchesCategory && matchesLifecycle && matchesFocus;
+      })
+      .sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false));
   });
 
   onSearchChange(value: string): void {
@@ -58,5 +70,9 @@ export class ServiceCatalogComponent {
 
   onLifecycleChange(value: string): void {
     this.selectedLifecycle.set(value as LifecycleStatus | '');
+  }
+
+  setFocusMode(mode: 'featured' | 'all'): void {
+    this.focusMode.set(mode);
   }
 }

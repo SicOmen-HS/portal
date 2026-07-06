@@ -15,11 +15,15 @@
 ## Needs Review
 
 
+## Done
+
+- AB-007 - UX-städning, responsiv grund och fokusläge för Rapporter och dashboards
+  See: docs/work-items/AB-007.md
+  Completed: 2026-07-06
+
 - AB-003 - Inför dataprodukt som användarbegrepp för Information Mart
   See: docs/work-items/AB-003.md
-
-
-## Done
+  Completed: 2026-07-06
 
 - AB-006 - Förbättra beställningsformulär med stegvis flöde och bättre fokus
   See: docs/work-items/AB-006.md
