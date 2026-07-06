@@ -200,3 +200,47 @@ the adopted minimal UI/metadata change).
 - `docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`
 - `docs/03_Informationsmodell.md` (Dataprodukt and InformationMart sections)
 - `docs/work-items/AB-003.md`
+
+---
+
+## DEC-004 - Operational Needs Use An Action-Led Service Path
+
+- **Status:** `approved`
+- **Date:** `2026-07-06`
+- **Owner:** Project owner
+- **Supersedes:** None
+- **Superseded by:** None
+
+### Context
+
+The report need page presented services, datasets, data products, guides and orders as
+equivalent results. That made the user interpret the portal's information model before
+they could answer the simpler question: what do I want to do with my report or dashboard?
+
+### Decision
+
+For operational service needs, the portal shall primarily present an action-led service
+path: choose a concrete action, understand its prerequisites and process, and continue
+with a specific next action. Related data, guides and status remain available as
+contextual support, not as equivalent primary choices. AB-004 applies this to
+`Rapporter och dashboards` while retaining `/behov/rapport` for link compatibility.
+
+This iteration uses the existing page component and conceptual `ServiceOffering`,
+`OrderType` and `OrderFlow` structures. It does not introduce a new `ServiceAction`
+information object; that can be reconsidered if several services need reusable,
+content-managed actions.
+
+### Consequences
+
+- Positive: users start from intent rather than resource type or technical platform.
+- Positive: calls to action can name the actual task instead of using a generic
+  "Visa nästa steg" label.
+- Trade-off: the six actions are local mockup content until a reusable content model
+  is justified.
+- Required follow-up: assess a reusable `ServiceAction` model only after the pattern
+  is used by additional service pages.
+
+### Related Evidence
+
+- `docs/work-items/AB-004.md`
+- `frontend/src/app/features/needs-catalog/`

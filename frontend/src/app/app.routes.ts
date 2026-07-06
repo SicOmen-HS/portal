@@ -44,7 +44,7 @@ export const routes: Routes = [
   {
     path: 'behov/rapport',
     loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
-    title: 'Skapa eller ändra en rapport – Data- och analysportalen',
+    title: 'Rapporter och dashboards – Data- och analysportalen',
   },
   {
     path: 'data',

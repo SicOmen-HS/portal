@@ -1,29 +1,73 @@
-<nav class="breadcrumb-small" aria-label="Brödsmulor"><a routerLink="/">Hem</a><i class="bi bi-chevron-right" aria-hidden="true"></i><span>Skapa eller ändra en rapport</span></nav>
-<header class="need-header">
-  <p class="eyebrow">Ditt behov</p>
-  <h1>Skapa eller ändra en rapport</h1>
-  <p>Här finns data, guider och beställningar som hjälper dig från fråga till färdig rapport. Du behöver inte välja teknisk plattform först.</p>
-</header>
+<nav class="breadcrumb-small" aria-label="Brödsmulor"><a routerLink="/">Hem</a><i class="bi bi-chevron-right" aria-hidden="true"></i><span>Rapporter och dashboards</span></nav>
 
-<div class="catalog-toolbar">
-  <div><strong>{{ filteredResources().length }} relevanta resurser</strong><span>Sorterade efter rekommenderad väg</span></div>
-  <div class="view-switch" aria-label="Visningsläge"><button [class.active]="viewMode() === 'list'" [attr.aria-pressed]="viewMode() === 'list'" type="button" (click)="viewMode.set('list')"><i class="bi bi-list" aria-hidden="true"></i> Lista</button><button [class.active]="viewMode() === 'cards'" [attr.aria-pressed]="viewMode() === 'cards'" type="button" (click)="viewMode.set('cards')"><i class="bi bi-grid" aria-hidden="true"></i> Kort</button></div>
-</div>
+@if (!selectedAction()) {
+  <div id="service-start" class="service-mode">
+    <header class="service-header">
+      <p class="eyebrow">Tjänst</p>
+      <h1>Rapporter och dashboards</h1>
+      <p>Skapa, ändra eller få hjälp med rapporter och dashboards. Välj vad du vill göra så visar vi rätt väg, förutsättningar och nästa steg.</p>
+    </header>
 
-<div class="need-layout">
-  <aside class="need-filter">
-    <h2>Förfina</h2>
-    @for (type of filterTypes; track type) {
-      <label><input class="form-check-input" type="checkbox" (change)="toggleType(type, $any($event.target).checked)" /> {{ type }}</label>
-    }
-  </aside>
-  <section class="need-results" [class.card-view]="viewMode() === 'cards'" aria-label="Relevanta resurser" aria-live="polite">
-    @for (resource of filteredResources(); track resource.type + resource.title) {
-      <article>
-        <div><p class="resource-type">{{ resource.type }}</p><h2>{{ resource.title }}</h2><p>{{ resource.description }}</p><span><i class="bi bi-check-circle" aria-hidden="true"></i>{{ resource.signal }}</span></div>
-        <a [routerLink]="resource.routerLink">Visa nästa steg <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-      </article>
-    }
-    @if (!filteredResources().length) { <p>Inga resurser matchar valda filter.</p> }
+    <section class="action-section" aria-labelledby="action-heading">
+      <div class="section-heading"><p class="eyebrow">Börja här</p><h2 id="action-heading" tabindex="-1">Vad vill du göra?</h2><p>Välj den åtgärd som ligger närmast ditt behov. Du kan byta val utan att något skickas.</p></div>
+      <div class="action-grid">
+        @for (action of actions; track action.id) {
+          <article class="action-card">
+            <i class="bi {{ action.icon }}" aria-hidden="true"></i>
+            <div><h3>{{ action.title }}</h3><p>{{ action.description }}</p><small>{{ action.audience }}</small></div>
+            <button type="button" (click)="selectAction(action)">Visa process <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+} @else if (selectedAction(); as action) {
+<div id="selected-view" class="service-mode selected-mode">
+<button id="change-action-button" class="change-action" type="button" (click)="showAllActions()"><i class="bi bi-arrow-left" aria-hidden="true"></i> Byt åtgärd</button>
+<section class="action-detail" aria-labelledby="detail-heading">
+  <div class="detail-intro">
+    <p class="eyebrow">Vald åtgärd</p><h1 id="detail-heading">{{ action.title }}</h1>
+    <p>{{ action.description }}</p><p>{{ action.useWhen }}</p>
+  </div>
+
+  @if (action.note) { <aside class="data-note"><h2>Behöver du data som inte finns ännu?</h2><p>{{ action.note }}</p></aside> }
+
+  <div class="detail-facts">
+    <section><h2>Du behöver ange</h2><ul>@for (item of action.requirements; track item) { <li>{{ item }}</li> }</ul></section>
+    <section><h2>Förutsättningar</h2><ul>@for (item of action.prerequisites; track item) { <li>{{ item }}</li> }</ul></section>
+  </div>
+
+  <section class="process" aria-labelledby="process-heading">
+    <h2 id="process-heading">Så går det till</h2>
+    <ol aria-label="Process för vald åtgärd">@for (step of action.steps; track step; let index = $index) { <li><span>{{ index + 1 }}</span><strong>{{ step }}</strong></li> }</ol>
   </section>
+
+  @if (action.id === 'change') {
+    <form class="request-form" (submit)="submitMock($event)">
+      <div class="form-heading"><p class="eyebrow">Mockad beställning</p><h3>Beskriv ändringen</h3><p>Fälten demonstrerar flödet. Inga uppgifter skickas eller sparas.</p></div>
+      <fieldset><legend>Välj rapport eller dashboard</legend><div class="choice-grid">@for (report of reports; track report) { <label><input type="checkbox" name="reports" /> <span>{{ report }}</span></label> }</div></fieldset>
+      <fieldset><legend>Vilka delar gäller ändringen?</legend><div class="choice-grid compact">@for (part of reportParts; track part) { <label><input type="checkbox" name="parts" /> <span>{{ part }}</span></label> }</div></fieldset>
+      <label class="field">Beskriv önskad ändring<textarea rows="5" placeholder="Beskriv vad du vill ändra och varför."></textarea></label>
+      <div class="upload-mock" aria-disabled="true"><i class="bi bi-paperclip" aria-hidden="true"></i><div><strong>Bifoga exempel eller skiss</strong><span>Bifogning stöds senare</span></div></div>
+      <label class="field">Önskad tidpunkt<select><option>Ingen särskild</option><option>Inom 2 veckor</option><option>Inför månadsslut</option><option>Annat</option></select></label>
+      <button class="primary-action" type="submit">Skicka ändringsbegäran</button>
+      @if (submitted()) { <p class="mock-confirmation" role="status"><i class="bi bi-check-circle" aria-hidden="true"></i> Mockup klar – ingen begäran har skickats.</p> }
+    </form>
+  } @else {
+    <div class="simple-next"><div><h2>Nästa handling</h2><p>Den här iterationen visar process och förutsättningar. Ett fullständigt formulär byggs i en senare version.</p></div><button type="button">{{ action.cta }}</button></div>
+  }
+
+  <aside class="reassurance"><i class="bi bi-chat-square-check" aria-hidden="true"></i><div><h3>Vad händer efteråt?</h3><p>När begäran skickas granskar utvecklingsteamet underlaget och återkopplar inom 3 arbetsdagar. Om mer information behövs kontaktar vi angiven beställare.</p><p><strong>Ansvar och kontakt:</strong> Team BI och visualisering (fiktiv kontaktfunktion).</p></div></aside>
+</section>
+
+<section class="related-support" aria-labelledby="related-heading">
+  <div class="section-heading"><p class="eyebrow">Stöd längs vägen</p><h2 id="related-heading">Relaterat innehåll</h2><p>Data och vägledning visas här som stöd efter att du valt vad du vill göra.</p></div>
+  <div class="support-grid">
+    <a routerLink="/data/dataset-sales-transactions-demo"><span>Datamängd</span><strong>Exempel Försäljningstransaktioner</strong><small>Fiktiv data för rapportering</small></a>
+    <a routerLink="/data/dataprodukt/mart-sales-demo"><span>Dataprodukt</span><strong>Försäljning – kund och order</strong><small>Ägd och dokumenterad datagrund</small></a>
+    <a routerLink="/guider"><span>Guide</span><strong>Kom igång med rapportering</strong><small>Förbered behov och ansvar</small></a>
+    <a routerLink="/kontakt"><span>Kontakt</span><strong>Få hjälp att välja väg</strong><small>Kontakta en fiktiv supportfunktion</small></a>
+  </div>
+</section>
 </div>
+}

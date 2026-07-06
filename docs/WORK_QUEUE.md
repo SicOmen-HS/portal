@@ -14,11 +14,16 @@
 
 ## Needs Review
 
+
 - AB-003 - Inför dataprodukt som användarbegrepp för Information Mart
   See: docs/work-items/AB-003.md
 
 
 ## Done
+
+- AB-004 - Gör rapportbehov till tjänstesida med åtgärdsflöden
+  See: docs/work-items/AB-004.md
+  Completed: 2026-07-06
 
 - AB-002 - Skapa behovsstyrd katalogarbetsyta för nästa mockup
   See: docs/work-items/AB-002.md

@@ -25,8 +25,8 @@ interface SearchSuggestion {
 }
 
 const NEEDS: NeedTile[] = [
-  { title: 'Hitta data till en rapport', description: 'Utforska data och konsumtionsklara ytor.', icon: 'bi-database', routerLink: ['/behov', 'rapport'] },
-  { title: 'Beställ eller ändra dashboard', description: 'Från behov till publicerad rapport.', icon: 'bi-bar-chart-line', routerLink: ['/bestall', 'order-type-new-bi-app'] },
+  { title: 'Rapporter och dashboards', description: 'Välj åtgärd, se process och starta rätt väg.', icon: 'bi-bar-chart-line', routerLink: ['/behov', 'rapport'] },
+  { title: 'Hitta data till en rapport', description: 'Utforska data och konsumtionsklara ytor.', icon: 'bi-database', routerLink: ['/data'] },
   { title: 'Få åtkomst eller ändra behörighet', description: 'Hitta rätt åtkomstväg och förutsättningar.', icon: 'bi-key', routerLink: ['/bestall', 'order-type-access-group'] },
   { title: 'Beställ AI- eller ML-yta', description: 'Förbered ett säkert, avgränsat experiment.', icon: 'bi-stars', routerLink: ['/bestall', 'order-type-ai-ml-yta'] },
   { title: 'Hitta guide eller dokumentation', description: 'Kom igång utan att känna till plattformen.', icon: 'bi-book', routerLink: ['/guider'] },
@@ -55,7 +55,7 @@ export class HomeComponent {
   protected readonly status$ = this.statusService.getStatus();
   protected readonly variantLabel = computed(() => ({ a: 'Behovsstyrd arbetsyta', b: 'Minimal sökportal', c: 'Datamarknad' })[this.variant()]);
   protected readonly suggestions: SearchSuggestion[] = [
-    { type: 'Behov', title: 'Jag vill skapa en rapport om försäljning', description: 'Samlad väg till data, guide och beställning', routerLink: ['/behov', 'rapport'], action: 'Visa väg' },
+    { type: 'Behov', title: 'Jag vill göra något med en rapport', description: 'Välj åtgärd och se rätt process', routerLink: ['/behov', 'rapport'], action: 'Visa process' },
     { type: 'Datamängd', title: 'Exempel Försäljningstransaktioner', description: 'Försäljning · Åtkomst krävs', routerLink: ['/data', 'dataset-sales-transactions-demo'], action: 'Se datamängd' },
     { type: 'Guide', title: 'Så beställer du en dashboard', description: 'Kom igång · Steg för steg', routerLink: ['/guider'], action: 'Läs guide' },
     { type: 'Beställning', title: 'Ny BI-tillämpning', description: 'Business Intelligence · 5 steg', routerLink: ['/bestall', 'order-type-new-bi-app'], action: 'Starta beställning' },
