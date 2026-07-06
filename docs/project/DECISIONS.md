@@ -301,3 +301,66 @@ använda.
 - `docs/analysis/AN-003_atgardsflode_atervandning_rapporter_dashboards.md`
 - `docs/work-items/AN-003.md`
 - `frontend/src/app/features/support/support.component.ts`
+
+---
+
+## DEC-006 - Route- Och Komponentprincip För Tjänstespecifika, Återanvändbara Och Generiska Flöden
+
+- **Status:** `approved`
+- **Date:** `2026-07-07`
+- **Owner:** Project owner
+- **Supersedes:** None
+- **Superseded by:** None
+
+### Context
+
+AB-012 länkade "Skapa ny rapport eller dashboard" och "Ändra behörighet" till
+befintliga `OrderType`-poster under `/bestall`, vilket löste kortsiktig
+återanvändning men skapade en oavsiktlig funktionsskillnad mellan tjänstespecifika
+formulär i portalen (`/tjanster/rapporter-och-dashboards/...`) och den läsande
+`/bestall/<order-type>`-katalogsidan. `AN-004` analyserade detta och rekommenderade en
+uttalad klassificering (tjänstespecifikt flöde, återanvändbart domänflöde, generiskt
+portalflöde) och en princip för var varje typ ska renderas.
+
+### Decision
+
+Anta route- och komponentprincipen dokumenterad i fullständig form i
+`docs/adr/0004-route-komponentprincip-delade-tjansteflode.md`: tjänstespecifika
+åtgärder får en egen route och komponent under sin tjänst (redan `ADR-0002`);
+återanvändbara domänflöden (t.ex. "Ändra behörighet") byggs som en enda, delad
+formulärkomponent monterad i respektive tjänsts egen route med kontext via
+input-signaler, inte via omdirigering till en kontextlös sida; genuint generiska
+portalflöden (t.ex. "Rapportera problem", `DEC-005`) får en enda, portalägd route som
+flera tjänster länkar till.
+
+`order-type-new-bi-app`s nuvarande länkning via `/bestall` (`AB-012`) är uttryckligen
+en känd, tillfällig kompromiss – ordertypen är tjänstespecifik för Rapporter och
+dashboards, inte generisk eller återanvändbar, och bör på sikt få en egen, fördjupad
+väg under tjänsten istället.
+
+### Consequences
+
+- Positive: nya åtgärder/flöden har en tydlig regel för var de ska implementeras,
+  istället för att varje AB-item uppfinner sin egen lösning.
+- Positive: återanvändbara domänflöden kan delas mellan tjänster utan att användaren
+  möter en annan interaktionsnivå eller tappar sin tjänstekontext.
+- Trade-off: tills en delad domänflödeskomponent faktiskt byggs fortsätter "Skapa ny
+  rapport eller dashboard" och "Ändra behörighet" att peka på den generiska
+  `/bestall`-katalogen – en dokumenterad, avsiktlig avvikelse, inte ett brott mot
+  principen.
+- Required follow-up: bygg en delad "Ändra behörighet"-komponent monterad under
+  tjänstens egen route; ge "Skapa ny rapport eller dashboard" en egen, fördjupad väg;
+  bedöm `OrderType.relatedServiceId` → `relatedServiceIds` när ett andra konkret
+  delat-formulär-fall bekräftar behovet (se `ADR-0004` och `AN-004` för detaljer).
+
+### Alternatives Considered
+
+Se `docs/adr/0004-route-komponentprincip-delade-tjansteflode.md` för den fullständiga
+avvägningen mot att fortsätta länka till `/bestall` permanent, kontra att bygga en
+separat kopia av formuläret per tjänst.
+
+### Related Evidence
+
+- `docs/adr/0004-route-komponentprincip-delade-tjansteflode.md`
+- `docs/analysis/AN-004_tjansteatgarder_ordertyper_atervandbara_formular.md`
+- `docs/work-items/AB-012.md`

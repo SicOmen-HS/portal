@@ -17,6 +17,10 @@
 
 ## Done
 
+- AB-013 - Dokumentera route- och komponentprincip för delade tjänsteflöden (ADR-0004)
+  See: docs/work-items/AB-013.md
+  Completed: 2026-07-07
+
 - AN-004 - Förtydliga relationen mellan tjänsteåtgärder, ordertyper och återanvändbara formulär
   See: docs/work-items/AN-004.md
   Completed: 2026-07-07
