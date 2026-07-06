@@ -150,6 +150,73 @@ a {
   }
 }
 
+// Sök- och lägg-till-mönster: sökträffar och valda objekt som chips. Generiskt så att
+// fler flöden (t.ex. framtida "Ändra ägare"/"Ändra behörighet") kan återanvända samma
+// mönster istället för stora, permanenta kryssrutelistor.
+.app-search-results {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-2);
+  display: grid;
+  gap: var(--space-1);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+
+  button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    border: 0;
+    background: transparent;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+
+    &:hover, &:focus-visible {
+      background: var(--color-gray-100);
+    }
+
+    i {
+      margin-left: auto;
+      color: var(--color-brand-red);
+    }
+  }
+}
+
+.app-chip-tag {
+  color: var(--color-brand-red);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.app-chip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.app-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-status-info-bg);
+  border: 1px solid var(--color-brand-red);
+  border-radius: 999px;
+  font-size: 0.85rem;
+
+  button {
+    border: 0;
+    background: transparent;
+    color: var(--color-brand-red);
+    padding: 0;
+  }
+}
+
 // Skiplänk för tangentbordsanvändare
 .skip-link {
   position: absolute;

@@ -23,11 +23,11 @@ export const routes: Routes = [
       ),
     title: 'Tjänster – Data- och analysportalen',
   },
-  // Canonical route för tjänsten Rapporter och dashboards (AN-002, ADR-0002). Åtgärden
-  // "Ändra innehåll eller utseende" har en egen underroute; övriga åtgärder är ännu
-  // internt state på samma sida. /behov/rapport och den äldre id-baserade
-  // /tjanster/service-reports-dashboards-vägen redirectar hit istället för att rendera
-  // en egen kopia av sidan.
+  // Canonical route för tjänsten Rapporter och dashboards (AN-002, ADR-0002).
+  // Åtgärderna "Ändra innehåll eller utseende" och "Lägg till eller ändra data" har
+  // egna underroutes; övriga åtgärder är ännu internt state på samma sida.
+  // /behov/rapport och den äldre id-baserade /tjanster/service-reports-dashboards-vägen
+  // redirectar hit istället för att rendera en egen kopia av sidan.
   {
     path: 'tjanster/rapporter-och-dashboards',
     loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
@@ -38,6 +38,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
     title: 'Ändra innehåll eller utseende – Rapporter och dashboards – Data- och analysportalen',
     data: { actionId: 'change' },
+  },
+  {
+    path: 'tjanster/rapporter-och-dashboards/lagg-till-data',
+    loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
+    title: 'Lägg till eller ändra data – Rapporter och dashboards – Data- och analysportalen',
+    data: { actionId: 'data' },
   },
   { path: 'tjanster/service-reports-dashboards', redirectTo: 'tjanster/rapporter-och-dashboards' },
   {

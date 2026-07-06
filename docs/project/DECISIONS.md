@@ -244,3 +244,60 @@ content-managed actions.
 
 - `docs/work-items/AB-004.md`
 - `frontend/src/app/features/needs-catalog/`
+
+---
+
+## DEC-005 - Rapportera Problem Ska Vara Ett Generellt Portalflöde
+
+- **Status:** `approved`
+- **Date:** `2026-07-06`
+- **Owner:** Project owner
+- **Supersedes:** None
+- **Superseded by:** None
+
+### Context
+
+Tjänsten "Rapporter och dashboards" visar åtgärden "Rapportera problem" tillsammans
+med rapportspecifika åtgärder. Analys av åtgärdsflödena (`AN-003`) visar att
+problemrapportering inte bör modelleras som ett unikt rapport-/dashboardflöde. Behovet
+kan uppstå för flera tjänster, system, dataprodukter och framtida processer.
+
+Det finns ännu inget generellt ärende- eller incidentkoncept i informationsmodellen,
+och den befintliga supportytan (`SupportComponent`, `/kontakt`) pekar redan mot ett
+framtida generellt ticketing-/supportflöde – den har redan en avsiktligt osatt
+`TICKETING_SYSTEM_URL`-konfigurationsnyckel – snarare än ett tjänstespecifikt
+formulär.
+
+### Decision
+
+"Rapportera problem" ska hanteras som ett generellt portalövergripande formulär eller
+ärendeflöde, inte som ett unikt flöde för "Rapporter och dashboards".
+
+Rapporter och dashboards får visa en åtgärd eller länk för problemrapportering, men den
+ska senare leda till samma generella problem-/supportflöde som andra tjänster kan
+använda.
+
+### Consequences
+
+- Positivt: vi undviker duplicerade problemformulär per tjänst.
+- Positivt: framtida ärendestatus, support och ticketing kan byggas en gång och
+  återanvändas.
+- Trade-off: "Rapportera problem" byggs inte som nästa rapportspecifika åtgärd.
+- Nästa fokus inom "Rapporter och dashboards" bör vara åtgärder som är genuint
+  tjänstespecifika, i första hand "Lägg till eller ändra data".
+- Required follow-up: bedöm ett generellt problem-/ärendeflöde (informationsmodell,
+  UI, eventuell koppling till `TICKETING_SYSTEM_URL`) som ett eget, separat AB-item när
+  det prioriteras, inte som en förlängning av Rapporter och dashboards-serien.
+
+### Alternatives Considered
+
+| Alternative | Outcome | Reason |
+| --- | --- | --- |
+| Bygg "Rapportera problem" som ett rapportspecifikt formulär nu, i samma serie som övriga åtgärder | Rejected | Skulle sannolikt behöva göras om eller leva kvar som en inkonsekvent specialvariant när ett generellt ärendeflöde senare byggs, eftersom `SupportComponent` redan är förberedd för exakt det generella flödet. |
+| Skjut upp all problemrapportering tills ett fullständigt ärendesystem finns | Rejected | Onödigt restriktivt – tjänsten kan fortsätta visa en åtgärd/länk för problemrapportering, den ska bara peka mot det framtida generella flödet istället för ett eget formulär. |
+
+### Related Evidence
+
+- `docs/analysis/AN-003_atgardsflode_atervandning_rapporter_dashboards.md`
+- `docs/work-items/AN-003.md`
+- `frontend/src/app/features/support/support.component.ts`

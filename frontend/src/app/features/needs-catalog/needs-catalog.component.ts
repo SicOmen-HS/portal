@@ -7,9 +7,15 @@ import { ObjectSelectorComponent, SelectableObject } from '../../shared/componen
 import { OrderFormStepComponent } from '../../shared/components/order-form-step/order-form-step.component';
 import { ProcessStepperComponent, ProcessStepView } from '../../shared/components/process-stepper/process-stepper.component';
 import { ReviewEntry, ReviewSummaryComponent } from '../../shared/components/review-summary/review-summary.component';
+import { DataCatalogService } from '../../services/data-catalog.service';
 import { ReportingCatalogService } from '../../services/reporting-catalog.service';
 import { SystemService } from '../../services/system.service';
 import { reportingApprovalMessage } from '../../models';
+
+/** Ett sökbart resultat/valt objekt i sök- och lägg-till-mönstret för databehov. */
+interface DataReferenceOption extends SelectableObject {
+  group: 'Dataprodukt' | 'Datamängd';
+}
 
 interface ServiceAction {
   id: string;
@@ -51,9 +57,9 @@ const ACTIONS: ServiceAction[] = [
     description: 'Koppla befintlig data eller utred behov av en ny datakälla.',
     audience: 'För dig vars rapport behöver ett nytt mått, urval eller dataområde.',
     useWhen: 'När rapportens datainnehåll behöver utökas eller förändras.',
-    requirements: ['Berörd rapport eller dashboard', 'Önskad data och användning', 'Känd datamängd eller dataprodukt om sådan finns'],
-    prerequisites: ['Åtkomst och lämplighet behöver kontrolleras innan data kopplas in.'],
-    steps: ['Välj rapport/dashboard', 'Välj befintlig data', 'Kontrollera åtkomst', 'Granskning', 'Modellering vid behov', 'Leverans'],
+    requirements: ['Berörd rapport eller dashboard', 'Önskad data och användning, om känd', 'Befintlig datamängd eller dataprodukt om sådan finns'],
+    prerequisites: ['Åtkomst och lämplighet behöver kontrolleras innan data kopplas in.', 'Det går bra att inte veta exakt vilken data som behövs – beskriv då behovet istället.'],
+    steps: ['Välj rapport/dashboard', 'Beskriv databehovet', 'Granskning', 'Berörda godkännanden', 'Utveckling och modellering', 'Leverans'],
     cta: 'Välj rapport/dashboard',
     note: 'Om datan redan finns som datamängd eller dataprodukt kan den ofta kopplas till rapporten. Om datan saknas kan en ny dataintegrering, dataprodukt eller analysyta behöva beställas först.',
   },
@@ -103,6 +109,7 @@ export class NeedsCatalogComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly systemService = inject(SystemService);
   private readonly reportingCatalog = inject(ReportingCatalogService);
+  private readonly dataCatalog = inject(DataCatalogService);
   protected readonly actions = ACTIONS;
   protected readonly selectedAction = signal<ServiceAction | null>(this.initialRouteAction());
   protected readonly formStage = signal<'editing' | 'review' | 'confirmed'>('editing');
@@ -136,6 +143,70 @@ export class NeedsCatalogComponent {
     { title: 'Återkoppling', description: 'Du får besked om begäran kan planeras eller om mer information behövs.' },
     { title: 'Planering och leverans', description: 'När underlaget är tydligt planeras arbetet enligt teamets prioritering.' },
   ];
+
+  // Guidat flöde för "Lägg till eller ändra data" (AN-003, AB-011). Återanvänder samma
+  // BI-objektval, kollapsande steg och sammanfattningskomponent som "Ändra innehåll
+  // eller utseende", men med ett eget, kortare formulär (3 steg istället för 6) – se
+  // handoffen för vilka delar som medvetet dupliceras istället för att brytas ut.
+  protected readonly dataProcessSteps: ProcessStepView[] = [
+    { title: 'Välj rapport/dashboard', description: 'Välj den rapport eller dashboard som databehovet gäller.' },
+    { title: 'Beskriv databehovet', description: 'Välj befintlig data om den finns, eller beskriv vad du behöver. Det går bra att inte veta exakt vilka fält, mått eller begrepp som krävs.' },
+    { title: 'Granskning', description: 'Utvecklingsteamet och dataförvaltningen kontrollerar åtkomst, lämplighet och eventuell påverkan på befintlig data.' },
+    { title: 'Berörda godkännanden', description: 'Ägaren av datan, och rapportens ansvarige om rapporten också ska ändras, godkänner innan arbetet påbörjas.' },
+    { title: 'Utveckling och modellering', description: 'Om datan saknas paketeras den som en ny datamängd eller dataprodukt och kopplas därefter in.' },
+    { title: 'Leverans', description: 'Du får återkoppling när kopplingen eller ändringen är klar.' },
+  ];
+  protected readonly dataNeedTypes: SelectableObject[] = ['Nytt mått', 'Nytt urval', 'Ny datakälla', 'Nytt dataområde', 'Annat'].map((title, index) => ({ id: `need-${index}`, title }));
+  protected readonly dataStage = signal<'editing' | 'confirmed'>('editing');
+  protected readonly dataActiveStep = signal(1);
+  protected readonly dataCompletedStep = signal(0);
+  protected readonly dataStep2Attempted = signal(false);
+  protected readonly dataReviewEntries = signal<ReviewEntry[]>([]);
+  protected readonly dataBiSystemId = signal('');
+  protected readonly dataBiContainerId = signal('');
+  protected readonly dataBiAssetId = signal('');
+  protected readonly dataBiAttempted = signal(false);
+  protected readonly dataRequesterIsResponsible = signal(false);
+  protected readonly selectedDataBiSystem = computed(() => this.biSystems().find((system) => system.id === this.dataBiSystemId()));
+  protected readonly selectedDataBiAsset = computed(() => this.biAssets().find((asset) => asset.id === this.dataBiAssetId()));
+
+  // Befintlig data att söka bland (sök- och lägg-till-mönster, inte en permanent
+  // checkbox-lista) – återanvänder redan existerande DataCatalogService/mockdata,
+  // ingen ny katalog eller informationsmodell.
+  private readonly informationMarts = toSignal(this.dataCatalog.getAllInformationMarts(), { initialValue: [] });
+  private readonly datasets = toSignal(this.dataCatalog.getAllDatasets(), { initialValue: [] });
+  private readonly combinedDataOptions = computed<DataReferenceOption[]>(() => [
+    ...this.informationMarts().map((mart) => ({ id: mart.id, title: mart.name, description: mart.description, group: 'Dataprodukt' as const })),
+    ...this.datasets().map((dataset) => ({ id: dataset.id, title: dataset.name, description: dataset.description, group: 'Datamängd' as const })),
+  ]);
+  protected readonly dataSearchQuery = signal('');
+  protected readonly dataSearchResults = computed<DataReferenceOption[]>(() => {
+    const query = this.dataSearchQuery().trim().toLowerCase();
+    if (!query) return [];
+    const selectedIds = new Set(this.dataRequestForm.controls.dataReferenceIds.value);
+    return this.combinedDataOptions()
+      .filter((item) => !selectedIds.has(item.id))
+      .filter((item) => `${item.title} ${item.description ?? ''}`.toLowerCase().includes(query))
+      .slice(0, 8);
+  });
+  protected readonly selectedDataReferences = computed<DataReferenceOption[]>(() => {
+    const options = this.combinedDataOptions();
+    return this.dataRequestForm.controls.dataReferenceIds.value
+      .map((id) => options.find((item) => item.id === id))
+      .filter((item): item is DataReferenceOption => !!item);
+  });
+
+  protected readonly dataRequestForm = this.formBuilder.nonNullable.group({
+    needTypeIds: this.formBuilder.nonNullable.control<string[]>([], Validators.required),
+    dataReferenceIds: this.formBuilder.nonNullable.control<string[]>([]),
+    dataNotFound: [false],
+    dataUnknown: [false],
+    // Frivilligt: användaren kan ange kända fält/mått/begrepp, men ska också kunna be
+    // om hjälp utan att fylla i något här.
+    description: ['', Validators.minLength(10)],
+    otherKnownData: [''],
+    alsoUpdateReport: this.formBuilder.nonNullable.control<'ja' | 'nej' | ''>('', Validators.required),
+  });
   protected readonly requestForm = this.formBuilder.nonNullable.group({
     scopeIds: this.formBuilder.nonNullable.control<string[]>([], Validators.required),
     changeDescription: ['', [Validators.required, Validators.minLength(10)]],
@@ -165,6 +236,12 @@ export class NeedsCatalogComponent {
       // "Ändra innehåll eller utseende" har en egen route (ADR-0002) så att den går att
       // dela, bokmärka och navigera till/från med webbläsarens bakåt/fram.
       this.router.navigate(['/tjanster', 'rapporter-och-dashboards', 'andra-innehall']);
+      return;
+    }
+    if (action.id === 'data') {
+      // Samma ADR-0002-princip som "Ändra innehåll eller utseende": ett eget, riktigt
+      // flöde ska ha en egen route.
+      this.router.navigate(['/tjanster', 'rapporter-och-dashboards', 'lagg-till-data']);
       return;
     }
     this.selectedAction.set(action);
@@ -241,6 +318,125 @@ export class NeedsCatalogComponent {
 
   protected processInfoText(): string {
     return reportingApprovalMessage(this.selectedBiAsset(), this.requesterIsResponsible());
+  }
+
+  onDataBiSelectionChange(change: BiObjectSelectionChange): void {
+    this.dataBiSystemId.set(change.systemId);
+    this.dataBiContainerId.set(change.containerId);
+    this.dataBiAssetId.set(change.assetId);
+  }
+
+  protected dataBiSelectionSummary(): string {
+    const asset = this.selectedDataBiAsset();
+    if (!asset) return '';
+    return `${this.selectedDataBiSystem()?.name ?? ''} · ${asset.name}`;
+  }
+
+  protected dataProcessInfoText(): string {
+    return reportingApprovalMessage(this.selectedDataBiAsset(), this.dataRequesterIsResponsible());
+  }
+
+  protected dataNeedTypeTitles(): string {
+    const ids = this.dataRequestForm.controls.needTypeIds.value;
+    return ids.map((id) => this.dataNeedTypes.find((item) => item.id === id)?.title).filter(Boolean).join(', ');
+  }
+
+  private dataReferenceTitles(ids: string[]): string {
+    const options = this.combinedDataOptions();
+    return ids.map((id) => options.find((item) => item.id === id)?.title).filter(Boolean).join(', ');
+  }
+
+  addDataReference(id: string): void {
+    const current = this.dataRequestForm.controls.dataReferenceIds.value;
+    if (!current.includes(id)) {
+      this.dataRequestForm.controls.dataReferenceIds.setValue([...current, id]);
+    }
+    this.dataSearchQuery.set('');
+  }
+
+  removeDataReference(id: string): void {
+    const current = this.dataRequestForm.controls.dataReferenceIds.value;
+    this.dataRequestForm.controls.dataReferenceIds.setValue(current.filter((existingId) => existingId !== id));
+  }
+
+  /** Sant om något av de fyra sätten att ange databehov är ifyllt: typ, vald befintlig data, eller markering att datan saknas/är okänd. */
+  protected dataStepHasSomeInput(): boolean {
+    const value = this.dataRequestForm.getRawValue();
+    return value.needTypeIds.length > 0 || value.dataReferenceIds.length > 0 || value.dataNotFound || value.dataUnknown;
+  }
+
+  protected dataStep2Invalid(): boolean {
+    return !this.dataStepHasSomeInput() || !this.dataRequestForm.controls.alsoUpdateReport.value || this.dataRequestForm.controls.description.invalid;
+  }
+
+  protected dataStepSummary(): string {
+    const parts: string[] = [];
+    const types = this.dataNeedTypeTitles();
+    if (types) parts.push(types);
+    const refCount = this.dataRequestForm.controls.dataReferenceIds.value.length;
+    if (refCount) parts.push(`${refCount} vald${refCount > 1 ? 'a' : ''} befintlig data`);
+    if (this.dataRequestForm.controls.dataUnknown.value) parts.push('Vet inte vilken data');
+    if (this.dataRequestForm.controls.dataNotFound.value) parts.push('Hittar inte datan');
+    return parts.join(' · ');
+  }
+
+  openDataStep(step: number): void {
+    if (step > this.dataCompletedStep() + 1 || this.dataStage() === 'confirmed') return;
+    this.dataActiveStep.set(step);
+    setTimeout(() => document.querySelector<HTMLButtonElement>(`#data-step-${step} .step-heading`)?.focus({ preventScroll: true }));
+  }
+
+  continueDataStep(step: number): void {
+    if (step === 1) {
+      if (!this.dataBiAssetId()) {
+        this.dataBiAttempted.set(true);
+        setTimeout(() => document.querySelector<HTMLElement>('#data-step-1 .field-error')?.focus());
+        return;
+      }
+      this.dataCompletedStep.update((value) => Math.max(value, step));
+      this.openDataStep(2);
+      return;
+    }
+    if (step === 2) {
+      this.dataRequestForm.controls.description.markAsTouched();
+      if (this.dataStep2Invalid()) {
+        this.dataStep2Attempted.set(true);
+        setTimeout(() => document.querySelector<HTMLElement>('#data-step-2 .field-error')?.focus());
+        return;
+      }
+      this.dataCompletedStep.update((value) => Math.max(value, step));
+      this.reviewDataRequest();
+      this.dataActiveStep.set(3);
+    }
+  }
+
+  private reviewDataRequest(): void {
+    const value = this.dataRequestForm.getRawValue();
+    const dataStatusParts: string[] = [];
+    if (value.dataNotFound) dataStatusParts.push('Hittar inte datan som behövs');
+    if (value.dataUnknown) dataStatusParts.push('Vet inte vilken data som behövs');
+    this.dataReviewEntries.set([
+      { label: 'Rapport/dashboard', value: this.dataBiSelectionSummary() },
+      { label: 'Ansvarig', value: this.selectedDataBiAsset()?.responsibleLabel ?? '' },
+      { label: 'Godkännande', value: this.dataProcessInfoText() },
+      { label: 'Typ av databehov', value: this.dataNeedTypeTitles() || 'Ingen typ vald' },
+      { label: 'Vald befintlig data', value: this.dataReferenceTitles(value.dataReferenceIds) || 'Ingen vald' },
+      { label: 'Status för databehov', value: dataStatusParts.join(', ') || 'Ingen avvikelse angiven' },
+      { label: 'Kända fält, mått eller begrepp', value: value.description || 'Inga angivna' },
+      { label: 'Annan känd data', value: value.otherKnownData || 'Ingen angiven' },
+      { label: 'Rapporten/dashboarden behöver också ändras', value: value.alsoUpdateReport === 'ja' ? 'Ja' : 'Nej' },
+    ]);
+  }
+
+  editDataRequest(): void {
+    this.dataStage.set('editing');
+    this.dataActiveStep.set(3);
+    setTimeout(() => document.querySelector<HTMLButtonElement>('#data-step-3 .step-heading')?.focus());
+  }
+
+  confirmDataRequest(): void {
+    this.dataStage.set('confirmed');
+    setTimeout(() => document.querySelector<HTMLElement>('#data-confirmation-heading')?.focus());
   }
 
   openFormStep(step: number): void {

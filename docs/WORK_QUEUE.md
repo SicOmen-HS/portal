@@ -17,6 +17,14 @@
 
 ## Done
 
+- AB-011 - Förtydliga åtgärden Lägg till eller ändra data
+  See: docs/work-items/AB-011.md
+  Completed: 2026-07-06
+
+- AN-003 - Analysera åtgärdsflöden och återanvändning för Rapporter och dashboards
+  See: docs/work-items/AN-003.md
+  Completed: 2026-07-06
+
 - AB-010 - Förbered BI-objektval i rapportbeställning
   See: docs/work-items/AB-010.md
   Completed: 2026-07-06

@@ -39,6 +39,8 @@
 
   @if (action.id === 'change') {
     <app-process-stepper [steps]="changeProcessSteps" />
+  } @else if (action.id === 'data') {
+    <app-process-stepper [steps]="dataProcessSteps" />
   } @else {
     <section class="process" aria-labelledby="process-heading"><h2 id="process-heading">Så går det till</h2><ol aria-label="Process för vald åtgärd">@for (step of action.steps; track step; let index = $index) { <li><span>{{ index + 1 }}</span><strong>{{ step }}</strong></li> }</ol></section>
   }
@@ -63,6 +65,72 @@
       </form>
     } @else {
       <section class="confirmation" role="status" aria-labelledby="confirmation-heading"><i class="bi bi-check-circle" aria-hidden="true"></i><p class="eyebrow">Mockad bekräftelse</p><h2 id="confirmation-heading" tabindex="-1">Ändringsbegäran är skapad i mockupen</h2><p><strong>Demo-ärende: RPT-DEMO-001</strong></p><p>Gäller: {{ biSelectionSummary() }}</p><p>Ingen information har skickats eller sparats.</p><h3>Vad händer nu?</h3><ul><li>Utvecklingsteamet granskar underlaget.</li><li>Om mer information behövs kontaktar vi angiven kontaktfunktion.</li><li>Du får återkoppling inom 3 arbetsdagar.</li><li>Vid godkänt underlag planeras ändringen enligt prioritering.</li></ul><button class="secondary-action" type="button" (click)="editRequest()">Tillbaka till uppgifterna</button></section>
+    }
+  } @else if (action.id === 'data') {
+    @if (dataStage() === 'editing') {
+      <form class="request-form guided-form" [formGroup]="dataRequestForm" (ngSubmit)="$event.preventDefault()" novalidate>
+        <div class="form-heading"><p class="eyebrow">Mockad beställning</p><h2 id="data-form-heading" tabindex="-1">Underlag för databehov</h2><p>Fälten demonstrerar ett återanvändbart flöde. Inga uppgifter skickas eller sparas.</p></div>
+        <div class="form-steps">
+          <div id="data-step-1"><app-order-form-step [stepNumber]="1" title="Välj rapport eller dashboard" [active]="dataActiveStep() === 1" [complete]="dataCompletedStep() >= 1" [summary]="dataBiSelectionSummary()" (open)="openDataStep(1)"><p class="field-help">Välj det BI-system, den container och det rapport-/dashboardobjekt som databehovet gäller.</p><app-bi-object-selector [systems]="biSystems()" [containers]="biContainers()" [assets]="biAssets()" [systemId]="dataBiSystemId()" [containerId]="dataBiContainerId()" [assetId]="dataBiAssetId()" [requesterIsResponsible]="dataRequesterIsResponsible()" (selectionChange)="onDataBiSelectionChange($event)" (requesterResponsibleChange)="dataRequesterIsResponsible.set($event)" />@if (dataBiAttempted() && !dataBiAssetId()) { <p class="field-error" tabindex="-1">Välj system, container och rapport-/dashboardobjekt.</p> }<div class="step-actions"><button class="primary-action" type="button" [disabled]="!dataBiAssetId()" (click)="continueDataStep(1)">Nästa</button></div></app-order-form-step></div>
+
+          <div id="data-step-2"><app-order-form-step [stepNumber]="2" title="Beskriv databehovet" [active]="dataActiveStep() === 2" [complete]="dataCompletedStep() >= 2" [locked]="dataCompletedStep() < 1" [summary]="dataStepSummary()" (open)="openDataStep(2)">
+            <p class="field-help">Markera vad databehovet gäller.</p>
+            <app-object-selector [items]="dataNeedTypes" [selectedIds]="dataRequestForm.controls.needTypeIds.value" [compact]="true" (selectionChange)="dataRequestForm.controls.needTypeIds.setValue($event)" />
+
+            <div>
+              <label class="field">Sök bland befintliga dataprodukter och datamängder
+                <input type="search" [value]="dataSearchQuery()" (input)="dataSearchQuery.set($any($event.target).value)" placeholder="Sök på namn, t.ex. försäljning" />
+              </label>
+              @if (dataSearchQuery().trim()) {
+                @if (dataSearchResults().length) {
+                  <ul class="app-search-results" role="list" aria-label="Sökträffar">
+                    @for (item of dataSearchResults(); track item.id) {
+                      <li><button type="button" (click)="addDataReference(item.id)"><span class="app-chip-tag">{{ item.group }}</span><strong>{{ item.title }}</strong><i class="bi bi-plus-circle" aria-hidden="true"></i></button></li>
+                    }
+                  </ul>
+                } @else {
+                  <p class="field-help">Inga träffar. Prova ett annat sökord, eller markera ett av alternativen nedan.</p>
+                }
+              }
+
+              @if (selectedDataReferences().length) {
+                <ul class="app-chip-list" role="list" aria-label="Valda dataprodukter och datamängder">
+                  @for (item of selectedDataReferences(); track item.id) {
+                    <li class="app-chip"><span class="app-chip-tag">{{ item.group }}</span><span>{{ item.title }}</span><button type="button" (click)="removeDataReference(item.id)" [attr.aria-label]="'Ta bort ' + item.title"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+                  }
+                </ul>
+              }
+
+              <div class="choice-grid">
+                <label><input type="checkbox" [checked]="dataRequestForm.controls.dataNotFound.value" (change)="dataRequestForm.controls.dataNotFound.setValue($any($event.target).checked)" /> Jag hittar inte datan jag behöver</label>
+                <label><input type="checkbox" [checked]="dataRequestForm.controls.dataUnknown.value" (change)="dataRequestForm.controls.dataUnknown.setValue($any($event.target).checked)" /> Jag vet inte vilken data som behövs</label>
+              </div>
+              @if (dataStep2Attempted() && !dataStepHasSomeInput()) { <p class="field-error" tabindex="-1">Välj typ av databehov eller befintlig data, eller markera att du inte hittar eller vet vilken data som behövs.</p> }
+            </div>
+
+            <div class="data-description-section">
+              <label class="field">Kända fält, mått eller begrepp (frivilligt)<textarea formControlName="description" rows="4" aria-describedby="data-description-help data-description-error"></textarea><small id="data-description-help">Ange gärna kända fält, mått eller begrepp. Vet du inte exakt vad som behövs går det bra att beskriva vad du vill kunna se eller besvara – vi hjälper dig hitta rätt data.</small></label>
+              @if (dataRequestForm.controls.description.touched && dataRequestForm.controls.description.invalid) { <p id="data-description-error" class="field-error" tabindex="-1">Beskrivningen behöver vara minst 10 tecken, eller lämnas tom.</p> }
+
+              <label class="field">Annan känd data, om den inte finns i listorna ovan<input formControlName="otherKnownData" /></label>
+            </div>
+
+            <fieldset><legend>Behöver rapporten eller dashboarden också ändras när datan finns på plats?</legend>
+              <div class="choice-grid">
+                <label><input type="radio" name="alsoUpdateReport" value="ja" formControlName="alsoUpdateReport" /> Ja</label>
+                <label><input type="radio" name="alsoUpdateReport" value="nej" formControlName="alsoUpdateReport" /> Nej</label>
+              </div>
+            </fieldset>
+            @if (dataStep2Attempted() && !dataRequestForm.controls.alsoUpdateReport.value) { <p class="field-error" tabindex="-1">Ange om rapporten eller dashboarden också behöver ändras.</p> }
+
+            <div class="step-actions"><button class="secondary-action" type="button" (click)="openDataStep(1)">Föregående</button><button class="primary-action" type="button" [disabled]="dataStep2Invalid()" (click)="continueDataStep(2)">Granska sammanfattning</button></div>
+          </app-order-form-step></div>
+
+          <div id="data-step-3"><app-order-form-step [stepNumber]="3" title="Granska och skicka" [active]="dataActiveStep() === 3" [locked]="dataCompletedStep() < 2" summary="Underlaget är klart för granskning" (open)="openDataStep(3)"><app-review-summary [entries]="dataReviewEntries()" /><div class="review-actions"><button class="secondary-action" type="button" (click)="openDataStep(2)">Ändra uppgifter</button><button class="primary-action" type="button" (click)="confirmDataRequest()">Skicka databehov</button></div></app-order-form-step></div>
+        </div>
+      </form>
+    } @else {
+      <section class="confirmation" role="status" aria-labelledby="data-confirmation-heading"><i class="bi bi-check-circle" aria-hidden="true"></i><p class="eyebrow">Mockad bekräftelse</p><h2 id="data-confirmation-heading" tabindex="-1">Databehovet är skapat i mockupen</h2><p><strong>Demo-ärende: RPT-DATA-DEMO-001</strong></p><p>Gäller: {{ dataBiSelectionSummary() }}</p><p>Ingen information har skickats eller sparats.</p><h3>Vad händer nu?</h3><ul><li>Utvecklingsteamet kontrollerar åtkomst och lämplighet.</li><li>Om datan saknas kan en separat databeställning behöva startas.</li><li>Du får återkoppling inom 3 arbetsdagar.</li></ul><button class="secondary-action" type="button" (click)="editDataRequest()">Tillbaka till uppgifterna</button></section>
     }
   } @else {
     <div class="simple-next"><div><h2>Nästa handling</h2><p>Den här iterationen visar process och förutsättningar. Ett fullständigt formulär byggs i en senare version.</p></div><button type="button">{{ action.cta }}</button></div>
