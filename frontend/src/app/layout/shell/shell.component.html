@@ -1,10 +1,10 @@
 <a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
 
 <div class="shell">
-  <div class="shell-sidenav" [class.open]="mobileNavOpen()" [class.collapsed]="navCollapsed()">
+  <div class="shell-sidenav" [class.open]="mobileNavOpen()">
     <app-sidenav
-      [collapsed]="navCollapsed() && !mobileNavOpen()"
-      (collapsedToggle)="toggleDesktopNav()"
+      [expanded]="navExpanded()"
+      (expandedToggle)="toggleNavExpanded()"
       (linkActivated)="closeMobileNav()"
     />
   </div>

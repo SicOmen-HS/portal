@@ -15,6 +15,8 @@ interface NeedTile {
   description: string;
   icon: string;
   routerLink: string[];
+  /** Visas alltid som prioriterad väg på startsidan; övriga behov visas bakom "Visa fler". */
+  priority?: boolean;
 }
 
 interface SearchSuggestion {
@@ -26,7 +28,7 @@ interface SearchSuggestion {
 }
 
 const NEEDS: NeedTile[] = [
-  { title: 'Rapporter och dashboards', description: 'Välj åtgärd, se process och starta rätt väg.', icon: 'bi-bar-chart-line', routerLink: ['/tjanster', 'rapporter-och-dashboards'] },
+  { title: 'Rapporter och dashboards', description: 'Välj åtgärd, se process och starta rätt väg.', icon: 'bi-bar-chart-line', routerLink: ['/tjanster', 'rapporter-och-dashboards'], priority: true },
   { title: 'Hitta data till en rapport', description: 'Utforska data och konsumtionsklara ytor.', icon: 'bi-database', routerLink: ['/data'] },
   { title: 'Få åtkomst eller ändra behörighet', description: 'Hitta rätt åtkomstväg och förutsättningar.', icon: 'bi-key', routerLink: ['/bestall', 'order-type-access-group'] },
   { title: 'Beställ AI- eller ML-yta', description: 'Förbered ett säkert, avgränsat experiment.', icon: 'bi-stars', routerLink: ['/bestall', 'order-type-ai-ml-yta'] },
@@ -53,6 +55,8 @@ export class HomeComponent {
   protected readonly suggestionQuery = signal('');
   protected readonly showIntroduction = signal(false);
   protected readonly needs = NEEDS;
+  protected readonly priorityNeeds = computed(() => this.needs.filter((need) => need.priority));
+  protected readonly secondaryNeeds = computed(() => this.needs.filter((need) => !need.priority));
   protected readonly status$ = this.statusService.getStatus();
   protected readonly variantLabel = computed(() => ({ a: 'Behovsstyrd arbetsyta', b: 'Minimal sökportal', c: 'Datamarknad' })[this.variant()]);
   protected readonly suggestions: SearchSuggestion[] = [

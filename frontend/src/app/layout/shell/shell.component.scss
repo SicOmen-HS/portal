@@ -6,9 +6,6 @@
 .shell-sidenav {
   width: var(--sidenav-width);
   flex-shrink: 0;
-  transition: width .2s ease;
-
-  &.collapsed { width: 76px; }
 
   @media (max-width: 991px) {
     position: fixed;

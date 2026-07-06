@@ -10,9 +10,12 @@ import { NAV_ITEMS } from '../nav-items';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavComponent {
-  protected readonly navItems = NAV_ITEMS;
-  readonly collapsed = input(false);
+  protected readonly primaryItems = NAV_ITEMS.filter((item) => item.primary);
+  protected readonly secondaryItems = NAV_ITEMS.filter((item) => !item.primary);
+
+  /** Om övriga menyval (utöver Hem och Tjänster) ska visas. */
+  readonly expanded = input(false);
 
   readonly linkActivated = output<void>();
-  readonly collapsedToggle = output<void>();
+  readonly expandedToggle = output<void>();
 }

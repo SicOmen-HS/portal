@@ -52,18 +52,26 @@
 
   @if (variant() !== 'b') {
     <section class="needs-section">
-      <div class="section-heading-row"><div><p class="section-kicker">Vanliga behov</p><h2>Välj en väg in</h2></div><p>Du når rekommenderade resurser på högst två val.</p></div>
+      <div class="section-heading-row"><div><p class="section-kicker">Prioriterat behov</p><h2>Välj en väg in</h2></div><p>Du når rekommenderade resurser på högst två val.</p></div>
       <div class="needs-grid">
-        @for (need of needs; track need.title) {
-          <a class="need-card" [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><div><h3>{{ need.title }}</h3><p>{{ need.description }}</p></div><i class="bi bi-arrow-right arrow" aria-hidden="true"></i></a>
+        @for (need of priorityNeeds(); track need.title) {
+          <a class="need-card priority-card" [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><div><h3>{{ need.title }}</h3><p>{{ need.description }}</p></div><i class="bi bi-arrow-right arrow" aria-hidden="true"></i></a>
         }
       </div>
+      <details class="needs-more">
+        <summary>Visa fler vanliga behov</summary>
+        <div class="needs-grid secondary">
+          @for (need of secondaryNeeds(); track need.title) {
+            <a class="need-card" [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><div><h3>{{ need.title }}</h3><p>{{ need.description }}</p></div><i class="bi bi-arrow-right arrow" aria-hidden="true"></i></a>
+          }
+        </div>
+      </details>
     </section>
   } @else {
     <section class="minimal-shortcuts" aria-labelledby="common-needs-title">
       <div class="minimal-heading"><h2 id="common-needs-title">Vanliga uppgifter</h2><span>Snabba vägar till rätt nästa steg</span></div>
-      @for (need of needs.slice(0, 4); track need.title) { <a [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><span><strong>{{ need.title }}</strong><small>{{ need.description }}</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a> }
-      <details><summary>Visa fler vanliga behov</summary><p class="secondary-label">Sekundära behov</p><div>@for (need of needs.slice(4); track need.title) { <a [routerLink]="need.routerLink">{{ need.title }} <i class="bi bi-arrow-right" aria-hidden="true"></i></a> }</div></details>
+      @for (need of priorityNeeds(); track need.title) { <a class="priority-card" [routerLink]="need.routerLink"><i class="bi {{ need.icon }}" aria-hidden="true"></i><span><strong>{{ need.title }}</strong><small>{{ need.description }}</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a> }
+      <details><summary>Visa fler vanliga behov</summary><p class="secondary-label">Sekundära behov</p><div>@for (need of secondaryNeeds(); track need.title) { <a [routerLink]="need.routerLink">{{ need.title }} <i class="bi bi-arrow-right" aria-hidden="true"></i></a> }</div></details>
     </section>
   }
 

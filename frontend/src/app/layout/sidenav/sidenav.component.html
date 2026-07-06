@@ -1,41 +1,57 @@
-<div class="sidenav-brand" [class.compact]="collapsed()">
+<div class="sidenav-brand">
   <span class="sidenav-brand-mark" aria-hidden="true">
     <i class="bi bi-hexagon-fill"></i>
   </span>
-  @if (!collapsed()) { <div>
+  <div>
     <span class="sidenav-brand-title">Data- och analysportalen</span>
     <span class="sidenav-brand-subtitle">Mockup</span>
-  </div> }
+  </div>
 </div>
-
-<button
-  type="button"
-  class="rail-toggle"
-  [attr.aria-label]="collapsed() ? 'Expandera huvudmenyn' : 'Minimera huvudmenyn'"
-  [attr.title]="collapsed() ? 'Expandera meny' : 'Minimera meny'"
-  (click)="collapsedToggle.emit()"
->
-  <i class="bi" [class.bi-layout-sidebar-inset]="collapsed()" [class.bi-layout-sidebar]="!collapsed()" aria-hidden="true"></i>
-  @if (collapsed()) { <span class="rail-tooltip" role="tooltip">Expandera meny</span> }
-</button>
 
 <nav class="sidenav-nav" aria-label="Huvudnavigation">
   <ul>
-    @for (item of navItems; track item.path) {
+    @for (item of primaryItems; track item.path) {
       <li>
         <a
           [routerLink]="item.path"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: item.end ?? false }"
-          [attr.title]="collapsed() ? item.label : null"
-          [attr.aria-label]="collapsed() ? item.label : null"
           (click)="linkActivated.emit()"
         >
           <i class="bi {{ item.icon }}" aria-hidden="true"></i>
-          @if (!collapsed()) { <span>{{ item.label }}</span> }
-          @else { <span class="nav-tooltip" role="tooltip">{{ item.label }}</span> }
+          <span>{{ item.label }}</span>
         </a>
       </li>
     }
   </ul>
 </nav>
+
+<button
+  type="button"
+  class="nav-toggle"
+  [attr.aria-expanded]="expanded()"
+  (click)="expandedToggle.emit()"
+>
+  <span>{{ expanded() ? 'Dölj fler menyval' : 'Visa fler menyval' }}</span>
+  <i class="bi" [class.bi-chevron-up]="expanded()" [class.bi-chevron-down]="!expanded()" aria-hidden="true"></i>
+</button>
+
+@if (expanded()) {
+  <nav class="sidenav-nav sidenav-nav-secondary" aria-label="Fler menyval">
+    <ul>
+      @for (item of secondaryItems; track item.path) {
+        <li>
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.end ?? false }"
+            (click)="linkActivated.emit()"
+          >
+            <i class="bi {{ item.icon }}" aria-hidden="true"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+}

@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, startWith } from 'rxjs';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { SidenavComponent } from '../sidenav/sidenav.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -14,18 +12,8 @@ import { FooterComponent } from '../footer/footer.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {
-  private readonly router = inject(Router);
   protected readonly mobileNavOpen = signal(false);
-  protected readonly homeNavExpanded = signal(false);
-  protected readonly isHome = toSignal(
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      map((event) => event.urlAfterRedirects.split('?')[0] === '/'),
-      startWith(this.router.url.split('?')[0] === '/')
-    ),
-    { initialValue: true }
-  );
-  protected readonly navCollapsed = computed(() => this.isHome() && !this.homeNavExpanded());
+  protected readonly navExpanded = signal(false);
 
   toggleMobileNav(): void {
     this.mobileNavOpen.update((open) => !open);
@@ -35,5 +23,7 @@ export class ShellComponent {
     this.mobileNavOpen.set(false);
   }
 
-  toggleDesktopNav(): void { this.homeNavExpanded.update((expanded) => !expanded); }
+  toggleNavExpanded(): void {
+    this.navExpanded.update((expanded) => !expanded);
+  }
 }
