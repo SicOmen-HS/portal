@@ -17,6 +17,10 @@
 
 ## Done
 
+- AN-004 - Förtydliga relationen mellan tjänsteåtgärder, ordertyper och återanvändbara formulär
+  See: docs/work-items/AN-004.md
+  Completed: 2026-07-07
+
 - AB-012 - Länka rapportåtgärder till befintliga beställningsflöden
   See: docs/work-items/AB-012.md
   Completed: 2026-07-07
