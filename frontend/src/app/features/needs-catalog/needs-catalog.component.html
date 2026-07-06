@@ -14,7 +14,7 @@
         @for (action of actions; track action.id) {
           <article class="action-card">
             <i class="bi {{ action.icon }}" aria-hidden="true"></i>
-            <div><h3>{{ action.title }}</h3><p>{{ action.description }}</p><small>{{ action.audience }}</small></div>
+            <div><h3>{{ action.title }}</h3><p>{{ action.description }}</p><small>{{ action.audience }}</small>@if (action.linkedOrderTypeId) { <small><i class="bi bi-arrow-right-circle" aria-hidden="true"></i> Befintligt beställningsflöde</small> }</div>
             <button type="button" (click)="selectAction(action)">Visa process <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
           </article>
         }
@@ -132,6 +132,8 @@
     } @else {
       <section class="confirmation" role="status" aria-labelledby="data-confirmation-heading"><i class="bi bi-check-circle" aria-hidden="true"></i><p class="eyebrow">Mockad bekräftelse</p><h2 id="data-confirmation-heading" tabindex="-1">Databehovet är skapat i mockupen</h2><p><strong>Demo-ärende: RPT-DATA-DEMO-001</strong></p><p>Gäller: {{ dataBiSelectionSummary() }}</p><p>Ingen information har skickats eller sparats.</p><h3>Vad händer nu?</h3><ul><li>Utvecklingsteamet kontrollerar åtkomst och lämplighet.</li><li>Om datan saknas kan en separat databeställning behöva startas.</li><li>Du får återkoppling inom 3 arbetsdagar.</li></ul><button class="secondary-action" type="button" (click)="editDataRequest()">Tillbaka till uppgifterna</button></section>
     }
+  } @else if (action.linkedOrderTypeId) {
+    <div class="simple-next"><div><h2>Redan en befintlig beställning</h2><p>{{ action.title }} hanteras via portalens befintliga, generella beställningsflöde{{ linkedOrderType() ? ' – "' + linkedOrderType()!.name + '"' : '' }}, inte ett eget formulär för Rapporter och dashboards.</p>@if (linkedOrderType(); as orderType) { <p>{{ orderType.description }}</p> }</div><a class="primary-action d-inline-flex align-items-center gap-2" [routerLink]="['/bestall', action.linkedOrderTypeId]">Fortsätt till befintlig beställning <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
   } @else {
     <div class="simple-next"><div><h2>Nästa handling</h2><p>Den här iterationen visar process och förutsättningar. Ett fullständigt formulär byggs i en senare version.</p></div><button type="button">{{ action.cta }}</button></div>
   }

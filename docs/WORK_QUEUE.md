@@ -17,6 +17,10 @@
 
 ## Done
 
+- AB-012 - Länka rapportåtgärder till befintliga beställningsflöden
+  See: docs/work-items/AB-012.md
+  Completed: 2026-07-07
+
 - AB-011 - Förtydliga åtgärden Lägg till eller ändra data
   See: docs/work-items/AB-011.md
   Completed: 2026-07-06
