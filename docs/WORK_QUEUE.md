@@ -21,6 +21,14 @@
 
 ## Done
 
+- AB-006 - Förbättra beställningsformulär med stegvis flöde och bättre fokus
+  See: docs/work-items/AB-006.md
+  Completed: 2026-07-06
+
+- AB-005 - Bygg mockup för återanvändbart beställningsformulär
+  See: docs/work-items/AB-005.md
+  Completed: 2026-07-06
+
 - AB-004 - Gör rapportbehov till tjänstesida med åtgärdsflöden
   See: docs/work-items/AB-004.md
   Completed: 2026-07-06
