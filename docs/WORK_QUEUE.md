@@ -17,6 +17,14 @@
 
 ## Done
 
+- AN-002 - Utreda URL-struktur, BI-objektmodell och integrationsstrategi för portalen
+  See: docs/work-items/AN-002.md
+  Completed: 2026-07-06
+
+- AB-008 - Dokumentera styrande princip för responsiv design
+  See: docs/work-items/AB-008.md
+  Completed: 2026-07-06
+
 - AB-007 - UX-städning, responsiv grund och fokusläge för Rapporter och dashboards
   See: docs/work-items/AB-007.md
   Completed: 2026-07-06

@@ -100,6 +100,9 @@ for full detail):
   `docs/13_Utvecklarguide.md` — never hardcoded.
 - Code is written in English; UI text and project documentation are written in
   Swedish (`docs/06_Utvecklingsprinciper.md`).
+- New or materially changed UI must work on mobile, tablet and desktop, must not
+  depend on hover for core functionality, and must be reviewed at roughly 375px,
+  768px and desktop width (`docs/12_Designsystem_och_UI.md`).
 
 Introducing a new framework, a database strategy, an authentication solution, a new
 integration principle or a deployment model requires an ADR

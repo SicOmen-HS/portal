@@ -706,9 +706,11 @@ Primärt fokus är desktop och laptop, men gränssnittet ska kunna anpassas till
 
 ## Styrande princip för nya vyer
 
-* Nya vyer ska designas responsivt för mobil, tablet och desktop.
+* Nya vyer och större UI-ändringar ska fungera på mobil, tablet och desktop.
 * Centrala funktioner får inte vara beroende av hover.
-* Processer och formulär ska fungera med tangentbord, touch och smal skärm.
+* Formulär, processer, navigation och sök ska fungera med tangentbord, touch och smal skärm.
+* Nya eller ändrade komponenter ska minst granskas vid cirka 375 px, 768 px och desktopbredd.
+* Om något inte är fullt responsivt i en iteration ska det dokumenteras som känd begränsning i work itemets handoff.
 
 ---
 
