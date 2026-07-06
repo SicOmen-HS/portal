@@ -17,6 +17,10 @@
 
 ## Done
 
+- AB-009 - Inför canonical routes för Rapporter och dashboards
+  See: docs/work-items/AB-009.md
+  Completed: 2026-07-06
+
 - AN-002 - Utreda URL-struktur, BI-objektmodell och integrationsstrategi för portalen
   See: docs/work-items/AN-002.md
   Completed: 2026-07-06

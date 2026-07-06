@@ -23,6 +23,23 @@ export const routes: Routes = [
       ),
     title: 'Tjänster – Data- och analysportalen',
   },
+  // Canonical route för tjänsten Rapporter och dashboards (AN-002, ADR-0002). Åtgärden
+  // "Ändra innehåll eller utseende" har en egen underroute; övriga åtgärder är ännu
+  // internt state på samma sida. /behov/rapport och den äldre id-baserade
+  // /tjanster/service-reports-dashboards-vägen redirectar hit istället för att rendera
+  // en egen kopia av sidan.
+  {
+    path: 'tjanster/rapporter-och-dashboards',
+    loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
+    title: 'Rapporter och dashboards – Data- och analysportalen',
+  },
+  {
+    path: 'tjanster/rapporter-och-dashboards/andra-innehall',
+    loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
+    title: 'Ändra innehåll eller utseende – Rapporter och dashboards – Data- och analysportalen',
+    data: { actionId: 'change' },
+  },
+  { path: 'tjanster/service-reports-dashboards', redirectTo: 'tjanster/rapporter-och-dashboards' },
   {
     path: 'tjanster/:id',
     loadComponent: () =>
@@ -41,11 +58,8 @@ export const routes: Routes = [
     loadComponent: () => import('./features/search-results/search-results.component').then((m) => m.SearchResultsComponent),
     title: 'Sök – Data- och analysportalen',
   },
-  {
-    path: 'behov/rapport',
-    loadComponent: () => import('./features/needs-catalog/needs-catalog.component').then((m) => m.NeedsCatalogComponent),
-    title: 'Rapporter och dashboards – Data- och analysportalen',
-  },
+  // Behovsingång, alias för tjänstens canonical route (ADR-0002) – ingen egen sida.
+  { path: 'behov/rapport', redirectTo: 'tjanster/rapporter-och-dashboards' },
   {
     path: 'data',
     loadComponent: () =>

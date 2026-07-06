@@ -193,6 +193,17 @@ Fördelar med detta mönster:
 URL-strukturen är på svenska (`/tjanster`, `/system`, `/data`, `/guider`, `/bestall`,
 `/status`, `/kontakt`, `/om-portalen`) eftersom målgruppen och UI-språket är svenskt.
 
+### Canonical route, alias och redirect
+
+En tjänst med ett fördjupat, dedikerat sidflöde (t.ex. Rapporter och dashboards) har
+sin canonical route under `/tjanster/<service-slug>`, med en egen underroute per
+åtgärd som har ett eget flöde (`/tjanster/<service-slug>/<action-slug>`). Äldre eller
+alternativa vägar (t.ex. en behovsingång under `/behov/...` eller en tidigare
+id-baserad slug) ska registreras som `redirectTo` till canonical routen istället för
+att rendera en egen kopia av sidan – se `ADR-0002` (`docs/adr/`). `ServiceOffering`s
+valfria `detailRoute`-fält pekar alltid på canonical routen och används av
+`ServiceCardComponent` och `SearchService` istället för den generiska `/tjanster/:id`.
+
 ---
 
 ## Mockdata

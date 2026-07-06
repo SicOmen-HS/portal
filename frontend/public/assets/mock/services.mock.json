@@ -20,7 +20,7 @@
     "lastUpdated": "2026-07-06",
     "source": "Lokal portal-konfiguration",
     "featured": true,
-    "detailRoute": ["/behov", "rapport"]
+    "detailRoute": ["/tjanster", "rapporter-och-dashboards"]
   },
   {
     "id": "service-order-dashboard",

@@ -110,7 +110,7 @@ export class SearchService {
           description: item.shortDescription,
           type: 'Tjänst',
           category: item.category,
-          routerLink: ['/tjanster', item.id],
+          routerLink: item.detailRoute ?? ['/tjanster', item.id],
           signals: ['Tydligt nästa steg', 'Support finns', LIFECYCLE_STATUS_LABELS[item.lifecycleStatus]],
           owner: 'Ansvarig tjänstefunktion',
           access: 'Öppen information',

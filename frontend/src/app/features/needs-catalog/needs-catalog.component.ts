@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObjectSelectorComponent, SelectableObject } from '../../shared/components/object-selector/object-selector.component';
 import { OrderFormStepComponent } from '../../shared/components/order-form-step/order-form-step.component';
 import { ProcessStepperComponent, ProcessStepView } from '../../shared/components/process-stepper/process-stepper.component';
@@ -94,8 +94,10 @@ const ACTIONS: ServiceAction[] = [
 export class NeedsCatalogComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly injector = inject(Injector);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   protected readonly actions = ACTIONS;
-  protected readonly selectedAction = signal<ServiceAction | null>(null);
+  protected readonly selectedAction = signal<ServiceAction | null>(this.initialRouteAction());
   protected readonly formStage = signal<'editing' | 'review' | 'confirmed'>('editing');
   protected readonly activeFormStep = signal(1);
   protected readonly completedFormStep = signal(0);
@@ -131,16 +133,40 @@ export class NeedsCatalogComponent {
     reportOwner: [''],
   });
 
+  constructor() {
+    // Landar man direkt på åtgärdsroutens URL (länk, bokmärke eller webbläsarens
+    // bakåt/fram) körs aldrig selectAction(), så samma scroll/fokus som ett klick ger
+    // måste sättas explicit här också.
+    if (this.selectedAction()) {
+      this.scrollTopAndFocus('#selected-view', '#change-action-button');
+    }
+  }
+
   selectAction(action: ServiceAction): void {
+    if (action.id === 'change') {
+      // "Ändra innehåll eller utseende" har en egen route (ADR-0002) så att den går att
+      // dela, bokmärka och navigera till/från med webbläsarens bakåt/fram.
+      this.router.navigate(['/tjanster', 'rapporter-och-dashboards', 'andra-innehall']);
+      return;
+    }
     this.selectedAction.set(action);
     this.resetRequest();
     this.scrollTopAndFocus('#selected-view', '#change-action-button');
   }
 
   showAllActions(): void {
+    if (this.route.snapshot.data['actionId']) {
+      this.router.navigate(['/tjanster', 'rapporter-och-dashboards']);
+      return;
+    }
     this.selectedAction.set(null);
     this.resetRequest();
     this.scrollTopAndFocus('#service-start', '#action-heading');
+  }
+
+  private initialRouteAction(): ServiceAction | null {
+    const actionId = this.route.snapshot.data['actionId'] as string | undefined;
+    return actionId ? ACTIONS.find((action) => action.id === actionId) ?? null : null;
   }
 
   private scrollTopAndFocus(topSelector: string, focusSelector: string): void {

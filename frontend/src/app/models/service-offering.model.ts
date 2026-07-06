@@ -28,6 +28,6 @@ export interface ServiceOffering {
   lastUpdated: string;
   source: string;
   featured?: boolean;
-  /** Egen ingångsväg när en fördjupad upplevelse redan finns, t.ex. ett tjänstesidesflöde under /behov. Om satt används den istället för den generiska /tjanster/:id-sidan. */
+  /** Egen ingångsväg när tjänsten har ett fördjupat, dedikerat sidflöde under /tjanster/<slug> istället för den generiska /tjanster/:id-sidan (ADR-0002). Används alltid som canonical route om satt. */
   detailRoute?: string[];
 }
