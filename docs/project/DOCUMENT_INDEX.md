@@ -102,6 +102,7 @@ owner; related documents must not silently compete with it.
 | --- | --- | --- | --- |
 | [`docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`](../adr/0001-dataprodukt-som-anvandarbegrepp.md) | Decision: "Dataprodukt" is the primary user term; "Information Mart" is secondary technical metadata | Any change touching Dataprodukt/Information Mart language or the underlying model | `docs/03_Informationsmodell.md`, `docs/11_ADR_mall.md` |
 | [`docs/adr/0002-canonical-url-struktur-tjanster.md`](../adr/0002-canonical-url-struktur-tjanster.md) | Decision: canonical routes for services with a dedicated flow live under `/tjanster/<slug>`; `/behov/*` and old slugs are aliases/redirects, never a parallel canonical page | Any change to routing, a service's `detailRoute`, or adding a new dedicated action route | `docs/analysis/AN-002_urler_bi_objektmodell_integrationsstrategi.md`, `docs/13_Utvecklarguide.md` |
+| [`docs/adr/0003-generisk-bi-objektmodell-forsta-steg.md`](../adr/0003-generisk-bi-objektmodell-forsta-steg.md) | Decision: `ReportingContainer`/`ReportingAsset` are the first, deliberately scoped step of the generic BI object model (Qlik Sense/Grafana/SAP BusinessObjects); `ReportingPart`/`ReportingDataBinding` are deferred | Any change touching BI object modeling, the reporting catalog, or the "Ändra innehåll eller utseende" object picker | `docs/analysis/AN-002_urler_bi_objektmodell_integrationsstrategi.md`, `docs/03_Informationsmodell.md` |
 
 ### Operational (lightweight, frequently read)
 

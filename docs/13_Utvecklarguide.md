@@ -381,6 +381,8 @@ modell utan att först kontrollera om ett befintligt objekt redan täcker behove
 | `LifecycleStatus`      | `lifecycle-status.model.ts`         | `LifecycleBadge` – används av i stort sett alla korttyper      |
 | `Visibility`           | `visibility.model.ts`               | Synlighetsnivå per objekt (visas i tjänstedetaljens metadata)  |
 | `Team`                 | `team.model.ts`                     | Ansvarigt team (metadata, ingen egen vy)                       |
+| `ReportingContainer`   | `reporting-container.model.ts`      | Ström/mapp-val i `BiObjectSelectorComponent` (ADR-0003)        |
+| `ReportingAsset`       | `reporting-asset.model.ts`          | App/dashboard/dokument-val i `BiObjectSelectorComponent`, med ansvarig och mockad godkännandeprincip (ADR-0003) |
 
 `models/index.ts` är en barrel-export – importera alltid modeller via
 `'../../models'` (relativ till din fil) istället för att peka på enskilda filer.
@@ -458,6 +460,29 @@ hårdkodade hex-värden i komponent-scss.
 3. Om beställningstypen har egen dokumentation: sätt `documentationUrlKey` och lägg
    till motsvarande nyckel i runtime-config enligt föregående avsnitt.
 4. `/bestall` och `/bestall/:id` visar den nya beställningstypen automatiskt.
+
+---
+
+## Lägga till ett nytt mockat BI-objekt
+
+Se `docs/adr/0003-generisk-bi-objektmodell-forsta-steg.md` för principen bakom detta
+första, avgränsade steg av den generiska BI-objektmodellen.
+
+1. Om det gäller ett nytt BI-system: lägg till en post i
+   `frontend/public/assets/mock/systems.mock.json` (se befintliga `system-qlik-sense`,
+   `system-grafana`, `system-sap-businessobjects` som mönster).
+2. Lägg till en `ReportingContainer`-post i
+   `frontend/public/assets/mock/reporting-containers.mock.json` med `systemId` mot
+   steg 1 och rätt `containerType` (`stream` för Qlik Sense, `folder` för Grafana/SAP
+   BusinessObjects).
+3. Lägg till en eller flera `ReportingAsset`-poster i
+   `frontend/public/assets/mock/reporting-assets.mock.json` med `containerId` mot steg
+   2, rätt `assetType`, ett fiktivt `responsibleLabel` och en `approvalPolicy`.
+4. Ingen kodändring krävs – `ReportingCatalogService` läser filerna dynamiskt och
+   `BiObjectSelectorComponent` visar det nya systemet/containern/objektet automatiskt
+   med typanpassade etiketter.
+5. Använd aldrig ett riktigt personnamn, en riktig AD-grupp eller ett riktigt
+   käll-id – se `docs/00_Projektprinciper.md` och `docs/05_Konfiguration.md`.
 
 ---
 

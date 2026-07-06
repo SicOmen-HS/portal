@@ -30,6 +30,21 @@
     "source": "Lokal portal-konfiguration"
   },
   {
+    "id": "system-sap-businessobjects",
+    "name": "SAP BusinessObjects",
+    "description": "Plattform för Web Intelligence-dokument, rapporter och semantiska lager (universe).",
+    "systemType": "Business Intelligence",
+    "ownerTeamId": "team-bi-visualisering",
+    "contactPointId": "contact-bi-support",
+    "linkIds": [],
+    "relatedServiceIds": [],
+    "platformCapabilityId": "platform-bi",
+    "authenticationModel": "Internt federerad inloggning (exempel)",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "source": "Lokal portal-konfiguration"
+  },
+  {
     "id": "system-openmetadata",
     "name": "OpenMetadata",
     "description": "Datakatalog och metadataplattform för att hitta och förstå datamängder.",

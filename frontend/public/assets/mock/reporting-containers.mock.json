@@ -1,0 +1,68 @@
+[
+  {
+    "id": "reporting-container-qlik-sales",
+    "name": "Försäljning demo",
+    "description": "Fiktiv Qlik Sense-ström för försäljningsrelaterade appar.",
+    "systemId": "system-qlik-sense",
+    "containerType": "stream",
+    "sourceSystemNativeId": "stream-sales-demo",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "lastSyncedAt": "2026-07-05T06:00:00"
+  },
+  {
+    "id": "reporting-container-qlik-finance",
+    "name": "Ekonomi demo",
+    "description": "Fiktiv Qlik Sense-ström för ekonomirelaterade appar.",
+    "systemId": "system-qlik-sense",
+    "containerType": "stream",
+    "sourceSystemNativeId": "stream-finance-demo",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "lastSyncedAt": "2026-07-05T06:00:00"
+  },
+  {
+    "id": "reporting-container-grafana-ops",
+    "name": "Drift demo",
+    "description": "Fiktiv Grafana-mapp för driftrelaterade dashboards.",
+    "systemId": "system-grafana",
+    "containerType": "folder",
+    "sourceSystemNativeId": "folder-ops-demo",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "lastSyncedAt": "2026-07-05T05:30:00"
+  },
+  {
+    "id": "reporting-container-grafana-platform",
+    "name": "Plattform demo",
+    "description": "Fiktiv Grafana-mapp för plattformsrelaterade dashboards.",
+    "systemId": "system-grafana",
+    "containerType": "folder",
+    "sourceSystemNativeId": "folder-platform-demo",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "lastSyncedAt": "2026-07-05T05:30:00"
+  },
+  {
+    "id": "reporting-container-sapbo-finance",
+    "name": "Ekonomi demo",
+    "description": "Fiktiv SAP BusinessObjects-mapp för ekonomirelaterade dokument.",
+    "systemId": "system-sap-businessobjects",
+    "containerType": "folder",
+    "sourceSystemNativeId": "folder-finance-demo",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "lastSyncedAt": "2026-07-05T04:00:00"
+  },
+  {
+    "id": "reporting-container-sapbo-customer",
+    "name": "Kund demo",
+    "description": "Fiktiv SAP BusinessObjects-mapp för kundrelaterade dokument.",
+    "systemId": "system-sap-businessobjects",
+    "containerType": "folder",
+    "sourceSystemNativeId": "folder-customer-demo",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "lastSyncedAt": "2026-07-05T04:00:00"
+  }
+]

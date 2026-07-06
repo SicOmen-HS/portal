@@ -117,6 +117,7 @@ De viktigaste objekten är:
 * `DataService`
 * `InformationMart` (visas i användargränssnittet som **Dataprodukt**, se `docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`)
 * `BusinessApplication`
+* `ReportingContainer` och `ReportingAsset` (första steget av en generisk BI-objektmodell, se `docs/adr/0003-generisk-bi-objektmodell-forsta-steg.md`)
 * `Guide`
 * `OrderFlow`
 * `OrderType`
@@ -565,6 +566,43 @@ I portalens gränssnitt visas motsvarande objekt som **Dataprodukt** (se ovan). 
 Mart ska bara visas där en teknisk eller förvaltande målgrupp uttryckligen behöver veta
 den faktiska implementationen, till exempel under "Tekniska detaljer" på en
 dataproduktsida (`docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`).
+
+---
+
+## ReportingContainer och ReportingAsset (BI-objektmodell, första steget)
+
+Ett första, avgränsat steg av en generisk BI-objektmodell för Qlik Sense, Grafana och
+SAP BusinessObjects (`docs/adr/0003-generisk-bi-objektmodell-forsta-steg.md`,
+`docs/analysis/AN-002_urler_bi_objektmodell_integrationsstrategi.md`). Används för att
+låta användaren peka ut ett konkret rapport-/dashboardobjekt i en ändringsbegäran.
+
+En `ReportingContainer` beskriver den gruppering källsystemet själv använder (Qlik
+Sense-ström, Grafana-mapp, SAP BusinessObjects-mapp) och hör till ett `System`. En
+`ReportingAsset` beskriver det körbara/visningsbara objektet (Qlik-app,
+Grafana-dashboard, SAP BusinessObjects Web Intelligence-dokument) och hör till en
+`ReportingContainer`.
+
+### Typiska egenskaper
+
+En container bör kunna innehålla: id, namn, beskrivning, tillhörande system,
+containertyp (ström/mapp), källsystemets eget id, livscykelstatus, synlighet och
+senast synkad.
+
+Ett asset bör kunna innehålla: id, namn, beskrivning, tillhörande container, assettyp
+(Qlik-app/Grafana-dashboard/Web Intelligence-dokument), källsystemets eget id,
+ansvarigt team, fiktiv ansvarig person/funktion, en mockad godkännandeprincip (inget
+separat godkännande, eller godkännande från ansvarig krävs), livscykelstatus,
+synlighet och senast synkad.
+
+### Princip
+
+Etiketter i användargränssnittet ska styras av containerns/assetets typ, inte
+hårdkodas per system, så att ett nytt BI-system kan läggas till utan modelländring.
+
+Ansvarig och godkännandeprincip är en förberedelse för ett framtida, riktigt
+godkännandeflöde – inte en behörighetskontroll. `ReportingPart` (enskilt ark/panel/
+rapportflik) och `ReportingDataBinding` (datakoppling) är medvetet inte införda ännu;
+de läggs till som en separat utökning när ett konkret behov uppstår.
 
 ---
 

@@ -1,10 +1,15 @@
-import { ChangeDetectionStrategy, Component, Injector, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { BiObjectSelectionChange, BiObjectSelectorComponent } from '../../shared/components/bi-object-selector/bi-object-selector.component';
 import { ObjectSelectorComponent, SelectableObject } from '../../shared/components/object-selector/object-selector.component';
 import { OrderFormStepComponent } from '../../shared/components/order-form-step/order-form-step.component';
 import { ProcessStepperComponent, ProcessStepView } from '../../shared/components/process-stepper/process-stepper.component';
 import { ReviewEntry, ReviewSummaryComponent } from '../../shared/components/review-summary/review-summary.component';
+import { ReportingCatalogService } from '../../services/reporting-catalog.service';
+import { SystemService } from '../../services/system.service';
+import { reportingApprovalMessage } from '../../models';
 
 interface ServiceAction {
   id: string;
@@ -86,7 +91,7 @@ const ACTIONS: ServiceAction[] = [
 
 @Component({
   selector: 'app-needs-catalog',
-  imports: [RouterLink, ReactiveFormsModule, ObjectSelectorComponent, OrderFormStepComponent, ProcessStepperComponent, ReviewSummaryComponent],
+  imports: [RouterLink, ReactiveFormsModule, ObjectSelectorComponent, OrderFormStepComponent, ProcessStepperComponent, ReviewSummaryComponent, BiObjectSelectorComponent],
   templateUrl: './needs-catalog.component.html',
   styleUrl: './needs-catalog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -96,19 +101,33 @@ export class NeedsCatalogComponent {
   private readonly injector = inject(Injector);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly systemService = inject(SystemService);
+  private readonly reportingCatalog = inject(ReportingCatalogService);
   protected readonly actions = ACTIONS;
   protected readonly selectedAction = signal<ServiceAction | null>(this.initialRouteAction());
   protected readonly formStage = signal<'editing' | 'review' | 'confirmed'>('editing');
   protected readonly activeFormStep = signal(1);
   protected readonly completedFormStep = signal(0);
   protected readonly reviewEntries = signal<ReviewEntry[]>([]);
-  protected readonly reports: SelectableObject[] = [
-    { id: 'sales', title: 'Försäljningsdashboard demo', type: 'Dashboard', meta: 'Exempelteam Försäljning', description: 'Översikt av fiktiva försäljningsvärden.' },
-    { id: 'finance', title: 'Månadsrapport ekonomi demo', type: 'Rapport', meta: 'Exempelteam Ekonomi', description: 'Fiktiv ekonomisk månadsuppföljning.' },
-    { id: 'customer', title: 'Kundöversikt demo', type: 'Dashboard', meta: 'Exempel kontaktfunktion Kund', description: 'Fiktiv sammanställning av kundrelaterade mått.' },
-    { id: 'operations', title: 'Operativ uppföljning demo', type: 'Rapport', meta: 'Exempelteam Verksamhet', description: 'Fiktiv operativ uppföljning för flera användare.' },
-  ];
   protected readonly reportScopes: SelectableObject[] = ['Översikt', 'Detaljvy', 'Filter', 'Diagram', 'Mått eller beräkning', 'Texter och rubriker', 'Layout', 'Export eller utskrift', 'Annat'].map((title, index) => ({ id: `scope-${index}`, title }));
+
+  // BI-objektval (system/container/asset) för "Ändra innehåll eller utseende" –
+  // en första, avgränsad tillämpning av den generiska BI-objektmodellen
+  // (docs/adr/0003-generisk-bi-objektmodell-forsta-steg.md).
+  private readonly allSystems = toSignal(this.systemService.getAll(), { initialValue: [] });
+  protected readonly biContainers = toSignal(this.reportingCatalog.getContainers(), { initialValue: [] });
+  protected readonly biAssets = toSignal(this.reportingCatalog.getAssets(), { initialValue: [] });
+  protected readonly biSystems = computed(() => {
+    const systemIds = new Set(this.biContainers().map((container) => container.systemId));
+    return this.allSystems().filter((system) => systemIds.has(system.id));
+  });
+  protected readonly biSystemId = signal('');
+  protected readonly biContainerId = signal('');
+  protected readonly biAssetId = signal('');
+  protected readonly biAttempted = signal(false);
+  protected readonly requesterIsResponsible = signal(false);
+  protected readonly selectedBiSystem = computed(() => this.biSystems().find((system) => system.id === this.biSystemId()));
+  protected readonly selectedBiAsset = computed(() => this.biAssets().find((asset) => asset.id === this.biAssetId()));
   protected readonly changeProcessSteps: ProcessStepView[] = [
     { title: 'Välj rapport/dashboard', description: 'Välj den eller de rapporter som ändringen gäller. Samma ändring kan gälla flera lösningar.' },
     { title: 'Välj flikar eller vyer', description: 'Ange vilka delar ändringen berör, till exempel översikt, filter, diagram eller mått.' },
@@ -118,7 +137,6 @@ export class NeedsCatalogComponent {
     { title: 'Planering och leverans', description: 'När underlaget är tydligt planeras arbetet enligt teamets prioritering.' },
   ];
   protected readonly requestForm = this.formBuilder.nonNullable.group({
-    reportIds: this.formBuilder.nonNullable.control<string[]>([], Validators.required),
     scopeIds: this.formBuilder.nonNullable.control<string[]>([], Validators.required),
     changeDescription: ['', [Validators.required, Validators.minLength(10)]],
     reason: ['', Validators.required],
@@ -187,8 +205,9 @@ export class NeedsCatalogComponent {
   }
 
   reviewRequest(): void {
-    if (this.requestForm.invalid || !this.requestForm.controls.reportIds.value.length || !this.requestForm.controls.scopeIds.value.length) {
+    if (this.requestForm.invalid || !this.biAssetId() || !this.requestForm.controls.scopeIds.value.length) {
       this.requestForm.markAllAsTouched();
+      this.biAttempted.set(true);
       setTimeout(() => document.querySelector<HTMLElement>('.field-error')?.focus());
       return;
     }
@@ -196,7 +215,9 @@ export class NeedsCatalogComponent {
     const titles = (ids: string[], items: SelectableObject[]) => ids.map((id) => items.find((item) => item.id === id)?.title).filter(Boolean).join(', ');
     this.reviewEntries.set([
       { label: 'Vald åtgärd', value: 'Ändra innehåll eller utseende' },
-      { label: 'Rapporter/dashboards', value: titles(value.reportIds, this.reports) },
+      { label: 'Rapport/dashboard', value: this.biSelectionSummary() },
+      { label: 'Ansvarig', value: this.selectedBiAsset()?.responsibleLabel ?? '' },
+      { label: 'Godkännande', value: this.processInfoText() },
       { label: 'Berörda delar', value: titles(value.scopeIds, this.reportScopes) },
       { label: 'Vad vill du ändra?', value: value.changeDescription },
       { label: 'Varför?', value: value.reason },
@@ -204,6 +225,22 @@ export class NeedsCatalogComponent {
       { label: 'Tidpunkt, prioritet och påverkan', value: `${value.timing} · ${value.priority} · ${value.impact}` },
       { label: 'Kontakt och ansvar', value: `${value.requester} · ${value.contactFunction}\n${value.businessArea}${value.reportOwner ? ` · Ägare: ${value.reportOwner}` : ''}` },
     ]);
+  }
+
+  onBiSelectionChange(change: BiObjectSelectionChange): void {
+    this.biSystemId.set(change.systemId);
+    this.biContainerId.set(change.containerId);
+    this.biAssetId.set(change.assetId);
+  }
+
+  protected biSelectionSummary(): string {
+    const asset = this.selectedBiAsset();
+    if (!asset) return '';
+    return `${this.selectedBiSystem()?.name ?? ''} · ${asset.name}`;
+  }
+
+  protected processInfoText(): string {
+    return reportingApprovalMessage(this.selectedBiAsset(), this.requesterIsResponsible());
   }
 
   openFormStep(step: number): void {
@@ -214,8 +251,18 @@ export class NeedsCatalogComponent {
   }
 
   continueForm(step: number): void {
+    if (step === 1) {
+      if (!this.biAssetId()) {
+        this.biAttempted.set(true);
+        setTimeout(() => document.querySelector<HTMLElement>('#form-step-1 .field-error')?.focus());
+        return;
+      }
+      this.completedFormStep.update((value) => Math.max(value, step));
+      this.openFormStep(2);
+      return;
+    }
     const controlsByStep = [
-      [this.requestForm.controls.reportIds],
+      [],
       [this.requestForm.controls.scopeIds],
       [this.requestForm.controls.changeDescription, this.requestForm.controls.reason],
       [this.requestForm.controls.timing, this.requestForm.controls.priority, this.requestForm.controls.impact],
@@ -223,7 +270,7 @@ export class NeedsCatalogComponent {
     ];
     const controls = controlsByStep[step - 1] ?? [];
     controls.forEach((control) => control.markAsTouched());
-    const arraysInvalid = step === 1 && !this.requestForm.controls.reportIds.value.length || step === 2 && !this.requestForm.controls.scopeIds.value.length;
+    const arraysInvalid = step === 2 && !this.requestForm.controls.scopeIds.value.length;
     if (arraysInvalid || controls.some((control) => control.invalid)) {
       setTimeout(() => document.querySelector<HTMLElement>(`#form-step-${step} .field-error`)?.focus());
       return;
@@ -233,7 +280,6 @@ export class NeedsCatalogComponent {
     this.openFormStep(step + 1);
   }
 
-  protected reportSummary(): string { return this.selectedTitles(this.requestForm.controls.reportIds.value, this.reports); }
   protected scopeSummary(): string { return this.selectedTitles(this.requestForm.controls.scopeIds.value, this.reportScopes); }
   protected descriptionSummary(): string { const value = this.requestForm.controls.changeDescription.value; return value.length > 70 ? `${value.slice(0, 70)}…` : value; }
   private selectedTitles(ids: string[], items: SelectableObject[]): string { return ids.map((id) => items.find((item) => item.id === id)?.title).filter(Boolean).join(', '); }
@@ -246,6 +292,11 @@ export class NeedsCatalogComponent {
     this.reviewEntries.set([]);
     this.activeFormStep.set(1);
     this.completedFormStep.set(0);
-    this.requestForm.reset({ reportIds: [], scopeIds: [], changeDescription: '', reason: '', usage: '', reference: '', timing: '', priority: 'Normal', impact: '', requester: 'Exempel beställare', contactFunction: 'Exempel kontaktfunktion', businessArea: 'Exempelteam Verksamhet', reportOwner: '' });
+    this.biSystemId.set('');
+    this.biContainerId.set('');
+    this.biAssetId.set('');
+    this.biAttempted.set(false);
+    this.requesterIsResponsible.set(false);
+    this.requestForm.reset({ scopeIds: [], changeDescription: '', reason: '', usage: '', reference: '', timing: '', priority: 'Normal', impact: '', requester: 'Exempel beställare', contactFunction: 'Exempel kontaktfunktion', businessArea: 'Exempelteam Verksamhet', reportOwner: '' });
   }
 }

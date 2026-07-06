@@ -17,6 +17,10 @@
 
 ## Done
 
+- AB-010 - Förbered BI-objektval i rapportbeställning
+  See: docs/work-items/AB-010.md
+  Completed: 2026-07-06
+
 - AB-009 - Inför canonical routes för Rapporter och dashboards
   See: docs/work-items/AB-009.md
   Completed: 2026-07-06

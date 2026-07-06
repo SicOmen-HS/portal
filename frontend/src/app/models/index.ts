@@ -23,3 +23,5 @@ export * from './order-type.model';
 export * from './order-flow.model';
 export * from './status-item.model';
 export * from './monitoring-subscription.model';
+export * from './reporting-container.model';
+export * from './reporting-asset.model';
