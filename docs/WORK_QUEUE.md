@@ -14,10 +14,12 @@
 
 ## Needs Review
 
-- AN-005 - Förtydliga Beställ, Ärenden och generella portalflöden
-  See: docs/work-items/AN-005.md
 
 ## Done
+
+- AN-005 - Förtydliga Beställ, Ärenden och generella portalflöden
+  See: docs/work-items/AN-005.md
+  Completed: 2026-07-07
 
 - AB-013 - Dokumentera route- och komponentprincip för delade tjänsteflöden (ADR-0004)
   See: docs/work-items/AB-013.md

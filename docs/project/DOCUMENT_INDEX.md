@@ -116,6 +116,7 @@ owner; related documents must not silently compete with it.
 | [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Current phase and priorities | When current state affects the task | — |
 | [`DECISIONS.md`](DECISIONS.md) | Durable decision log | Understanding why something is the way it is | — |
 | [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) | One-page orientation | New collaborator/session, fast orientation | Links to all of the above |
+| [`OBSERVATION_LOG.md`](OBSERVATION_LOG.md) | Non-governing log for small UI observations, future ideas, friction and minor bugs that are not approved work items | Periodic review and when preparing UI/design work | Worksmith remains the only work-item workflow; this is not a backlog or priority list |
 | [`../development/PROJECT_ADMINISTRATION.md`](../development/PROJECT_ADMINISTRATION.md) | Worksmith CLI command reference | Running any `npm run project -- ...` command | — |
 
 ## Templates And Examples
@@ -132,6 +133,9 @@ future core update. Treat any content there as non-authoritative for this projec
 - `docs/work-items/*.md` — individual work items. Completed (`done`) items are
   immutable project history and must not be edited except for an explicitly approved
   correction of an obvious spelling/formatting error.
+- `docs/project/OBSERVATION_LOG.md` — a non-governing capture surface for small UI
+  observations, future ideas, friction and minor bugs. It is not a backlog, priority
+  list or substitute for Worksmith; approved work must link to an AB or AN item.
 - `.worksmith/topics.json` — the registered topic vocabulary (project-owned
   configuration, not documentation).
 - `.worksmith.json` — presentation configuration (language, output target, shell);
