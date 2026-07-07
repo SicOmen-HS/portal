@@ -17,6 +17,10 @@
 
 ## Done
 
+- AB-015 - Bygg Hantera behörighet och ansvar i tjänstekontext
+  See: docs/work-items/AB-015.md
+  Completed: 2026-07-08
+
 - AB-014 - Dokumentera namespace- och livscykelprincip för portalflöden
   See: docs/work-items/AB-014.md
   Completed: 2026-07-07

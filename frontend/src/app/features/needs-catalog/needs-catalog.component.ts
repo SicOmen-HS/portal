@@ -73,25 +73,14 @@ const ACTIONS: ServiceAction[] = [
     note: 'Om datan redan finns som datamängd eller dataprodukt kan den ofta kopplas till rapporten. Om datan saknas kan en ny dataintegrering, dataprodukt eller analysyta behöva beställas först.',
   },
   {
-    id: 'access', title: 'Ändra behörighet', icon: 'bi-key',
-    description: 'Lägg till eller ta bort åtkomst till en rapport eller dashboard.',
-    audience: 'För dig som behöver ändra vilka användare eller grupper som har åtkomst.',
-    useWhen: 'När rapporten redan finns och endast åtkomsten ska förändras.',
-    requirements: ['Berörd rapport eller dashboard', 'Användare eller fiktiv grupp', 'Lägg till eller ta bort'],
-    prerequisites: ['Begäran kan behöva godkännas av ansvarig ägare.'],
-    steps: ['Välj rapport/dashboard', 'Ange användare eller grupp', 'Välj lägg till/ta bort', 'Kontroll av behörighet', 'Genomförande'],
-    cta: 'Begär behörighet',
-    linkedOrderTypeId: 'order-type-access-group',
-  },
-  {
-    id: 'owner', title: 'Ändra ägare eller kontaktväg', icon: 'bi-person-gear',
-    description: 'Uppdatera ansvarig ägare eller den kontaktfunktion som visas.',
-    audience: 'För dig som förvaltar en rapport där ansvar eller kontaktväg har ändrats.',
-    useWhen: 'När ägarskap ska överlämnas eller kontaktinformationen inte längre stämmer.',
-    requirements: ['Berörd rapport eller dashboard', 'Ny ägare eller kontaktfunktion', 'Bekräftelse av det nya ansvaret'],
-    prerequisites: ['Den nya ansvarsfunktionen behöver bekräfta övertagandet.'],
-    steps: ['Välj rapport/dashboard', 'Ange ny ägare eller kontaktfunktion', 'Bekräfta ansvar', 'Granskning', 'Uppdatering'],
-    cta: 'Starta ändringsbegäran',
+    id: 'access', title: 'Hantera behörighet och ansvar', icon: 'bi-person-lock',
+    description: 'Hantera åtkomst, behörighetsnivåer, ansvarig eller kontaktväg för en resurs.',
+    audience: 'För dig som behöver ändra åtkomst, ansvarig person, team eller kontaktväg.',
+    useWhen: 'När en befintlig resurs behöver ändrad behörighet eller uppdaterat ansvar.',
+    requirements: ['Berörd resurs', 'Fiktiv person, funktion, team eller grupp', 'Önskad ändring och motivering'],
+    prerequisites: ['Begäran kan behöva godkännas av objektansvarig eller accepteras av en ny ansvarig.'],
+    steps: ['Välj ändringstyp', 'Välj resurs', 'Beskriv ändring', 'Godkännande', 'Granska och skicka'],
+    cta: 'Hantera behörighet och ansvar',
   },
   {
     id: 'problem', title: 'Rapportera problem', icon: 'bi-exclamation-circle',
@@ -261,6 +250,12 @@ export class NeedsCatalogComponent {
       // Samma ADR-0002-princip som "Ändra innehåll eller utseende": ett eget, riktigt
       // flöde ska ha en egen route.
       this.router.navigate(['/tjanster', 'rapporter-och-dashboards', 'lagg-till-data']);
+      return;
+    }
+    if (action.id === 'access') {
+      // Ett återanvändbart domänflöde monteras i tjänstens canonical route med
+      // tjänstekontext enligt ADR-0004, inte via den generiska /bestall-katalogen.
+      this.router.navigate(['/tjanster', 'rapporter-och-dashboards', 'behorighet-och-ansvar']);
       return;
     }
     this.selectedAction.set(action);

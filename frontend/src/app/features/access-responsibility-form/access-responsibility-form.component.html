@@ -1,0 +1,72 @@
+<nav class="breadcrumb-small" aria-label="Brödsmulor">
+  <a routerLink="/">Hem</a><i class="bi bi-chevron-right" aria-hidden="true"></i>
+  <a [routerLink]="returnRoute()">{{ serviceContextLabel() }}</a><i class="bi bi-chevron-right" aria-hidden="true"></i>
+  <span>Hantera behörighet och ansvar</span>
+</nav>
+
+<header class="form-header">
+  <p class="eyebrow">Tjänsteåtgärd · {{ serviceContextLabel() }}</p>
+  <h1>Hantera behörighet och ansvar</h1>
+  <p>Beställ ändring av åtkomst, behörighetsnivåer, ansvarig person eller kontaktväg för en rapport, dashboard, dataprodukt, datamängd eller annan resurs.</p>
+  <div class="context-chip"><i class="bi bi-grid" aria-hidden="true"></i> Gäller tjänsten {{ serviceContextLabel() }}</div>
+</header>
+
+<app-process-stepper [steps]="processSteps" />
+
+@if (stage() === 'editing') {
+  <form class="guided-form" [formGroup]="form" novalidate>
+    <app-order-form-step [stepNumber]="1" title="Vad vill du ändra?" [active]="activeStep() === 1" [complete]="completedStep() >= 1" [summary]="currentChangeKind() === 'access' ? 'Behörighet eller åtkomst' : currentChangeKind() === 'responsibility' ? 'Ansvar eller kontaktväg' : ''" (open)="openStep(1)">
+      <fieldset><legend>Välj typ av ändring</legend><div class="choice-grid two">
+        <label [class.selected]="currentChangeKind() === 'access'"><input type="radio" formControlName="changeKind" value="access" (change)="chooseChangeKind('access')"><span><i class="bi bi-key" aria-hidden="true"></i><strong>Behörighet eller åtkomst</strong><small>Lägg till, ändra eller ta bort åtkomst.</small></span></label>
+        <label [class.selected]="currentChangeKind() === 'responsibility'"><input type="radio" formControlName="changeKind" value="responsibility" (change)="chooseChangeKind('responsibility')"><span><i class="bi bi-person-gear" aria-hidden="true"></i><strong>Ansvar eller kontaktväg</strong><small>Lägg till eller byt ansvarig eller ändra kontaktväg.</small></span></label>
+      </div></fieldset>
+      <div class="step-actions"><a class="secondary-action" [routerLink]="returnRoute()">Avbryt</a><button class="primary-action" type="button" [disabled]="form.controls.changeKind.invalid" (click)="continueFrom(1)">Fortsätt</button></div>
+    </app-order-form-step>
+
+    <app-order-form-step [stepNumber]="2" title="Vad gäller ändringen?" [active]="activeStep() === 2" [complete]="completedStep() >= 2" [locked]="completedStep() < 1" [summary]="resourceSummary()" (open)="openStep(2)">
+      <fieldset><legend>Välj resurstyp</legend><div class="choice-grid resource-types">
+        @for (type of resourceTypes; track type.id) { <label [class.selected]="selectedResourceKind() === type.id"><input type="radio" formControlName="resourceKind" [value]="type.id" (change)="chooseResourceKind(type.id)"><span><strong>{{ type.label }}</strong><small>{{ type.description }}</small></span></label> }
+      </div></fieldset>
+      @if (selectedResourceKind() && selectedResourceKind() !== 'other') {
+        <label class="field">Sök objekt<input type="search" [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" placeholder="Sök i befintlig mockdata"></label>
+        <div class="resource-results" role="list" aria-label="Sökresultat">
+          @for (resource of filteredResources(); track resource.id) { <button type="button" role="listitem" [class.selected]="selectedResourceId() === resource.id" (click)="chooseResource(resource.id)"><span><strong>{{ resource.label }}</strong><small>{{ resource.type }} @if (resource.meta) { · {{ resource.meta }} }</small></span><i class="bi {{ selectedResourceId() === resource.id ? 'bi-check-circle-fill' : 'bi-circle' }}" aria-hidden="true"></i></button> }
+          @if (filteredResources().length === 0) { <p class="empty-note">Inga objekt matchar sökningen. Beskriv resursen nedan.</p> }
+        </div>
+      }
+      <label class="field">{{ selectedResourceKind() === 'other' ? 'Beskriv resursen' : 'Jag hittar inte objektet – beskriv det i stället' }}<textarea formControlName="resourceDescription" rows="3" placeholder="Namn, typ och annan information som hjälper oss identifiera resursen"></textarea></label>
+      <div class="step-actions"><button class="secondary-action" type="button" (click)="openStep(1)">Föregående</button><button class="primary-action" type="button" [disabled]="!selectedResourceKind() || (!form.controls.resourceId.value && form.controls.resourceDescription.value.trim().length < 5)" (click)="continueFrom(2)">Fortsätt</button></div>
+    </app-order-form-step>
+
+    <app-order-form-step [stepNumber]="3" [title]="currentChangeKind() === 'access' ? 'Behörighet eller åtkomst' : 'Ansvar eller kontaktväg'" [active]="activeStep() === 3" [complete]="completedStep() >= 3" [locked]="completedStep() < 2" [summary]="form.controls.recipient.value" (open)="openStep(3)">
+      @if (currentChangeKind() === 'access') {
+        <div class="form-grid"><label class="field">Vad vill du göra?<select formControlName="accessAction"><option value="add">Lägg till behörighet</option><option value="change">Ändra befintlig behörighet</option><option value="remove">Ta bort behörighet</option></select></label><label class="field">Vem eller vilka gäller ändringen?<select formControlName="recipientKind"><option value="person">Person eller funktion</option><option value="team">Team</option><option value="group">Behörighetsgrupp</option></select></label></div>
+        <label class="field">Ange person, team eller behörighetsgrupp<input formControlName="recipient" placeholder="Fiktivt team, funktion eller mockad grupp"><small>Använd inte personuppgifter eller riktiga AD-grupper i mockupen.</small></label>
+        <label class="field">Vilken åtkomstnivå gäller?<select formControlName="accessLevel"><option value="read">Läsa / använda</option><option value="edit">Redigera / utveckla</option><option value="publish">Publicera / förvalta</option><option value="admin">Administrera</option><option value="other">Annan nivå / beskriv</option></select></label>
+        @if (form.controls.accessLevel.value === 'other') { <label class="field">Beskriv åtkomstnivån<input formControlName="customAccessLevel"></label> }
+      } @else {
+        <div class="form-grid"><label class="field">Vilket ansvar vill du ändra?<select formControlName="responsibilityType"><option value="business-owner">Verksamhetsansvarig</option><option value="technical-owner">Teknisk ansvarig</option><option value="contact">Kontaktperson</option><option value="approver">Godkännare för behörighet</option><option value="support">Support- eller förvaltningskontakt</option><option value="other">Annat ansvar</option></select></label><label class="field">Vad vill du göra?<select formControlName="responsibilityAction"><option value="add">Lägg till ansvarig</option><option value="replace">Byt ansvarig</option><option value="contact">Ändra kontaktväg</option></select></label></div>
+        <label class="field">Sök eller ange föreslagen person, team eller funktion<input formControlName="recipient" list="mock-teams" placeholder="Ange fiktivt team eller funktion"><datalist id="mock-teams">@for (team of teams(); track team.id) { <option [value]="team.name"></option> }</datalist><small>Listan innehåller endast fiktiva team och funktioner från mockdata.</small></label>
+        <fieldset><legend>Kompletterande ansvarsroller (valfritt)</legend><div class="checkbox-row">@for (role of ['Kontakt för verksamhetsfrågor', 'Teknisk kontakt', 'Godkännare', 'Supportkontakt']; track role) { <label><input type="checkbox" [checked]="form.controls.responsibilityRoles.value.includes(role)" (change)="toggleResponsibilityRole(role, $any($event.target).checked)"> {{ role }}</label> }</div></fieldset>
+        <fieldset><legend>När ska ändringen börja gälla?</legend><div class="radio-row"><label><input type="radio" formControlName="effectiveMode" value="asap"> Så snart som möjligt</label><label><input type="radio" formControlName="effectiveMode" value="date"> Föreslaget startdatum</label></div></fieldset>
+        @if (form.controls.effectiveMode.value === 'date') { <label class="field">Föreslaget startdatum<input type="date" formControlName="effectiveDate"></label> }
+      }
+      <label class="field">Motivering{{ currentChangeKind() === 'responsibility' ? ' / överlämningskommentar' : '' }}<textarea formControlName="justification" rows="4" placeholder="Beskriv varför ändringen behövs och relevant sammanhang"></textarea>@if (form.controls.justification.touched && form.controls.justification.invalid) { <small class="field-error">Skriv minst 10 tecken.</small> }</label>
+      <div class="step-actions"><button class="secondary-action" type="button" (click)="openStep(2)">Föregående</button><button class="primary-action" type="button" [disabled]="form.controls.recipient.invalid || form.controls.justification.invalid" (click)="continueFrom(3)">Fortsätt</button></div>
+    </app-order-form-step>
+
+    <app-order-form-step [stepNumber]="4" title="Godkännande och hantering" [active]="activeStep() === 4" [complete]="completedStep() >= 4" [locked]="completedStep() < 3" summary="Processinformation läst" (open)="openStep(4)">
+      <div class="approval-panel"><i class="bi bi-person-check" aria-hidden="true"></i><div><h2>Mockad hantering</h2><ul><li>Objektansvarig eller förvaltningskontakt granskar beställningen.</li><li>Behörighetsändringar kan kräva godkännande från ansvarig för objektet.</li><li>Ansvarsförändringar kan kräva att föreslagen ny ansvarig accepterar rollen.</li></ul><p>Ingen information skickas till IAM, AD, ticketing eller något annat system.</p></div></div>
+      <div class="step-actions"><button class="secondary-action" type="button" (click)="openStep(3)">Föregående</button><button class="primary-action" type="button" (click)="continueFrom(4)">Fortsätt till granskning</button></div>
+    </app-order-form-step>
+
+    <app-order-form-step [stepNumber]="5" title="Granska och skicka" [active]="activeStep() === 5" [complete]="completedStep() >= 5" [locked]="completedStep() < 4" summary="Redo att granskas" (open)="openStep(5)">
+      <p>Kontrollera uppgifterna innan den mockade begäran skapas.</p><div class="step-actions"><button class="secondary-action" type="button" (click)="openStep(4)">Föregående</button><button class="primary-action" type="button" (click)="showReview()">Visa sammanfattning</button></div>
+    </app-order-form-step>
+  </form>
+} @else if (stage() === 'review') {
+  <app-review-summary [entries]="reviewEntries()" />
+  <div class="review-actions"><button class="secondary-action" type="button" (click)="editRequest()">Ändra uppgifter</button><button class="primary-action" type="button" (click)="submitMockRequest()">Skicka mockad begäran</button></div>
+} @else {
+  <section class="confirmation" role="status" aria-labelledby="confirmation-heading"><i class="bi bi-check-circle" aria-hidden="true"></i><p class="eyebrow">Mockad bekräftelse</p><h2 id="confirmation-heading">Begäran är skapad i mockupen</h2><p><strong>Demo-ärende: ACCESS-RESP-DEMO-001</strong></p><p>Gäller: {{ resourceSummary() }}</p><p>Ingen information har skickats, sparats eller använts för en riktig behörighets- eller ansvarsförändring.</p><a class="secondary-action" [routerLink]="returnRoute()">Tillbaka till {{ serviceContextLabel() }}</a></section>
+}
