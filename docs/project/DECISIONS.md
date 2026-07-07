@@ -364,3 +364,47 @@ separat kopia av formuläret per tjänst.
 - `docs/adr/0004-route-komponentprincip-delade-tjansteflode.md`
 - `docs/analysis/AN-004_tjansteatgarder_ordertyper_atervandbara_formular.md`
 - `docs/work-items/AB-012.md`
+
+---
+
+## DEC-007 - Namespace Och Livscykel För Portalflöden
+
+- **Status:** `approved`
+- **Date:** `2026-07-07`
+- **Owner:** Project owner
+- **Supersedes:** None
+- **Superseded by:** None
+
+### Context
+
+AN-005 visade behovet av en permanent gräns mellan att hitta en tjänst, initiera en
+begäran eller felanmälan, få support, följa ett inskickat ärende och se driftstatus.
+
+### Decision
+
+Anta namespace- och livscykelprincipen i
+`docs/adr/0005-namespace-livscykelprincip-portalfloden.md`: `/tjanster` är primär
+kontextstyrd start; `/bestall` är sekundär katalog, inte hem för alla formulär;
+`/kontakt/rapportera-problem` är canonical route för det framtida generella
+problemflödet; `/arenden` är en framtida uppföljningsyta efter inskick; och `/status`
+reserveras för driftstatus. `/gemensamma-tjanster` ska inte införas som synlig
+kategori eller teknisk lösning för delade formulär.
+
+Beslutet dokumenterar målbild och routeansvar. Det implementerar inga nya routes,
+sidor, modeller eller navigationsetiketter.
+
+### Consequences
+
+- Positive: varje portalflöde får ett tydligt namespace utifrån användarens avsikt
+  och var i livscykeln användaren befinner sig.
+- Positive: ärendeuppföljning hålls skild från både driftstatus och supportstart.
+- Trade-off: `/kontakt/rapportera-problem` och `/arenden` förblir framtida tills
+  separat godkända implementations- och modellitems genomförs.
+- Required follow-up: dokumentera och genomför dessa framtida ytor endast genom egna
+  Worksmith-items; analysera informationsmodellen före `/arenden`.
+
+### Related Evidence
+
+- `docs/adr/0005-namespace-livscykelprincip-portalfloden.md`
+- `docs/analysis/AN-005_bestall_arenden_generella_portalfloden.md`
+- `docs/adr/0004-route-komponentprincip-delade-tjansteflode.md`

@@ -17,6 +17,10 @@
 
 ## Done
 
+- AB-014 - Dokumentera namespace- och livscykelprincip för portalflöden
+  See: docs/work-items/AB-014.md
+  Completed: 2026-07-07
+
 - AN-005 - Förtydliga Beställ, Ärenden och generella portalflöden
   See: docs/work-items/AN-005.md
   Completed: 2026-07-07

@@ -204,6 +204,33 @@ att rendera en egen kopia av sidan – se `ADR-0002` (`docs/adr/`). `ServiceOffe
 valfria `detailRoute`-fält pekar alltid på canonical routen och används av
 `ServiceCardComponent` och `SearchService` istället för den generiska `/tjanster/:id`.
 
+### Namespace och flödets livscykel
+
+Se `docs/adr/0005-namespace-livscykelprincip-portalfloden.md` för den styrande
+principen. Välj route efter användarens avsikt och flödets livscykel, inte efter var
+en återanvändbar komponent råkar ligga:
+
+| Situation | Canonical route eller namespace | Kommentar |
+| --- | --- | --- |
+| Hitta en tjänst | `/tjanster` | Primär, behovs- och kontextstyrd start |
+| Starta en åtgärd från en tjänst | `/tjanster/<service-slug>/<action-slug>` | Behåll tjänstekontext även när formuläret delas, se ADR-0004 |
+| Upptäcka vad som går att beställa eller ansöka om | `/bestall` | Sekundär katalog; inte ett krav att alla formulär ligger här |
+| Rapportera ett generellt problem | `/kontakt/rapportera-problem` | Canonical framtida problemroute; ännu inte implementerad |
+| Få rådgivning eller hitta kontaktväg | `/kontakt` | Supportstart, inte full ärendeuppföljning |
+| Följa något som redan skickats in | `/arenden` och `/arenden/<id>` | Framtida uppföljningsyta; ännu inte implementerad |
+| Se incidenter och underhåll | `/status` | Endast driftstatus, aldrig individuell ärendestatus |
+
+En beställning, ansökan, ändringsbegäran eller felanmälan ska behålla sitt
+användarnära namn när den startas. Efter inskick kan den visas som ett ärende under
+`/arenden`, med ursprunglig typ som metadata. Att flera routes använder samma
+formulärkomponent gör dem inte till samma användarresa eller samma canonical URL.
+
+Skapa inte `/gemensamma-tjanster` som kategori eller route för delade formulär.
+Återanvänd i stället komponenter och formulärfunktioner enligt ADR-0004. När en
+framtida route dokumenteras innan den är byggd ska texten uttryckligen säga att den
+inte är implementerad; lägg inte till länkar i UI förrän ett godkänt AB-item inför
+routen.
+
 ---
 
 ## Mockdata
