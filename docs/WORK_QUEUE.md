@@ -20,6 +20,10 @@
 
 ## Done
 
+- AN-006 - Målbild för Datamarknadens användarupplevelse
+  See: docs/work-items/AN-006.md
+  Completed: 2026-07-08
+
 - AB-017 - Skapa tjänsten Datamarknad
   See: docs/work-items/AB-017.md
   Completed: 2026-07-08
