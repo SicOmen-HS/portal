@@ -20,6 +20,10 @@
 
 ## Done
 
+- AN-007 - Informationssäkerhetsklassning för dataprodukter och datamängder
+  See: docs/work-items/AN-007.md
+  Completed: 2026-07-08
+
 - AB-018 - Bygg kuraterad utforskningsyta i Datamarknad
   See: docs/work-items/AB-018.md
   Completed: 2026-07-08
