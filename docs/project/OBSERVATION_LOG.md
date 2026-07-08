@@ -55,23 +55,38 @@ observationens placering i denna logg; det är inte en Worksmith-status.
 - Status: Ny observation
 - Länkat Worksmith-item: -
 
+### 2026-07-07 — UI — Justering av linjering på startsidan
+
 - Datum: 2026-07-07
 - Kategori: UI
-- Observation: Saker går inte i linje med varandra. Exempelvis Sökfältet är inte i linje med de andra boxarna nedan. Vanliga frågor rutan går inte i linje med den vita rutan. 
+- Observation: Vissa element på startsidan linjerar inte helt med varandra. Exempelvis upplevs sökfältet inte ligga i linje med boxarna nedanför, och sektionen med vanliga frågor linjerar inte konsekvent med intilliggande vit innehållsyta.
 - Var i portalen: Startsidan
-- Varför det kan vara värt att titta på: 
-- Möjlig hantering: Rätta till att allt går i linje med varandra.
-- Status: Ny observation 
+- Varför det kan vara värt att titta på: Startsidan är portalens primära ingång och små linjeringsskillnader kan göra helheten mindre polerad, särskilt när layouten används som referens för övriga sidor.
+- Möjlig hantering: Se över grid, maxbredd, kolumnindelning och spacing för startsidans sökfält, kortytor och FAQ-/informationsytor. Samordna gärna med ett framtida UI-polish- eller startsidesitem.
+- Status: Ny observation
 - Länkat Worksmith-item: -
+
+### 2026-07-07 — UI | Mindre bugg — Breadcrumbs saknar tjänstenivå
 
 - Datum: 2026-07-07
 - Kategori: UI | Mindre bugg
-- Observation: Breadcrumbs stämmer inte med resten. Saknas tjänster som breadcrumb.
-- Var i portalen: tjanster/rapporter-och-dashboards
-- Varför det kan vara värt att titta på: Lättare navigation
-- Möjlig hantering: Lägg in rätt breadcrumbs.
-- Status: Ny observation 
+- Observation: Breadcrumbs på Rapporter och dashboards-sidan stämmer inte helt med informationshierarkin. Tjänster-nivån saknas eller visas inte konsekvent, vilket gör att vägen inte speglar portalens struktur.
+- Var i portalen: `/tjanster/rapporter-och-dashboards`
+- Varför det kan vara värt att titta på: Tydliga breadcrumbs gör det lättare att förstå var användaren befinner sig och stärker den beslutade principen att tjänster är primär kontext för tjänsteflöden.
+- Möjlig hantering: Lägg till eller justera breadcrumb-strukturen så att den visar en konsekvent väg, exempelvis `Hem > Tjänster > Rapporter och dashboards`, och kontrollera samma mönster för underliggande tjänsteåtgärder.
+- Status: Ny observation
 - Länkat Worksmith-item: -
+
+### 2026-07-08 — UI | UX — Långa processflöden bryter ojämnt
+
+- Datum: 2026-07-08
+- Kategori: UI | UX
+- Observation: Process-steppen för det nya flödet "Skapa ny rapport eller dashboard" har sju steg. På bredare vy kan steg 7 hamna på en egen rad, vilket gör att flödet visuellt känns mindre sammanhållet än kortare beställningsflöden.
+- Var i portalen: `/tjanster/rapporter-och-dashboards/skapa-ny-rapport-dashboard`
+- Varför det kan vara värt att titta på: Processvisaren används som återkommande mönster i tjänstebeställningar. När antalet steg ökar behöver komponenten fortfarande vara lätt att överblicka på desktop, tablet och mobil.
+- Möjlig hantering: Se över hur `ProcessStepperComponent` eller motsvarande processvisning hanterar många steg. Möjliga lösningar är kompaktare steg, horisontell scroll på mindre ytor, två-radslayout med bättre balans, eller en alternativ sammanfattad progressindikator för långa flöden.
+- Status: Ny observation
+- Länkat Worksmith-item: AB-016
 
 ## Kandidater för framtida AB/AN
 

@@ -15,7 +15,14 @@
 ## Needs Review
 
 
+- AB-016 - Bygg tjänsteflöde för Skapa ny rapport eller dashboard
+  See: docs/work-items/AB-016.md
+
 ## Done
+
+- AB-017 - Skapa tjänsten Datamarknad
+  See: docs/work-items/AB-017.md
+  Completed: 2026-07-08
 
 - AB-015 - Bygg Hantera behörighet och ansvar i tjänstekontext
   See: docs/work-items/AB-015.md

@@ -53,6 +53,25 @@ export const routes: Routes = [
       ),
     title: 'Hantera behörighet och ansvar – Rapporter och dashboards – Data- och analysportalen',
   },
+  {
+    path: 'tjanster/rapporter-och-dashboards/skapa-ny-rapport-dashboard',
+    loadComponent: () =>
+      import('./features/new-report-request/new-report-request.component').then(
+        (m) => m.NewReportRequestComponent
+      ),
+    title: 'Skapa ny rapport eller dashboard – Rapporter och dashboards – Data- och analysportalen',
+  },
+  {
+    path: 'tjanster/datamarknad',
+    loadComponent: () => import('./features/data-market/data-market.component').then((m) => m.DataMarketComponent),
+    title: 'Datamarknad – Data- och analysportalen',
+  },
+  {
+    path: 'tjanster/datamarknad/behorighet-och-ansvar',
+    loadComponent: () =>
+      import('./features/data-market/data-market-access.component').then((m) => m.DataMarketAccessComponent),
+    title: 'Hantera behörighet och ansvar – Datamarknad – Data- och analysportalen',
+  },
   { path: 'tjanster/service-reports-dashboards', redirectTo: 'tjanster/rapporter-och-dashboards' },
   {
     path: 'tjanster/:id',

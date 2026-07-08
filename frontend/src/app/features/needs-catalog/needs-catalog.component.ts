@@ -8,7 +8,6 @@ import { OrderFormStepComponent } from '../../shared/components/order-form-step/
 import { ProcessStepperComponent, ProcessStepView } from '../../shared/components/process-stepper/process-stepper.component';
 import { ReviewEntry, ReviewSummaryComponent } from '../../shared/components/review-summary/review-summary.component';
 import { DataCatalogService } from '../../services/data-catalog.service';
-import { OrderService } from '../../services/order.service';
 import { ReportingCatalogService } from '../../services/reporting-catalog.service';
 import { SystemService } from '../../services/system.service';
 import { reportingApprovalMessage } from '../../models';
@@ -30,13 +29,6 @@ interface ServiceAction {
   cta: string;
   icon: string;
   note?: string;
-  /**
-   * Om åtgärden redan täcks av ett befintligt, generellt beställningsflöde
-   * (AN-003) istället för ett eget rapportspecifikt formulär – id mot
-   * order-types.mock.json. Åtgärden länkar då vidare till /bestall/<id> istället
-   * för att visa ett eget formulär.
-   */
-  linkedOrderTypeId?: string;
 }
 
 const ACTIONS: ServiceAction[] = [
@@ -49,7 +41,6 @@ const ACTIONS: ServiceAction[] = [
     prerequisites: ['En utsedd beställare behöver kunna förtydliga behovet.'],
     steps: ['Beskriv behov', 'Välj data eller dataprodukt', 'Ange målgrupp', 'Granskning', 'Planering', 'Leverans'],
     cta: 'Starta beställning',
-    linkedOrderTypeId: 'order-type-new-bi-app',
   },
   {
     id: 'change', title: 'Ändra innehåll eller utseende', icon: 'bi-layout-text-window-reverse',
@@ -109,17 +100,9 @@ export class NeedsCatalogComponent {
   private readonly systemService = inject(SystemService);
   private readonly reportingCatalog = inject(ReportingCatalogService);
   private readonly dataCatalog = inject(DataCatalogService);
-  private readonly orderService = inject(OrderService);
   protected readonly actions = ACTIONS;
   protected readonly selectedAction = signal<ServiceAction | null>(this.initialRouteAction());
 
-  // Åtgärder som redan har ett befintligt, generellt beställningsflöde (AN-003) länkas
-  // dit istället för att få ett eget rapportspecifikt formulär.
-  private readonly allOrderTypes = toSignal(this.orderService.getAllOrderTypes(), { initialValue: [] });
-  protected readonly linkedOrderType = computed(() => {
-    const orderTypeId = this.selectedAction()?.linkedOrderTypeId;
-    return orderTypeId ? this.allOrderTypes().find((orderType) => orderType.id === orderTypeId) : undefined;
-  });
   protected readonly formStage = signal<'editing' | 'review' | 'confirmed'>('editing');
   protected readonly activeFormStep = signal(1);
   protected readonly completedFormStep = signal(0);
@@ -240,6 +223,10 @@ export class NeedsCatalogComponent {
   }
 
   selectAction(action: ServiceAction): void {
+    if (action.id === 'create') {
+      this.router.navigate(['/tjanster', 'rapporter-och-dashboards', 'skapa-ny-rapport-dashboard']);
+      return;
+    }
     if (action.id === 'change') {
       // "Ändra innehåll eller utseende" har en egen route (ADR-0002) så att den går att
       // dela, bokmärka och navigera till/från med webbläsarens bakåt/fram.

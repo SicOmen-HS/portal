@@ -1,5 +1,28 @@
 [
   {
+    "id": "service-data-market",
+    "name": "Datamarknad",
+    "shortDescription": "Utforska, förstå och få tillgång till dataprodukter, datamängder och datatjänster.",
+    "longDescription": "En samlad ingång för att hitta data, bedöma kvalitet och styrning, ansöka om åtkomst och initiera förändringar av dataunderlag.",
+    "category": "Data",
+    "targetAudience": ["Verksamhetsanvändare", "Analytiker", "Data engineers", "Data scientists"],
+    "ownerTeamId": "team-data-platform",
+    "contactPointId": "contact-data-platform-support",
+    "platformCapabilityIds": ["platform-data", "platform-metadata"],
+    "relatedSystemIds": ["system-openmetadata"],
+    "technicalComponentIds": ["component-trino"],
+    "guideIds": ["guide-find-datasets", "guide-request-access"],
+    "orderTypeIds": ["order-type-access-group", "order-type-new-dataset", "order-type-change-dataset"],
+    "relatedServiceIds": ["service-find-datasets", "service-request-dataset-access", "service-combine-datasets-report", "service-reports-dashboards"],
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "tags": ["data", "dataprodukt", "datamängd", "datatjänst", "åtkomst", "governance", "kvalitet"],
+    "lastUpdated": "2026-07-08",
+    "source": "Lokal portal-konfiguration",
+    "featured": true,
+    "detailRoute": ["/tjanster", "datamarknad"]
+  },
+  {
     "id": "service-reports-dashboards",
     "name": "Rapporter och dashboards",
     "shortDescription": "Skapa, ändra eller få hjälp med rapporter och dashboards via ett samlat åtgärdsflöde.",
@@ -42,7 +65,7 @@
     "tags": ["dashboard", "qlik", "bi"],
     "lastUpdated": "2026-03-12",
     "source": "Lokal portal-konfiguration",
-    "featured": true
+    "featured": false
   },
   {
     "id": "service-order-ai-ml-yta",
