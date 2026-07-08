@@ -29,8 +29,8 @@ interface SearchSuggestion {
 
 const NEEDS: NeedTile[] = [
   { title: 'Rapporter och dashboards', description: 'Välj åtgärd, se process och starta rätt väg.', icon: 'bi-bar-chart-line', routerLink: ['/tjanster', 'rapporter-och-dashboards'], priority: true },
-  { title: 'Hitta data till en rapport', description: 'Utforska data och konsumtionsklara ytor.', icon: 'bi-database', routerLink: ['/data'] },
-  { title: 'Få åtkomst eller ändra behörighet', description: 'Hitta rätt åtkomstväg och förutsättningar.', icon: 'bi-key', routerLink: ['/bestall', 'order-type-access-group'] },
+  { title: 'Datamarknad', description: 'Utforska, förstå och få tillgång till data.', icon: 'bi-database', routerLink: ['/tjanster', 'datamarknad'], priority: true },
+  { title: 'Få åtkomst eller ändra behörighet', description: 'Hitta rätt åtkomstväg och förutsättningar.', icon: 'bi-key', routerLink: ['/tjanster', 'datamarknad', 'behorighet-och-ansvar'] },
   { title: 'Beställ AI- eller ML-yta', description: 'Förbered ett säkert, avgränsat experiment.', icon: 'bi-stars', routerLink: ['/bestall', 'order-type-ai-ml-yta'] },
   { title: 'Hitta guide eller dokumentation', description: 'Kom igång utan att känna till plattformen.', icon: 'bi-book', routerLink: ['/guider'] },
   { title: 'Hitta systemlänk', description: 'Öppna rätt verktyg via konfigurerade länkar.', icon: 'bi-box-arrow-up-right', routerLink: ['/system'] },
