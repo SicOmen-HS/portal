@@ -66,6 +66,29 @@ observationens placering i denna logg; det är inte en Worksmith-status.
 - Status: Ny observation
 - Länkat Worksmith-item: AB-016
 
+### 2026-07-08 — Informationsmodell | Framtidsidé — Gemensam informationssäkerhetsklassning för dataobjekt
+
+- Datum: 2026-07-08
+- Kategori: Framtidsidé
+- Observation: Dataprodukter och datamängder bör båda kunna bära informationssäkerhetsklassning. Nuvarande Datamarknad visar klassningsfilter som främst gäller datamängder, medan dataprodukter visar andra trust-/governance-signaler. Målbilden bör stödja en gemensam klassningsskala: Öppen data, Intern data, Känslig och Mycket känslig. Nivå 5.X ska inte hanteras i nuläget.
+- Var i portalen: `/tjanster/datamarknad`, `/data`, dataprodukt- och datamängdsdetaljer
+- Varför det kan vara värt att titta på: Klassning är ett centralt beslutsunderlag för åtkomst, användning, governance och vidare rapport-/dashboardflöden. Om dataprodukter saknar samma typ av klassningssignal som datamängder kan användaren få en ofullständig bild av informationssäkerheten.
+- Möjlig hantering: Skapa ett separat AN- eller AB-item för att analysera och införa gemensam informationssäkerhetsklassning i informationsmodell, mockdata och UI. Bör samordnas med framtida åtkomst- och governance-flöden.
+- Status: Ny observation
+- Länkat Worksmith-item: AB-018
+
+### 2026-07-08 — UI | UX — Datamarknadens list- och previewlayout behöver polish
+
+- Datum: 2026-07-08
+- Kategori: UI | UX
+- Observation: Den nya utforskningsytan i Datamarknad uppfyller grundscopet men layouten kan upplevas tung och något obalanserad. Resultatlistan har egen scrollbar, previewpanelen dominerar ytan och filterraden kan kännas ojämn när klassningsfiltret hamnar avskilt.
+- Var i portalen: `/tjanster/datamarknad`
+- Varför det kan vara värt att titta på: Datamarknadens utforskningsyta är central för upplevelsen av tjänsten. Små layoutproblem kan göra att sidan känns mindre polerad och att användaren missar att fler resultat finns i listan.
+- Möjlig hantering: Se över balans mellan lista och preview, scrollbeteende, filterradens placering och responsiv layout. Överväg kompaktare resultatlista, tydligare vald rad, bättre previewhöjd och en mer sammanhållen filteryta.
+- Status: Ny observation
+- Länkat Worksmith-item: AB-018
+
+
 ## Kandidater för framtida AB/AN
 
 Observationer som bedöms värda att utreda eller genomföra kan flyttas hit. Placering
