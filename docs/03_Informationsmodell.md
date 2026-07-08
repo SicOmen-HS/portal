@@ -426,6 +426,10 @@ Ett dataset bör kunna innehålla:
 
 Portalen behöver inte äga all datasetinformation.
 
+`Dataset` har en obligatorisk gemensam informationssäkerhetsklassning enligt ADR-0006:
+Öppen data, Intern data, Känslig eller Mycket känslig. Klassningen beskriver
+skyddsbehov och är inte samma sak som åtkomstmodell, synlighet, trust eller datakvalitet.
+
 Om OpenMetadata är källa för datamängder ska portalen i första hand återanvända eller länka till den informationen.
 
 ---
@@ -501,6 +505,7 @@ En dataprodukt bör kunna kommunicera:
 * vilka datamängder den bygger på
 * vilka dashboards/rapporter/BI-tillämpningar som använder den
 * åtkomstmodell
+* informationssäkerhetsklassning enligt den gemensamma fyrgradiga skalan
 * aktualitet (uppdateringsfrekvens)
 * tillit och kvalitet, uttryckt som en nivå (hög/medel/låg) med delsignaler
   (dokumentationsgrad, kvalitetskontroller, ägarskap, lineage, klassning, senaste
@@ -545,6 +550,7 @@ En Information Mart bör kunna innehålla:
 * beskrivning
 * datadomän
 * ägare
+* informationssäkerhetsklassning
 * ansvarigt team
 * relaterade datamängder
 * relaterade BI-tillämpningar
@@ -566,6 +572,10 @@ I portalens gränssnitt visas motsvarande objekt som **Dataprodukt** (se ovan). 
 Mart ska bara visas där en teknisk eller förvaltande målgrupp uttryckligen behöver veta
 den faktiska implementationen, till exempel under "Tekniska detaljer" på en
 dataproduktsida (`docs/adr/0001-dataprodukt-som-anvandarbegrepp.md`).
+
+Dataprodukten bär en explicit informationssäkerhetsklassning. Högsta klassning bland
+relaterade datamängder är dess konservativa miniminivå och valideringssignal. Se
+`docs/adr/0006-gemensam-informationssakerhetsklassning-dataobjekt.md`.
 
 ---
 

@@ -1,14 +1,6 @@
 import { Visibility } from './visibility.model';
 import { LifecycleStatus } from './lifecycle-status.model';
-
-export type DataClassification = 'open' | 'internal' | 'restricted' | 'confidential';
-
-export const DATA_CLASSIFICATION_LABELS: Record<DataClassification, string> = {
-  open: 'Öppen',
-  internal: 'Intern',
-  restricted: 'Begränsad',
-  confidential: 'Konfidentiell',
-};
+import { InformationSecurityClassification } from './information-security-classification.model';
 
 /**
  * Dataset beskriver en datamängd som användare kan hitta, förstå,
@@ -24,7 +16,7 @@ export interface Dataset {
   source: string;
   technicalSource?: string;
   accessModel: string;
-  classification: DataClassification;
+  classification: InformationSecurityClassification;
   updateFrequency: string;
   relatedDataServiceIds?: string[];
   relatedSystemIds?: string[];

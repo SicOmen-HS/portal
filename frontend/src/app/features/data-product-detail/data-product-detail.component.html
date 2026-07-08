@@ -19,6 +19,7 @@
           @if (product.accessModel) {
             <li><i class="bi bi-lock" aria-hidden="true"></i>{{ product.accessModel }}</li>
           }
+          <li><i class="bi bi-shield-lock" aria-hidden="true"></i>Informationssäkerhetsklassning: {{ classificationLabels[product.classification] }}</li>
         </ul>
       </div>
       <a class="btn btn-primary" routerLink="/bestall/order-type-access-group">Begär åtkomst</a>
@@ -86,7 +87,6 @@
               <div><dt>Kvalitetskontroller</dt><dd>{{ trust.qualityChecksPassed }} av {{ trust.qualityChecksTotal }} godkända</dd></div>
               <div><dt>Ägare</dt><dd>{{ trust.ownerAssigned ? 'Angiven' : 'Ej angiven' }}</dd></div>
               <div><dt>Lineage</dt><dd>{{ trust.lineageAvailable ? 'Finns' : 'Saknas' }}</dd></div>
-              <div><dt>Klassning</dt><dd>{{ trust.classificationAssigned ? 'Angiven' : 'Ej angiven' }}</dd></div>
               <div><dt>Senast granskad</dt><dd>{{ trust.lastReviewed }}</dd></div>
             </dl>
           </section>
@@ -107,6 +107,9 @@
       </main>
 
       <aside class="owner-card">
+        <p class="eyebrow">Informationssäkerhet</p>
+        <dl><dt>Explicit klassning</dt><dd>{{ classificationLabels[product.classification] }}</dd>@if(view.highestIncomingClassification){<dt>Högsta ingående klassning</dt><dd>{{ classificationLabels[view.highestIncomingClassification] }}</dd>}</dl>
+        <hr />
         <p class="eyebrow">Ägare och support</p>
         <h2>{{ product.owner }}</h2>
         @if (view.team) {

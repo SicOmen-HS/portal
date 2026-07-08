@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-019 - Inför gemensam informationssäkerhetsklassning för dataobjekt
+  See: docs/work-items/AB-019.md
+  Completed: 2026-07-08
+
 - AN-007 - Informationssäkerhetsklassning för dataprodukter och datamängder
   See: docs/work-items/AN-007.md
   Completed: 2026-07-08

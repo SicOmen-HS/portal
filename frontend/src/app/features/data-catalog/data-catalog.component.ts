@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { KeyValuePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../shared/components/search-box/search-box.component';
@@ -8,7 +7,7 @@ import { DatasetCardComponent } from '../../shared/components/dataset-card/datas
 import { LifecycleBadgeComponent } from '../../shared/components/lifecycle-badge/lifecycle-badge.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { DataCatalogService } from '../../services/data-catalog.service';
-import { DATA_CLASSIFICATION_LABELS, DataClassification } from '../../models';
+import { INFORMATION_SECURITY_CLASSIFICATION_LABELS, INFORMATION_SECURITY_CLASSIFICATION_ORDER, InformationSecurityClassification } from '../../models';
 import { SystemUrlService } from '../../core/links/system-url.service';
 
 @Component({
@@ -20,7 +19,6 @@ import { SystemUrlService } from '../../core/links/system-url.service';
     DatasetCardComponent,
     LifecycleBadgeComponent,
     EmptyStateComponent,
-    KeyValuePipe,
   ],
   templateUrl: './data-catalog.component.html',
   styleUrl: './data-catalog.component.scss',
@@ -40,15 +38,17 @@ export class DataCatalogPageComponent {
     initialValue: [],
   });
 
-  protected readonly classificationLabels = DATA_CLASSIFICATION_LABELS;
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
+  protected readonly classifications = INFORMATION_SECURITY_CLASSIFICATION_ORDER;
 
   protected readonly searchTerm = signal('');
   protected readonly selectedDomain = signal('');
-  protected readonly selectedClassification = signal<DataClassification | ''>('');
+  protected readonly selectedClassification = signal<InformationSecurityClassification | ''>('');
 
-  protected readonly domains = computed(() =>
-    Array.from(new Set(this.datasets().map((dataset) => dataset.dataDomain))).sort()
-  );
+  protected readonly domains = computed(() => Array.from(new Set([
+    ...this.datasets().map((dataset) => dataset.dataDomain),
+    ...this.informationMarts().map((product) => product.dataDomain),
+  ])).sort());
 
   protected readonly filteredDatasets = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
@@ -65,6 +65,15 @@ export class DataCatalogPageComponent {
       return matchesTerm && matchesDomain && matchesClassification;
     });
   });
+  protected readonly filteredInformationMarts = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    const domain = this.selectedDomain();
+    const classification = this.selectedClassification();
+    return this.informationMarts().filter((product) =>
+      (!term || product.name.toLowerCase().includes(term) || product.description.toLowerCase().includes(term))
+      && (!domain || product.dataDomain === domain)
+      && (!classification || product.classification === classification));
+  });
 
   onSearchChange(value: string): void {
     this.searchTerm.set(value);
@@ -75,6 +84,6 @@ export class DataCatalogPageComponent {
   }
 
   onClassificationChange(value: string): void {
-    this.selectedClassification.set(value as DataClassification | '');
+    this.selectedClassification.set(value as InformationSecurityClassification | '');
   }
 }

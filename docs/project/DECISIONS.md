@@ -408,3 +408,33 @@ sidor, modeller eller navigationsetiketter.
 - `docs/adr/0005-namespace-livscykelprincip-portalfloden.md`
 - `docs/analysis/AN-005_bestall_arenden_generella_portalfloden.md`
 - `docs/adr/0004-route-komponentprincip-delade-tjansteflode.md`
+
+---
+
+## DEC-008 - Gemensam Informationssäkerhetsklassning För Dataobjekt
+
+- **Status:** `approved`
+- **Date:** `2026-07-08`
+- **Owner:** Project owner
+- **Supersedes:** None
+- **Superseded by:** None
+
+### Decision
+
+Anta ADR-0006: Dataset och Dataprodukt använder samma fyrgradiga
+informationssäkerhetsklassning – Öppen data, Intern data, Känslig och Mycket känslig.
+Klassning beskriver skyddsbehov och hålls separat från åtkomstmodell, trust och
+datakvalitet. Dataproduktens explicita klassning får inte vara lägre än högsta
+klassningen bland relaterade datamängder. Nivå 5.X stöds inte.
+
+### Consequences
+
+- Klassningsvärden, etiketter, ordning och validering ägs centralt.
+- `restricted`, `confidential` och den booleska `classificationAssigned` ersätts.
+- Katalog-, detalj-, åtkomst- och rapportytor kan visa samma beslutsunderlag utan att
+  fatta automatiska åtkomstbeslut.
+
+### Related Evidence
+
+- `docs/adr/0006-gemensam-informationssakerhetsklassning-dataobjekt.md`
+- `docs/analysis/AN-007_informationssakerhetsklassning_dataprodukter_datamangder.md`

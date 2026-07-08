@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DATA_CLASSIFICATION_LABELS, Dataset } from '../../../models';
+import { INFORMATION_SECURITY_CLASSIFICATION_LABELS, Dataset } from '../../../models';
 import { LifecycleBadgeComponent } from '../lifecycle-badge/lifecycle-badge.component';
 import { RouterLink } from '@angular/router';
 
@@ -12,5 +12,5 @@ import { RouterLink } from '@angular/router';
 })
 export class DatasetCardComponent {
   readonly dataset = input.required<Dataset>();
-  protected readonly classificationLabels = DATA_CLASSIFICATION_LABELS;
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
 }

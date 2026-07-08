@@ -4,6 +4,7 @@
 // befintligt objekt redan täcker behovet (docs/07_AI_Instruktioner.md).
 export * from './lifecycle-status.model';
 export * from './visibility.model';
+export * from './information-security-classification.model';
 export * from './team.model';
 export * from './contact-point.model';
 export * from './system-link.model';

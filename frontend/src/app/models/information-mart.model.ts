@@ -1,5 +1,6 @@
 import { Visibility } from './visibility.model';
 import { LifecycleStatus } from './lifecycle-status.model';
+import { InformationSecurityClassification } from './information-security-classification.model';
 
 /**
  * InformationMart beskriver en strukturerad informationsprodukt eller
@@ -42,7 +43,6 @@ export interface DataProductTrust {
   qualityChecksTotal: number;
   ownerAssigned: boolean;
   lineageAvailable: boolean;
-  classificationAssigned: boolean;
   /** ISO-datum för senaste granskning. */
   lastReviewed: string;
 }
@@ -59,6 +59,7 @@ export interface InformationMart {
   purpose?: string;
   targetAudience?: string[];
   dataDomain: string;
+  classification: InformationSecurityClassification;
   owner: string;
   ownerTeamId?: string;
   /** Åtkomstläge, t.ex. "Åtkomst krävs via accessgrupp". */

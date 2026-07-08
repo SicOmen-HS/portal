@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import {
-  DATA_CLASSIFICATION_LABELS,
+  INFORMATION_SECURITY_CLASSIFICATION_LABELS,
+  INFORMATION_SECURITY_CLASSIFICATION_ORDER,
+  highestInformationSecurityClassification,
   Dataset,
   InformationMart,
   LIFECYCLE_STATUS_LABELS,
@@ -24,7 +26,8 @@ interface MarketItemView {
   updateFrequency: string;
   accessLabel: string;
   lifecycleStatus: Dataset['lifecycleStatus'];
-  classification?: Dataset['classification'];
+  classification: Dataset['classification'];
+  highestIncomingClassification?: Dataset['classification'];
   product?: InformationMart;
   dataset?: Dataset;
 }
@@ -41,7 +44,8 @@ export class DataMarketExplorerComponent {
   private readonly products = toSignal(this.dataCatalog.getAllInformationMarts(), { initialValue: [] });
   private readonly datasets = toSignal(this.dataCatalog.getAllDatasets(), { initialValue: [] });
 
-  protected readonly classificationLabels = DATA_CLASSIFICATION_LABELS;
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
+  protected readonly classifications = INFORMATION_SECURITY_CLASSIFICATION_ORDER;
   protected readonly lifecycleLabels = LIFECYCLE_STATUS_LABELS;
   protected readonly trustLabels = TRUST_LEVEL_LABELS;
   protected readonly query = signal('');
@@ -57,7 +61,13 @@ export class DataMarketExplorerComponent {
       domain: product.dataDomain, owner: product.owner,
       updateFrequency: product.updateFrequency || 'Inte angivet',
       accessLabel: product.accessModel || 'Kontakta ansvarig funktion',
-      lifecycleStatus: product.lifecycleStatus, product,
+      lifecycleStatus: product.lifecycleStatus, classification: product.classification,
+      highestIncomingClassification: highestInformationSecurityClassification(
+        (product.relatedDatasetIds ?? []).flatMap((id) => {
+          const dataset = this.datasets().find((item) => item.id === id);
+          return dataset ? [dataset.classification] : [];
+        })
+      ), product,
     })),
     ...this.datasets().map((dataset) => ({
       id: dataset.id, type: 'dataset' as const, typeLabel: 'Datamängd' as const,

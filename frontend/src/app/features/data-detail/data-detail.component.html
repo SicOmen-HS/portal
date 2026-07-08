@@ -10,6 +10,7 @@
           <li><i class="bi bi-patch-check" aria-hidden="true"></i>Verifierad metadata</li>
           <li><i class="bi bi-arrow-repeat" aria-hidden="true"></i>{{ dataset.updateFrequency }}</li>
           <li><i class="bi bi-lock" aria-hidden="true"></i>{{ dataset.accessModel }}</li>
+          <li><i class="bi bi-shield-lock" aria-hidden="true"></i>Informationssäkerhetsklassning: {{ classificationLabels[dataset.classification] }}</li>
         </ul>
       </div>
       <a class="btn btn-primary" routerLink="/bestall/order-type-access-group">Begär åtkomst</a>
@@ -45,8 +46,9 @@
         <dl>
           <dt>Vem är det till för?</dt>
           <dd>{{ view.targetAudience.length ? view.targetAudience.join(', ') : 'Analytiker och rapportutvecklare' }}</dd>
-          <dt>Kan jag lita på det?</dt>
-          <dd>{{ classificationLabels[dataset.classification] }} klassning, verifierad metadata</dd>
+          <dt>Informationssäkerhetsklassning</dt>
+          <dd>{{ classificationLabels[dataset.classification] }}</dd>
+          <dt>Metadata</dt><dd>Verifierad i denna mockup</dd>
           <dt>Domän</dt>
           <dd>{{ dataset.dataDomain }}</dd>
           <dt>Synlighet</dt>

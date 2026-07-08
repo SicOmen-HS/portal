@@ -9,6 +9,7 @@ import { TeamService } from '../../services/team.service';
 import { OrderFormStepComponent } from '../../shared/components/order-form-step/order-form-step.component';
 import { ProcessStepperComponent, ProcessStepView } from '../../shared/components/process-stepper/process-stepper.component';
 import { ReviewEntry, ReviewSummaryComponent } from '../../shared/components/review-summary/review-summary.component';
+import { INFORMATION_SECURITY_CLASSIFICATION_LABELS } from '../../models';
 
 type ChangeKind = 'access' | 'responsibility';
 type ResourceKind = 'bi' | 'data' | 'system' | 'other';
@@ -24,6 +25,7 @@ interface ResourceOption {
   label: string;
   type: string;
   meta?: string;
+  classification?: string;
 }
 
 const RESOURCE_TYPES: ResourceTypeOption[] = [
@@ -51,6 +53,7 @@ export class AccessResponsibilityFormComponent {
   readonly returnRoute = input<string[]>(['/tjanster', 'rapporter-och-dashboards']);
 
   protected readonly resourceTypes = RESOURCE_TYPES;
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
   protected readonly activeStep = signal(1);
   protected readonly completedStep = signal(0);
   protected readonly stage = signal<'editing' | 'review' | 'confirmed'>('editing');
@@ -99,8 +102,8 @@ export class AccessResponsibilityFormComponent {
         return this.reportingAssets().map((item) => ({ id: item.id, label: item.name, type: 'BI-tillämpning', meta: item.responsibleLabel }));
       case 'data':
         return [
-          ...this.informationMarts().map((item) => ({ id: item.id, label: item.name, type: 'Dataprodukt', meta: item.dataDomain })),
-          ...this.datasets().map((item) => ({ id: item.id, label: item.name, type: 'Datamängd', meta: item.dataDomain })),
+          ...this.informationMarts().map((item) => ({ id: item.id, label: item.name, type: 'Dataprodukt', meta: item.dataDomain, classification: this.classificationLabels[item.classification] })),
+          ...this.datasets().map((item) => ({ id: item.id, label: item.name, type: 'Datamängd', meta: item.dataDomain, classification: this.classificationLabels[item.classification] })),
         ];
       case 'system':
         return this.systems().map((item) => ({ id: item.id, label: item.name, type: item.systemType, meta: item.authenticationModel }));
@@ -195,6 +198,7 @@ export class AccessResponsibilityFormComponent {
       { label: 'Ändringstyp', value: changeLabel },
       { label: 'Resurstyp', value: resourceType },
       { label: 'Valt objekt', value: this.resourceSummary() },
+      ...(this.selectedResource()?.classification ? [{ label: 'Informationssäkerhetsklassning', value: this.selectedResource()!.classification! }] : []),
     ];
     if (value.changeKind === 'access') {
       return [...common,

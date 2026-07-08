@@ -6,7 +6,7 @@ import { DataCatalogService } from '../../services/data-catalog.service';
 import { GuideService } from '../../services/guide.service';
 import { OrderService } from '../../services/order.service';
 import { SystemService } from '../../services/system.service';
-import { DATA_CLASSIFICATION_LABELS } from '../../models';
+import { INFORMATION_SECURITY_CLASSIFICATION_LABELS } from '../../models';
 
 @Component({
   selector: 'app-data-detail',
@@ -21,7 +21,7 @@ export class DataDetailComponent {
   private readonly guides = inject(GuideService);
   private readonly orders = inject(OrderService);
   private readonly systems = inject(SystemService);
-  protected readonly classificationLabels = DATA_CLASSIFICATION_LABELS;
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
 
   protected readonly view$ = this.route.paramMap.pipe(
     switchMap((params) => this.catalog.getDatasetById(params.get('id') ?? '')),

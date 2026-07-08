@@ -407,12 +407,27 @@ modell utan att först kontrollera om ett befintligt objekt redan täcker behove
 | `MonitoringSubscription` | `monitoring-subscription.model.ts` | Larm kopplade till Information Mart (för närvarande ej egen vy) |
 | `LifecycleStatus`      | `lifecycle-status.model.ts`         | `LifecycleBadge` – används av i stort sett alla korttyper      |
 | `Visibility`           | `visibility.model.ts`               | Synlighetsnivå per objekt (visas i tjänstedetaljens metadata)  |
+| `InformationSecurityClassification` | `information-security-classification.model.ts` | Gemensam klassning för Dataset och Dataprodukt (ADR-0006) |
 | `Team`                 | `team.model.ts`                     | Ansvarigt team (metadata, ingen egen vy)                       |
 | `ReportingContainer`   | `reporting-container.model.ts`      | Ström/mapp-val i `BiObjectSelectorComponent` (ADR-0003)        |
 | `ReportingAsset`       | `reporting-asset.model.ts`          | App/dashboard/dokument-val i `BiObjectSelectorComponent`, med ansvarig och mockad godkännandeprincip (ADR-0003) |
 
 `models/index.ts` är en barrel-export – importera alltid modeller via
 `'../../models'` (relativ till din fil) istället för att peka på enskilda filer.
+
+### Informationssäkerhetsklassning för dataobjekt
+
+Använd endast den centrala typen, etiketterna och ordningen i
+`information-security-classification.model.ts`: `open` (Öppen data), `internal`
+(Intern data), `sensitive` (Känslig) och `highly-sensitive` (Mycket känslig).
+UI-text eller alfabetisk sortering får inte definiera nivåernas ordning.
+
+Varje Dataset och Dataprodukt ska ha exakt ett värde. Dataproduktens explicita nivå
+får inte understiga den högsta nivån bland `relatedDatasetIds`. Katalogservicen kör
+`validateDataClassifications` när mockfilerna läses och stoppar okända värden, trasiga
+relationer och för låg produktklassning. Lägg inte tillbaka `restricted`,
+`confidential`, `classificationAssigned` eller nivå 5.X. Klassning är skyddsbehov –
+inte åtkomstbeslut, trustnivå eller datakvalitet (ADR-0006).
 
 ---
 

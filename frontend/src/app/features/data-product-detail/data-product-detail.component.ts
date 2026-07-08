@@ -9,7 +9,7 @@ import { TeamService } from '../../services/team.service';
 import { ContactPointService } from '../../services/contact-point.service';
 import { ContactCardComponent } from '../../shared/components/contact-card/contact-card.component';
 import { SystemUrlService } from '../../core/links/system-url.service';
-import { DATA_PRODUCT_TECHNICAL_LABEL, TRUST_LEVEL_LABELS, TRUST_LEVEL_TONE } from '../../models';
+import { DATA_PRODUCT_TECHNICAL_LABEL, highestInformationSecurityClassification, INFORMATION_SECURITY_CLASSIFICATION_LABELS, TRUST_LEVEL_LABELS, TRUST_LEVEL_TONE } from '../../models';
 
 @Component({
   selector: 'app-data-product-detail',
@@ -31,6 +31,7 @@ export class DataProductDetailComponent {
   protected readonly trustLevelLabels = TRUST_LEVEL_LABELS;
   protected readonly trustLevelTone = TRUST_LEVEL_TONE;
   protected readonly technicalLabel = DATA_PRODUCT_TECHNICAL_LABEL;
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
 
   protected readonly view$ = this.route.paramMap.pipe(
     switchMap((params) => this.catalog.getInformationMartById(params.get('id') ?? '')),
@@ -53,6 +54,7 @@ export class DataProductDetailComponent {
                   relatedOrderTypes,
                   team,
                   contact,
+                  highestIncomingClassification: highestInformationSecurityClassification(datasets.map((dataset) => dataset.classification)),
                 }))
               )
             )
@@ -65,6 +67,7 @@ export class DataProductDetailComponent {
             relatedOrderTypes: [],
             team: undefined,
             contact: undefined,
+            highestIncomingClassification: undefined,
           })
     )
   );

@@ -30,7 +30,7 @@
       @if (selectedResourceKind() && selectedResourceKind() !== 'other') {
         <label class="field">Sök objekt<input type="search" [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" placeholder="Sök i befintlig mockdata"></label>
         <div class="resource-results" role="list" aria-label="Sökresultat">
-          @for (resource of filteredResources(); track resource.id) { <button type="button" role="listitem" [class.selected]="selectedResourceId() === resource.id" (click)="chooseResource(resource.id)"><span><strong>{{ resource.label }}</strong><small>{{ resource.type }} @if (resource.meta) { · {{ resource.meta }} }</small></span><i class="bi {{ selectedResourceId() === resource.id ? 'bi-check-circle-fill' : 'bi-circle' }}" aria-hidden="true"></i></button> }
+          @for (resource of filteredResources(); track resource.id) { <button type="button" role="listitem" [class.selected]="selectedResourceId() === resource.id" (click)="chooseResource(resource.id)"><span><strong>{{ resource.label }}</strong><small>{{ resource.type }} @if (resource.meta) { · {{ resource.meta }} } @if(resource.classification){ · {{resource.classification}} }</small></span><i class="bi {{ selectedResourceId() === resource.id ? 'bi-check-circle-fill' : 'bi-circle' }}" aria-hidden="true"></i></button> }
           @if (filteredResources().length === 0) { <p class="empty-note">Inga objekt matchar sökningen. Beskriv resursen nedan.</p> }
         </div>
       }

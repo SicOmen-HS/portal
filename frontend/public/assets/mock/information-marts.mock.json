@@ -6,6 +6,7 @@
     "purpose": "Ge en samlad, kvalitetssäkrad bild av försäljning för rapportering, uppföljning och beslutsstöd.",
     "targetAudience": ["Analytiker", "Beställare", "Verksamhetsanvändare"],
     "dataDomain": "Försäljning",
+    "classification": "internal",
     "owner": "Exempelteam Försäljningsanalys",
     "ownerTeamId": "team-data-platform",
     "accessModel": "Åtkomst krävs via accessgrupp",
@@ -18,7 +19,6 @@
       "qualityChecksTotal": 20,
       "ownerAssigned": true,
       "lineageAvailable": true,
-      "classificationAssigned": true,
       "lastReviewed": "2026-06-18"
     },
     "relatedDatasetIds": [
@@ -43,6 +43,7 @@
     "purpose": "Ge en samlad bild av kundinteraktioner för analys och uppföljning av kundnöjdhet.",
     "targetAudience": ["Analytiker", "Verksamhetsanvändare"],
     "dataDomain": "Kund",
+    "classification": "internal",
     "owner": "Exempelteam Kundinsikt",
     "ownerTeamId": "team-data-platform",
     "accessModel": "Åtkomst krävs via accessgrupp",
@@ -55,7 +56,6 @@
       "qualityChecksTotal": 15,
       "ownerAssigned": true,
       "lineageAvailable": true,
-      "classificationAssigned": true,
       "lastReviewed": "2026-05-22"
     },
     "relatedDatasetIds": ["dataset-customer-interactions-demo", "dataset-customer-register-demo"],
@@ -71,6 +71,7 @@
     "purpose": "Ge en kvalitetssäkrad grund för periodvis ekonomisk uppföljning och rapportering.",
     "targetAudience": ["Förvaltare", "Ekonomifunktion"],
     "dataDomain": "Ekonomi",
+    "classification": "highly-sensitive",
     "owner": "Exempelteam Ekonomi",
     "ownerTeamId": "team-data-platform",
     "accessModel": "Begränsad åtkomst via accessgrupp",
@@ -83,7 +84,6 @@
       "qualityChecksTotal": 12,
       "ownerAssigned": true,
       "lineageAvailable": false,
-      "classificationAssigned": true,
       "lastReviewed": "2026-04-30"
     },
     "relatedDatasetIds": ["dataset-finance-ledger-demo", "dataset-invoice-lines-demo"],
@@ -98,6 +98,7 @@
     "purpose": "Historisk rapporteringsgrund som fasas ut till förmån för \"Försäljning – kund och order\".",
     "targetAudience": ["Analytiker"],
     "dataDomain": "Försäljning",
+    "classification": "internal",
     "owner": "Exempelteam Försäljningsanalys",
     "ownerTeamId": "team-data-platform",
     "accessModel": "Begränsad åtkomst, rekommenderas inte för nya lösningar",
@@ -110,7 +111,6 @@
       "qualityChecksTotal": 10,
       "ownerAssigned": true,
       "lineageAvailable": false,
-      "classificationAssigned": false,
       "lastReviewed": "2025-09-12"
     },
     "relatedDatasetIds": ["dataset-legacy-reporting-extract-demo"],

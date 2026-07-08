@@ -7,10 +7,11 @@ import { TeamService } from '../../services/team.service';
 import { OrderFormStepComponent } from '../../shared/components/order-form-step/order-form-step.component';
 import { ProcessStepperComponent, ProcessStepView } from '../../shared/components/process-stepper/process-stepper.component';
 import { ReviewEntry, ReviewSummaryComponent } from '../../shared/components/review-summary/review-summary.component';
+import { highestInformationSecurityClassification, INFORMATION_SECURITY_CLASSIFICATION_LABELS, InformationSecurityClassification } from '../../models';
 
 type DeliveryType = 'dashboard' | 'report' | 'both' | 'unsure';
 
-interface DataOption { id: string; name: string; type: string; meta: string; }
+interface DataOption { id: string; name: string; type: string; meta: string; classification: InformationSecurityClassification; }
 
 @Component({
   selector: 'app-new-report-request',
@@ -34,20 +35,22 @@ export class NewReportRequestComponent {
   protected readonly dataKnowledge = signal('');
   protected readonly dataSearch = signal('');
   protected readonly selectedDataIds = signal<string[]>([]);
+  protected readonly classificationLabels = INFORMATION_SECURITY_CLASSIFICATION_LABELS;
 
   private readonly informationMarts = toSignal(this.dataCatalog.getAllInformationMarts(), { initialValue: [] });
   private readonly datasets = toSignal(this.dataCatalog.getAllDatasets(), { initialValue: [] });
   protected readonly teams = toSignal(this.teamService.getAll(), { initialValue: [] });
 
   protected readonly dataOptions = computed<DataOption[]>(() => [
-    ...this.informationMarts().map((item) => ({ id: item.id, name: item.name, type: 'Dataprodukt', meta: item.dataDomain })),
-    ...this.datasets().map((item) => ({ id: item.id, name: item.name, type: 'Datamängd', meta: item.dataDomain })),
+    ...this.informationMarts().map((item) => ({ id: item.id, name: item.name, type: 'Dataprodukt', meta: item.dataDomain, classification: item.classification })),
+    ...this.datasets().map((item) => ({ id: item.id, name: item.name, type: 'Datamängd', meta: item.dataDomain, classification: item.classification })),
   ]);
   protected readonly filteredDataOptions = computed(() => {
     const term = this.dataSearch().trim().toLocaleLowerCase('sv');
     return this.dataOptions().filter((item) => !term || `${item.name} ${item.type} ${item.meta}`.toLocaleLowerCase('sv').includes(term));
   });
   protected readonly selectedData = computed(() => this.dataOptions().filter((item) => this.selectedDataIds().includes(item.id)));
+  protected readonly selectedHighestClassification = computed(() => highestInformationSecurityClassification(this.selectedData().map((item) => item.classification)));
   protected readonly includesDashboard = computed(() => ['dashboard', 'both', 'unsure'].includes(this.deliveryType()));
   protected readonly includesReport = computed(() => ['report', 'both', 'unsure'].includes(this.deliveryType()));
 
@@ -106,6 +109,7 @@ export class NewReportRequestComponent {
       { label: 'Beslut eller åtgärder', value: v.decisions },
       { label: 'Målgrupp och användning', value: `${v.audience}\n${this.frequencyLabel(v.usageFrequency)}` },
       { label: 'Valda dataunderlag', value: this.selectedData().map((item) => `${item.type}: ${item.name}`).join('\n') || 'Inga valda' },
+      { label: 'Högsta informationssäkerhetsklassning', value: this.selectedHighestClassification() ? this.classificationLabels[this.selectedHighestClassification()!] : 'Inga dataobjekt valda' },
       { label: 'Saknat/osäkert dataunderlag', value: v.missingData || this.dataKnowledgeLabel(v.dataKnowledge) },
       { label: 'Källor, begrepp och historik', value: `${v.knownSources || 'Inte angivet'}\n${this.historyLabel(v.historyNeed)}` },
       { label: 'Uppdatering/distribution', value: this.deliveryDetails(v) },

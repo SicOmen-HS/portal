@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, shareReplay } from 'rxjs';
+import { combineLatest, Observable, map, shareReplay } from 'rxjs';
 import { MockDataService } from '../core/services/mock-data.service';
 import {
   BusinessApplication,
@@ -7,6 +7,7 @@ import {
   Dataset,
   InformationMart,
 } from '../models';
+import { validateDataClassifications } from './data-classification-validation';
 
 /**
  * Samlar datakatalogens objekt: Dataset, DataService, InformationMart och
@@ -18,17 +19,22 @@ import {
 export class DataCatalogService {
   private readonly mockData = inject(MockDataService);
 
-  private readonly datasets$: Observable<Dataset[]> = this.mockData
-    .load<Dataset[]>('datasets.mock.json')
-    .pipe(shareReplay(1));
+  private readonly rawDatasets$ = this.mockData.load<Dataset[]>('datasets.mock.json');
 
   private readonly dataServices$: Observable<DataServiceOffering[]> = this.mockData
     .load<DataServiceOffering[]>('data-services.mock.json')
     .pipe(shareReplay(1));
 
-  private readonly informationMarts$: Observable<InformationMart[]> = this.mockData
-    .load<InformationMart[]>('information-marts.mock.json')
-    .pipe(shareReplay(1));
+  private readonly rawInformationMarts$ = this.mockData.load<InformationMart[]>('information-marts.mock.json');
+  private readonly catalog$ = combineLatest([this.rawDatasets$, this.rawInformationMarts$]).pipe(
+    map(([datasets, products]) => {
+      validateDataClassifications(datasets, products);
+      return { datasets, products };
+    }),
+    shareReplay(1)
+  );
+  private readonly datasets$ = this.catalog$.pipe(map((catalog) => catalog.datasets));
+  private readonly informationMarts$ = this.catalog$.pipe(map((catalog) => catalog.products));
 
   private readonly businessApplications$: Observable<BusinessApplication[]> = this.mockData
     .load<BusinessApplication[]>('business-applications.mock.json')
