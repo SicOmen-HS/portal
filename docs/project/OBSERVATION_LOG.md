@@ -77,18 +77,6 @@ observationens placering i denna logg; det är inte en Worksmith-status.
 - Status: Ny observation
 - Länkat Worksmith-item: AB-018
 
-### 2026-07-08 — UI | UX — Datamarknadens list- och previewlayout behöver polish
-
-- Datum: 2026-07-08
-- Kategori: UI | UX
-- Observation: Den nya utforskningsytan i Datamarknad uppfyller grundscopet men layouten kan upplevas tung och något obalanserad. Resultatlistan har egen scrollbar, previewpanelen dominerar ytan och filterraden kan kännas ojämn när klassningsfiltret hamnar avskilt.
-- Var i portalen: `/tjanster/datamarknad`
-- Varför det kan vara värt att titta på: Datamarknadens utforskningsyta är central för upplevelsen av tjänsten. Små layoutproblem kan göra att sidan känns mindre polerad och att användaren missar att fler resultat finns i listan.
-- Möjlig hantering: Se över balans mellan lista och preview, scrollbeteende, filterradens placering och responsiv layout. Överväg kompaktare resultatlista, tydligare vald rad, bättre previewhöjd och en mer sammanhållen filteryta.
-- Status: Ny observation
-- Länkat Worksmith-item: AB-018
-
-
 ## Kandidater för framtida AB/AN
 
 Observationer som bedöms värda att utreda eller genomföra kan flyttas hit. Placering
@@ -102,7 +90,16 @@ Inga kandidater registrerade ännu.
 Flytta hit observationer som lösts inom ett godkänt Worksmith-item och ange itemets
 identifierare under `Länkat Worksmith-item`.
 
-Inga åtgärdade observationer registrerade ännu.
+### 2026-07-08 — UI | UX — Datamarknadens list- och previewlayout behöver polish
+
+- Datum: 2026-07-08
+- Kategori: UI | UX
+- Observation: Den nya utforskningsytan i Datamarknad uppfyllde grundscopet men layouten upplevdes tung och något obalanserad. Resultatlistans scrollbar var otydlig, previewpanelen dominerade och filterraden kändes ojämn.
+- Var i portalen: `/tjanster/datamarknad`
+- Varför det kan vara värt att titta på: Datamarknadens utforskningsyta är central för upplevelsen av tjänsten.
+- Möjlig hantering: Åtgärdad genom balanserade desktopkolumner, samlad filteryta, tydlig scrollinformation, starkare valdmarkering och responsiva list-/previewlägen.
+- Status: Åtgärdat
+- Länkat Worksmith-item: AB-020
 
 ## Parkerat / inte aktuellt
 

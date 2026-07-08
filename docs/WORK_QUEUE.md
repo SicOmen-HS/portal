@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-020 - Polera Datamarknadens list- och previewlayout
+  See: docs/work-items/AB-020.md
+  Completed: 2026-07-08
+
 - AB-019 - Inför gemensam informationssäkerhetsklassning för dataobjekt
   See: docs/work-items/AB-019.md
   Completed: 2026-07-08
