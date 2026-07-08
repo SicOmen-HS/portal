@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { DataCatalogService } from '../../services/data-catalog.service';
+import { DataMarketExplorerComponent } from './data-market-explorer.component';
 
 interface DataMarketAction {
   title: string;
@@ -23,7 +24,7 @@ const ACTIONS: DataMarketAction[] = [
 
 @Component({
   selector: 'app-data-market',
-  imports: [RouterLink],
+  imports: [RouterLink, DataMarketExplorerComponent],
   templateUrl: './data-market.component.html',
   styleUrl: './data-market.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

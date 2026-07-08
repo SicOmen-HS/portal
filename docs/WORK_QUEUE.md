@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-018 - Bygg kuraterad utforskningsyta i Datamarknad
+  See: docs/work-items/AB-018.md
+  Completed: 2026-07-08
+
 - AN-006 - Målbild för Datamarknadens användarupplevelse
   See: docs/work-items/AN-006.md
   Completed: 2026-07-08
