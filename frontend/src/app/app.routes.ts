@@ -53,6 +53,14 @@ export const routes: Routes = [
       ),
     title: 'Hantera behörighet och ansvar – Rapporter och dashboards – Data- och analysportalen',
   },
+  {
+    path: 'tjanster/rapporter-och-dashboards/skapa-ny-rapport-dashboard',
+    loadComponent: () =>
+      import('./features/new-report-request/new-report-request.component').then(
+        (m) => m.NewReportRequestComponent
+      ),
+    title: 'Skapa ny rapport eller dashboard – Rapporter och dashboards – Data- och analysportalen',
+  },
   { path: 'tjanster/service-reports-dashboards', redirectTo: 'tjanster/rapporter-och-dashboards' },
   {
     path: 'tjanster/:id',

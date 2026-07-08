@@ -14,6 +14,8 @@
 
 ## Needs Review
 
+- AB-016 - Bygg tjänsteflöde för Skapa ny rapport eller dashboard
+  See: docs/work-items/AB-016.md
 
 ## Done
 
