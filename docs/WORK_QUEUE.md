@@ -20,6 +20,10 @@
 
 ## Done
 
+- AN-008 - Utreda dubbelmodell mellan Datamarknad och fristående datatjänster i tjänstekatalogen
+  See: docs/work-items/AN-008.md
+  Completed: 2026-07-09
+
 - AB-020 - Polera Datamarknadens list- och previewlayout
   See: docs/work-items/AB-020.md
   Completed: 2026-07-08
