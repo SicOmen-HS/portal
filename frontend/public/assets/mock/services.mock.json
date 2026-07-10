@@ -2,7 +2,7 @@
   {
     "id": "service-data-market",
     "name": "Datamarknad",
-    "shortDescription": "Hitta och utforska data, begär åtkomst till datamängder och dataprodukter, och få stöd med datatjänster.",
+    "shortDescription": "Hitta, utforska och kombinera data, begär åtkomst till datamängder och dataprodukter, och få stöd med datatjänster.",
     "longDescription": "En samlad ingång för att hitta data, bedöma kvalitet och styrning, ansöka om åtkomst och initiera förändringar av dataunderlag.",
     "category": "Data",
     "targetAudience": ["Verksamhetsanvändare", "Analytiker", "Data engineers", "Data scientists"],
@@ -185,7 +185,7 @@
     "orderTypeIds": ["order-type-new-bi-app"],
     "relatedServiceIds": ["service-order-dashboard"],
     "lifecycleStatus": "active",
-    "visibility": "all-users",
+    "visibility": "hidden",
     "tags": ["rapport", "information-mart"],
     "lastUpdated": "2026-01-08",
     "source": "Lokal portal-konfiguration"
