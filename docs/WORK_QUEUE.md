@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-022 - Konsolidera Kombinera datamängder till rapport i Datamarknad
+  See: docs/work-items/AB-022.md
+  Completed: 2026-07-10
+
 - AB-021 - Konsolidera Hitta datamängder och Begär åtkomst till datamängd i Datamarknad
   See: docs/work-items/AB-021.md
   Completed: 2026-07-09
