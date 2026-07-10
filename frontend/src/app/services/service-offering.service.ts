@@ -11,8 +11,14 @@ export class ServiceOfferingService {
     .load<ServiceOffering[]>('services.mock.json')
     .pipe(shareReplay(1));
 
+  /**
+   * Exkluderar tjänster med visibility 'hidden', t.ex. konsoliderade tjänster
+   * som ersatts av en annan canonical tjänst (se AN-008/AB-021). getById och
+   * getByIds filtrerar inte på visibility, så tidigare nåbara direktlänkar
+   * fortsätter fungera oförändrat.
+   */
   getAll(): Observable<ServiceOffering[]> {
-    return this.services$;
+    return this.services$.pipe(map((items) => items.filter((item) => item.visibility !== 'hidden')));
   }
 
   getFeatured(): Observable<ServiceOffering[]> {
