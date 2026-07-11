@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-024 - Inför Git-branchregler och kopierbara leveranser
+  See: docs/work-items/AB-024.md
+  Completed: 2026-07-11
+
 - AB-023 - Visa fält och syntetisk preview på dataobjektdetalj
   See: docs/work-items/AB-023.md
   Completed: 2026-07-11

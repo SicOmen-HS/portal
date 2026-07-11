@@ -84,6 +84,30 @@ are synchronized discovery aids and never override the repository.
 - Prefer small commits and pull requests, clear names, reuse and consistent patterns.
 - Do not convert anticipated edge cases into permanent rules without observed need.
 
+## Git And Branches
+
+- Active repository development normally takes place on a separate branch, not
+  directly on `main`.
+- Use one branch per Worksmith work item or other clearly bounded and reviewable unit
+  of work. Branches are not permanent personal development branches.
+- When a work item exists, its identifier must appear in the branch name.
+- Changes normally reach `main` through a pull request and review before merge.
+  `main` represents the latest approved and verified version.
+- Keep branches small and short-lived, and remove them after an approved merge.
+- Commit, push, rebase, merge, force-push and other Git operations are manual and
+  project-owner controlled. Worksmith neither performs nor approves them.
+
+## Copyable Deliveries
+
+A finished prompt, handoff, manifest text, instruction or coherent command sequence
+must be delivered as one complete, self-contained and easily copyable block. Put any
+explanation before or after the block, never inside it. Instructions belonging to the
+same delivery must not be spread across comments or separate blocks, and a coherent
+delivery must not be split into several blocks merely for visual readability. The
+block must contain all context the recipient needs without manually joining multiple
+parts. This applies especially to content copied to Codex, Claude Code or other
+implementation agents.
+
 ## Architecture And Code Principles
 
 Current state (see `docs/project/PROJECT_STATUS.md` and `docs/04_Systemarkitektur.md`
