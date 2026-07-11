@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-025 - Förtydliga komplett prompt-, Git-, PR- och lokaltestflöde
+  See: docs/work-items/AB-025.md
+  Completed: 2026-07-11
+
 - AB-024 - Inför Git-branchregler och kopierbara leveranser
   See: docs/work-items/AB-024.md
   Completed: 2026-07-11

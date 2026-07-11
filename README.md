@@ -67,16 +67,17 @@ Ingen databas, inget internt nätverk och inga interna konton krävs.
 
 ## Installation
 
-```bash
-cd frontend
-npm install
+Kör från repositoryts rot. Den versionshanterade `frontend/package-lock.json` gör
+`ci` till det reproducerbara normalflödet:
+
+```powershell
+npm.cmd --prefix frontend ci
 ```
 
 ## Starta mockupen lokalt
 
-```bash
-cd frontend
-npm start
+```powershell
+npm.cmd --prefix frontend start
 ```
 
 Öppna sedan i webbläsaren:
@@ -87,21 +88,20 @@ http://localhost:4200
 
 Ingen ytterligare konfiguration krävs. Mockupen körs helt lokalt med fiktiv exempeldata och
 säker exempelkonfiguration (se [Konfiguration](#konfiguration) nedan).
+Processen fortsätter köra i terminalen och stoppas med `Ctrl+C`.
 
 ## Bygga
 
-```bash
-cd frontend
-npm run build
+```powershell
+npm.cmd --prefix frontend run build
 ```
 
 Byggartefakter hamnar i `frontend/dist/` (ingår inte i versionshantering).
 
 ## Testa
 
-```bash
-cd frontend
-npm test
+```powershell
+npm.cmd --prefix frontend test -- --watch=false
 ```
 
 Kör bland annat ett test för `SystemUrlService` som verifierar att URL-uppslagning och
@@ -178,7 +178,9 @@ Fullständig genomgång: [`docs/13_Utvecklarguide.md#variabelstyrda-urler-och-ur
 2. Lägg till samma nyckel i **både** `frontend/public/assets/config/runtime-config.json`
    (exempelvärde, t.ex. `https://example.local/...`) och
    `config/examples/runtime-config.example.json` (platshållarvärde, t.ex. `<MITT_SYSTEM_URL>`).
-3. Starta om `npm start` (eller vänta på automatisk omladdning) och kontrollera länken på
+3. Vänta på automatisk omladdning i den körande
+   `npm.cmd --prefix frontend start`-processen, eller stoppa den med `Ctrl+C` och
+   starta om samma kommando. Kontrollera sedan länken på
    `/system`.
 
 ### Lägga till en ny sida
@@ -217,10 +219,10 @@ Detta repository ska förbli **generiskt**. Följ dessa regler (se
 
 | Symptom                                             | Trolig orsak / åtgärd                                                                 |
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `npm start` startar men sidan är tom/vit               | Kontrollera webbläsarkonsolen. Kör `npm install` igen om beroenden saknas.                 |
+| `npm.cmd --prefix frontend start` startar men sidan är tom/vit | Kontrollera webbläsarkonsolen. Kör `npm.cmd --prefix frontend ci` igen om beroenden saknas. |
 | En länk (t.ex. systemlänk) leder till `#`              | Nyckeln (`urlKey`) saknas i `frontend/public/assets/config/runtime-config.json`s `systemUrls`. Detta är en avsiktlig, säker fallback – kontrollera webbläsarkonsolen för en varning med vilken nyckel som saknas. |
 | Ändring i en `.mock.json`-fil syns inte                | Kontrollera att JSON:en är giltig (t.ex. inga saknade kommatecken). Ladda om sidan.       |
-| Porten `4200` är upptagen                              | Stoppa tidigare `ng serve`-processer, eller kör `npm start -- --port 4300`.                |
+| Porten `4200` är upptagen                              | Stoppa tidigare process med `Ctrl+C`, eller kör `npm.cmd --prefix frontend start -- --port 4300` från repositoryts rot. |
 | TypeScript-fel om en modell saknar ett fält            | Kontrollera att mockdata följer motsvarande interface i `frontend/src/app/models/`.        |
 | Fel Node-version                                       | Använd en aktuell LTS-version av Node.js.                                                  |
 

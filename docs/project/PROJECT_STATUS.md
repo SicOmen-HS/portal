@@ -1,6 +1,6 @@
 # Data- och analysportalen Project Status
 
-Last reviewed: `2026-07-04`
+Last reviewed: `2026-07-11`
 
 ## Current Phase
 
@@ -55,7 +55,9 @@ Not currently implemented or not yet production-ready:
 - No real integrations with OpenMetadata, Qlik Sense, Grafana, the Generativ AI
   Chattportal, UiPath, Nintex or any other external system.
 - No authentication/authorization implementation.
-- No automated frontend test suite beyond the small `SystemUrlService` spec.
+- A small automated frontend test suite exists and covers application creation,
+  configuration-driven URL resolution, data-classification validation and search
+  behavior. It is not yet broad production-level coverage.
 
 ## Current Architecture
 
@@ -63,7 +65,7 @@ Not currently implemented or not yet production-ready:
 | --- | --- | --- |
 | Application | Angular (standalone, signals) + Bootstrap 5/SCSS, no backend yet | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md` |
 | Data | Fictional local mockdata (JSON), no database yet | `frontend/public/assets/mock/README.md` |
-| Hosting | Local development only (`npm start` in `frontend/`); no deployment yet | `docs/10_Release_och_deployment.md` |
+| Hosting | Local development only (`npm.cmd --prefix frontend start` from the repository root); no deployment yet | `docs/10_Release_och_deployment.md` |
 
 Keep this summary factual. Record approved reasoning in `DECISIONS.md` and technical
 detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.

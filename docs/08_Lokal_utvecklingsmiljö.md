@@ -147,20 +147,20 @@ Det ska dock vara möjligt att dokumentera lokal utveckling utan att förutsätt
 
 Frontend körs som Angular-applikation i lokal utvecklingsserver.
 
-Exempel på lokal körning:
+Kör frontend från repositoryts rot med det deklarerade `start`-scriptet:
 
-```text
-npm install
-npm start
+```powershell
+npm.cmd --prefix frontend start
 ```
 
-eller:
+Detta är det rekommenderade lokala startkommandot; användaren behöver inte byta till
+`frontend/`. Med aktuell Angular-konfiguration blir frontend tillgänglig på
+`http://localhost:4200/`. Processen fortsätter köra i den aktuella terminalen tills
+den stoppas med `Ctrl+C`. Kontrollera även startup-utdata eftersom en upptagen port
+eller framtida konfigurationsändring kan ge en annan adress.
 
-```text
-ng serve
-```
-
-Exakta kommandon beror på projektets faktiska `package.json`.
+Kommandot använder befintliga paket och scripts. Lägg inte till nya paket eller
+scripts för denna dokumentationsrutin.
 
 ## Principer
 

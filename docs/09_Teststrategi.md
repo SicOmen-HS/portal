@@ -32,7 +32,15 @@ Teststrategin ska stödja:
 * framtida verkliga integrationer
 * förvaltningsbarhet över tid
 
-Dokumentet beskriver övergripande principer och rekommenderade testnivåer. Exakta testkommandon och tekniska detaljer dokumenteras när projektstrukturen är etablerad.
+Dokumentet beskriver övergripande principer och rekommenderade testnivåer. Aktuella
+testkommandon ägs av `docs/13_Utvecklarguide.md` och det fullständiga leveransflödet
+av `docs/project/PROJECT_WORKFLOW.md`; läs alltid repositoryts deklarerade scripts
+innan verifiering.
+
+Alla repositoryändringar ska passera relevant lokal verifiering före leverans. För
+frontendändringar omfattar det deklarerad build och testsvit samt, för materiella
+UI-ändringar, visuell kontroll vid ungefär 375 px, 768 px och desktopbredd. Efter
+uppdatering mot senaste `origin/main` ska samma relevanta verifiering köras igen.
 
 ---
 

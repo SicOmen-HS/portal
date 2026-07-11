@@ -546,26 +546,33 @@ Följ mönstret för befintliga `shared`-komponenter:
 
 ## Test och verifiering
 
-Se `09_Teststrategi.md` för den fullständiga strategin. I kodbasen finns idag:
+Se `09_Teststrategi.md` för den fullständiga strategin. Följande befintliga scripts
+kan köras från repositoryts rot:
+
+```powershell
+npm.cmd --prefix frontend run build
+npm.cmd --prefix frontend test -- --watch=false
+```
+
+Starta frontend från repositoryts rot med `npm.cmd --prefix frontend start`; den
+fortsätter köra i terminalen och stoppas med `Ctrl+C`. Lägg inte till paket eller
+scripts för att få ett dokumenterat exempel att fungera—läs alltid aktuellt
+`frontend/package.json`.
+
+Den aktuella teststrukturen finns i `frontend/src/**/*.spec.ts` och omfattar idag
+följande huvudområden:
 
 * `frontend/src/app/app.spec.ts` – att appen kan skapas.
 * `frontend/src/app/core/links/system-url.service.spec.ts` – att `SystemUrlService`
   slår upp konfigurerade nycklar korrekt och faller tillbaka säkert på `"#"` för
   saknade eller ospecificerade nycklar, utan att kasta fel.
+* `frontend/src/app/services/data-classification-validation.spec.ts` – validering av
+  dataobjektens informationssäkerhetsklassning och relationer.
+* `frontend/src/app/services/search.service.spec.ts` – centralt sökbeteende och
+  relevanta träffar.
 
-Kör testerna med:
-
-```bash
-cd frontend
-npm test
-```
-
-Innan större ändringar, verifiera även manuellt att applikationen bygger och startar:
-
-```bash
-npm run build
-npm start
-```
+Innan större ändringar, verifiera även att applikationen bygger och startar med samma
+root-baserade kommandon ovan. `start`-processen stoppas med `Ctrl+C` efter kontrollen.
 
 ---
 
@@ -601,7 +608,9 @@ Dessa regler gäller all kod, mockdata och konfiguration i detta repository (se
       runtime-config.example.json.
 - [ ] Ny mockdata är fiktiv och följer ett befintligt informationsobjekt.
 - [ ] Nya komponenter återanvänder shared/-komponenter och _base.scss-klasser där möjligt.
-- [ ] `npm run build` och `npm test` körs utan fel.
+- [ ] `npm.cmd --prefix frontend run build` och
+      `npm.cmd --prefix frontend test -- --watch=false` körs utan fel från
+      repositoryts rot.
 - [ ] Dokumentation (docs/) är uppdaterad om ändringen påverkar struktur, modell eller
       konfigurationsprinciper.
 ```
