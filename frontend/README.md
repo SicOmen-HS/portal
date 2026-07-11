@@ -13,10 +13,14 @@ hur du lägger till en ny sida/tjänst/systemlänk, se
 
 ## Köra lokalt
 
-```bash
-npm install
-npm start
+Installera låsta beroenden och starta rekommenderat från repositoryts rot:
+
+```powershell
+npm.cmd --prefix frontend ci
+npm.cmd --prefix frontend start
 ```
+
+Processen fortsätter köra i terminalen tills den stoppas med `Ctrl+C`.
 
 Öppna `http://localhost:4200/` i webbläsaren. Sidan laddas om automatiskt vid ändringar.
 
@@ -65,16 +69,20 @@ runtime-konfigurationen via `core/links/system-url.service.ts`. Se
 
 ## Bygga
 
-```bash
-npm run build
+Från repositoryts rot:
+
+```powershell
+npm.cmd --prefix frontend run build
 ```
 
 Byggartefakter hamnar i `dist/` (ingår inte i versionshantering).
 
 ## Tester
 
-```bash
-npm test
+Från repositoryts rot:
+
+```powershell
+npm.cmd --prefix frontend test -- --watch=false
 ```
 
 ## Mer information

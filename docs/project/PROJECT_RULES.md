@@ -108,6 +108,14 @@ block must contain all context the recipient needs without manually joining mult
 parts. This applies especially to content copied to Codex, Claude Code or other
 implementation agents.
 
+The project owner's normal interface to a repository-capable agent is one complete
+task prompt. When that prompt explicitly authorizes the applicable operations, the
+agent normally performs the technical preparation—including temporary manifest and
+branch handling—without requiring the owner to compose those artifacts or commands.
+Commit, push, pull request, review, merge and branch deletion remain separately
+owner-controlled unless the prompt explicitly authorizes them. Manual owner execution
+is a supported fallback when the agent lacks repository or GitHub access.
+
 ## Architecture And Code Principles
 
 Current state (see `docs/project/PROJECT_STATUS.md` and `docs/04_Systemarkitektur.md`
@@ -203,8 +211,22 @@ needs on a given day.
 
 ## External Project-Context Synchronization
 
-No external assistant context (ChatGPT Projects, Claude Projects or similar) is
-currently adopted for this project. If one is adopted later, list here which
-documents must be kept synchronized there ("Required Maintained Copies"), which are
-provided on demand, and which remain repository-only by default. The repository
-always remains authoritative regardless of upload state.
+ChatGPT Project is adopted as a synchronized discovery and planning context. The
+repository remains the only authoritative source; external copies never override it.
+Update permanent documents in the repository first and refresh relevant external
+copies only after the repository change is approved. Report drift between the
+repository and ChatGPT Project instead of interpreting it silently.
+
+Required Maintained Copies in ChatGPT Project:
+
+- `docs/project/PROJECT_RULES.md`
+- `docs/project/PROJECT_WORKFLOW.md`
+- `docs/project/DOCUMENT_INDEX.md`
+- `docs/project/PROJECT_STATUS.md`
+- `docs/project/PROJECT_CONTEXT.md`
+- `docs/project/DECISIONS.md`
+- `docs/project/WORK_ITEM_SCHEMA.md`
+- `docs/development/PROJECT_ADMINISTRATION.md`
+
+Task-specific reference documents, ADRs, work items and source code are supplied on
+demand and do not require permanent external copies.

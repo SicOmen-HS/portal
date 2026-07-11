@@ -8,7 +8,9 @@ Start with [PROJECT_RULES.md](PROJECT_RULES.md). Read the active work record whe
 exists (`docs/WORK_QUEUE.md`, `docs/work-items/`). Use this index to select only the
 additional documents needed for the current task.
 
-Repository documents are authoritative. External copies are discovery aids.
+Repository documents are authoritative. Required Maintained Copies in the adopted
+ChatGPT Project are synchronized discovery and planning aids and never override the
+repository; see `PROJECT_RULES.md`.
 
 ## Why This Index Exists
 
@@ -154,5 +156,5 @@ When a permanent document is created, changed, moved, renamed, removed or supers
 2. update its catalog entry and Situation Guide route in this index;
 3. verify links and dependencies;
 4. remove or redirect obsolete competing guidance; and
-5. report whether external project-context copies must be refreshed (currently: none
-   adopted, see `PROJECT_RULES.md`).
+5. report which adopted ChatGPT Project Required Maintained Copies must be refreshed
+   after the repository change is approved (see `PROJECT_RULES.md`).

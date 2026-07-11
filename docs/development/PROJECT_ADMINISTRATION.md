@@ -88,6 +88,21 @@ and a fixed reminder that permanent documentation and current repository state
 outrank historical work-item prose. It never mutates anything and never performs
 broad historical search — only exact-id lookups.
 
+## Creation Manifest Role
+
+The strict JSON manifest is temporary machine input to `npm run project -- create`.
+Its schema remains owned by `docs/project/WORK_ITEM_SCHEMA.md`; this CLI reference
+does not duplicate that contract.
+It is normally generated internally by an authorized planning or implementation
+agent within one complete task prompt. It is not the implementation prompt, a
+parallel user workflow or permanent project documentation, and the project owner
+should not normally need to write or paste it manually. The manifest uses `id: auto`;
+Worksmith allocates the identifier. Remove a temporary manifest after a successful
+create unless approved scope explicitly adopts it as a permanent file.
+
+Worksmith manages work-item files, metadata and queue synchronization only. It does
+not perform or authorize commit, push, pull request, review, merge or deployment.
+
 ## Project-Owned Configuration
 
 - `.worksmith/topics.json` — the registered topic vocabulary for this project

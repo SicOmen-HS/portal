@@ -1,6 +1,6 @@
 # Data- och analysportalen Project Context
 
-Last reviewed: `2026-07-04`
+Last reviewed: `2026-07-11`
 
 ## Purpose
 
@@ -47,7 +47,7 @@ cannot remain safely summarized.
 | --- | --- | --- |
 | Application | Angular (standalone, signals) + Bootstrap 5/SCSS | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md` |
 | Data | Fictional local mockdata (JSON); no database yet | `frontend/public/assets/mock/README.md` |
-| Delivery | Local `npm start` only; no deployment pipeline yet | `docs/10_Release_och_deployment.md` |
+| Delivery | Local `npm.cmd --prefix frontend start` from the repository root; no deployment pipeline yet | `docs/10_Release_och_deployment.md` |
 
 ## Authority And Discovery
 
