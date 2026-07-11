@@ -78,24 +78,78 @@ Before preparing a creation manifest, the planning assistant:
 6. agrees purpose, deliverables, verification and explicit out-of-scope limits with
    the project owner.
 
-## 3. Create And Start The Work Item
+## 3. Prepare The Branch, Create And Start The Work Item
 
-The planning assistant prepares one strict manifest following
-`docs/project/WORK_ITEM_SCHEMA.md` with `"id": "auto"`. The project owner approves the
-proposal; no assistant calculates or reserves the identifier.
+Git operations are manual and project-owner controlled. Perform this routine only
+when the owner has authorized the applicable operations. Before Worksmith makes its
+first repository mutation, inspect the working tree and current branch. Do not switch
+branches or update `main` while uncommitted work could be overwritten:
 
-```bash
-npm run project -- create manifest.json
+```powershell
+git status --short --branch
+git branch --show-current
 ```
 
-Preview and apply the start transition:
+When the working tree is clean, update local `main` without creating a merge commit.
+Because Worksmith has not yet allocated an identifier, create a short-lived temporary
+branch before creating or starting the work item:
 
-```bash
-npm run project -- transition <id> ready in_progress --dry-run
-npm run project -- transition <id> ready in_progress
+```powershell
+git switch main
+git pull --ff-only origin main
+git switch -c work/pending-short-description
 ```
 
-Only one metadata-enabled item may be `in_progress`.
+On the temporary branch, repeat the queue and duplicate checks from Preflight New
+Work. If no matching item exists and the approved work requires a standard work item,
+prepare one strict manifest following `docs/project/WORK_ITEM_SCHEMA.md` with
+`"id": "auto"`. The project owner approves the proposal; no assistant calculates,
+reserves or hardcodes the identifier. Create the item and preview and apply its start
+transition on the temporary branch:
+
+```powershell
+npm.cmd run project -- queue
+npm.cmd run project -- create <manifest-path>
+npm.cmd run project -- transition <ID> ready in_progress --dry-run
+npm.cmd run project -- transition <ID> ready in_progress
+```
+
+Only one metadata-enabled item may be `in_progress`. Use the identifier returned by
+Worksmith, then immediately rename the temporary branch so that the allocated
+work-item identifier appears in its name:
+
+```powershell
+git branch -m docs/<work-item-id>-<short-description>
+```
+
+The temporary branch exists only to keep Worksmith's initial mutations off `main`;
+do not retain it under its pending name. Continue implementation and all applicable
+verification on the renamed work branch. Before delivery, bring in the latest
+approved `origin/main` state, resolve any conflicts, and run the full applicable
+verification again:
+
+```powershell
+git fetch origin
+git rebase origin/main
+git status --short --branch
+git diff --check
+```
+
+Push the work branch and create a pull request to `main` only with owner approval:
+
+```powershell
+git push -u origin HEAD
+```
+
+Do not push directly to `main` in the normal workflow. Do not use `git push --force`.
+After a rebase, `git push --force-with-lease` may be used only on the contributor's
+own branch, with owner approval and after confirming that it will not overwrite
+another person's work. Review the pull request's scope, changed files, verification
+results and permanent-documentation impact before merge. After an approved merge,
+remove the short-lived branch locally and remotely as an owner-controlled operation.
+
+Branch protection should be configured separately with the Git provider. That
+repository-hosting configuration is outside the Worksmith work-item workflow.
 
 ## 4. Prepare The Task Prompt
 
@@ -103,6 +157,29 @@ Each prompt owns one stage and states: role and active work item; intended outco
 approved repository scope; only the documents and paths required for the task;
 explicit prohibitions and out-of-scope work; authority limits and required
 verification; the expected handoff and any assigned lifecycle operation.
+
+Return the finished task prompt as one complete, self-contained and easily copyable
+block. Keep introductions and explanations outside it. Do not distribute instructions
+belonging to the same delivery between comments or multiple blocks; include all
+context an implementation agent needs in that single block.
+
+A task prompt for Codex, Claude Code or another repository-capable implementation
+agent must also require the agent, before implementation, to:
+
+- inspect the Worksmith queue and existing work items for matching, related or
+  dependent work;
+- use a matching existing item and follow its scope and current status;
+- create a new item through Worksmith only when no matching item exists and the
+  Lightweight Task Policy requires a standard work item; changes classified as
+  **No work item needed** or **Lightweight handling allowed** must not create one;
+- let Worksmith allocate the identifier with `id: auto`, never invent, calculate or
+  hardcode an identifier, and never edit `docs/WORK_QUEUE.md` or machine-managed
+  metadata manually; and
+- stop and report what the project owner must provide or do when required context,
+  dependencies, permissions or approval are missing.
+
+The prompt must preserve the project owner's approval authority and the constraint
+that only one metadata-enabled item may be `in_progress`.
 
 ## 5. Execute, Verify And Hand Off
 
@@ -112,6 +189,9 @@ runs verification proportionate to the change, and returns a concise handoff
 containing: result and changed files; verification commands and outcomes; deviations,
 risks and unresolved limitations; permanent documentation impact (`updated`, `none` or
 `follow-up required`); current lifecycle state; and only owner-controlled next actions.
+The finished handoff must be one complete, self-contained and easily copyable block;
+explanations belong before or after it, never inside it, and one coherent handoff must
+not be split across comments or multiple blocks.
 
 ## 6. Review And Move To Needs Review
 

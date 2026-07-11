@@ -1,6 +1,6 @@
 # Data- och analysportalen Documentation Index
 
-Last reviewed: `2026-07-07`
+Last reviewed: `2026-07-11`
 
 ## Read First
 
@@ -57,6 +57,7 @@ Use this table to decide **what to read before making a change**. Always read
 | Release or deployment | [`docs/10_Release_och_deployment.md`](../10_Release_och_deployment.md) | — |
 | Recommended editor/tooling extensions | [`docs/14_Rekommenderade_extensions.md`](../14_Rekommenderade_extensions.md) | `.vscode/extensions.json` |
 | Worksmith / work-item process itself | [`PROJECT_WORKFLOW.md`](PROJECT_WORKFLOW.md), [`WORK_ITEM_SCHEMA.md`](WORK_ITEM_SCHEMA.md), [`../development/PROJECT_ADMINISTRATION.md`](../development/PROJECT_ADMINISTRATION.md) | — |
+| Git branches, pull-request workflow, task prompts or handoffs | [`PROJECT_RULES.md`](PROJECT_RULES.md), [`PROJECT_WORKFLOW.md`](PROJECT_WORKFLOW.md) | Git operations remain manual and project-owner controlled. |
 
 Add a row only when it materially improves discovery. One topic should have one clear
 owner; related documents must not silently compete with it.
