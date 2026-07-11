@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-023 - Visa fält och syntetisk preview på dataobjektdetalj
+  See: docs/work-items/AB-023.md
+  Completed: 2026-07-11
+
 - AB-022 - Konsolidera Kombinera datamängder till rapport i Datamarknad
   See: docs/work-items/AB-022.md
   Completed: 2026-07-10

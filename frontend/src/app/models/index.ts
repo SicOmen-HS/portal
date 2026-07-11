@@ -12,6 +12,7 @@ export * from './system.model';
 export * from './platform-capability.model';
 export * from './technical-component.model';
 export * from './service-offering.model';
+export * from './dataset-field-preview.model';
 export * from './dataset.model';
 export * from './data-service.model';
 export * from './information-mart.model';

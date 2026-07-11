@@ -17,7 +17,39 @@
     "relatedOrderTypeIds": ["order-type-access-group", "order-type-new-bi-app"],
     "metadataSource": "OpenMetadata (exempel)",
     "lifecycleStatus": "active",
-    "visibility": "all-users"
+    "visibility": "all-users",
+    "sampleFields": [
+      {
+        "name": "transaktionsmanad",
+        "dataType": "månad",
+        "description": "Månad då transaktionen bokfördes",
+        "exampleValue": "2026-01"
+      },
+      {
+        "name": "kundsegment",
+        "dataType": "text",
+        "description": "Fiktivt segment för kundgrupp",
+        "exampleValue": "Segment A"
+      },
+      {
+        "name": "produktkategori",
+        "dataType": "text",
+        "description": "Övergripande produktgrupp",
+        "exampleValue": "Kategori 1"
+      },
+      {
+        "name": "antal_transaktioner",
+        "dataType": "heltal",
+        "description": "Aggregerat antal transaktioner",
+        "exampleValue": "1280"
+      },
+      {
+        "name": "beloppsintervall",
+        "dataType": "text",
+        "description": "Belopp uttryckt som intervall",
+        "exampleValue": "100k–500k"
+      }
+    ]
   },
   {
     "id": "dataset-customer-orders-demo",

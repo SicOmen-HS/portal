@@ -7,10 +7,11 @@ import { GuideService } from '../../services/guide.service';
 import { OrderService } from '../../services/order.service';
 import { SystemService } from '../../services/system.service';
 import { INFORMATION_SECURITY_CLASSIFICATION_LABELS } from '../../models';
+import { DatasetFieldsPreviewComponent } from '../../shared/components/dataset-fields-preview/dataset-fields-preview.component';
 
 @Component({
   selector: 'app-data-detail',
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, DatasetFieldsPreviewComponent],
   templateUrl: './data-detail.component.html',
   styleUrl: './data-detail.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

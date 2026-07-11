@@ -1,0 +1,50 @@
+<section class="dataset-fields-preview">
+  <h2>Fält i {{ objectLabel() }}</h2>
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr>
+          <th scope="col">Fält</th>
+          <th scope="col">Typ</th>
+          <th scope="col">Beskrivning</th>
+          <th scope="col">Exempel</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (field of fields(); track field.name) {
+          <tr>
+            <td><code>{{ field.name }}</code></td>
+            <td>{{ field.dataType }}</td>
+            <td>{{ field.description }}</td>
+            <td>{{ field.exampleValue }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="dataset-fields-preview-example">
+    <p class="text-muted-custom dataset-fields-preview-note">
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
+      Exempeldata är syntetisk och visar struktur, inte verkligt innehåll.
+    </p>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+            @for (field of fields(); track field.name) {
+              <th scope="col"><code>{{ field.name }}</code></th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            @for (field of fields(); track field.name) {
+              <td>{{ field.exampleValue }}</td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
