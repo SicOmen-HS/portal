@@ -1,6 +1,7 @@
 import { Visibility } from './visibility.model';
 import { LifecycleStatus } from './lifecycle-status.model';
 import { InformationSecurityClassification } from './information-security-classification.model';
+import { DatasetFieldPreview } from './dataset-field-preview.model';
 
 /**
  * Dataset beskriver en datamängd som användare kan hitta, förstå,
@@ -25,4 +26,6 @@ export interface Dataset {
   metadataSource: string;
   lifecycleStatus: LifecycleStatus;
   visibility: Visibility;
+  /** Fältstruktur med fiktiva exempelvärden, visad före åtkomst är beviljad. Aldrig verklig eller anonymiserad produktionsdata. */
+  sampleFields?: DatasetFieldPreview[];
 }
