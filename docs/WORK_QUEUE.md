@@ -20,6 +20,10 @@
 
 ## Done
 
+- AN-009 - Avgränsa lokal backend-POC för Datamarknad
+  See: docs/work-items/AN-009.md
+  Completed: 2026-07-12
+
 - AB-025 - Förtydliga komplett prompt-, Git-, PR- och lokaltestflöde
   See: docs/work-items/AB-025.md
   Completed: 2026-07-11
