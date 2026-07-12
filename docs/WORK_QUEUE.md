@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-026 - Etablera fyra primära tjänsteområden i tjänstekatalogen
+  See: docs/work-items/AB-026.md
+  Completed: 2026-07-12
+
 - AN-009 - Avgränsa lokal backend-POC för Datamarknad
   See: docs/work-items/AN-009.md
   Completed: 2026-07-12

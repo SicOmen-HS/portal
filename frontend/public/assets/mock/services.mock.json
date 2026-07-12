@@ -46,6 +46,50 @@
     "detailRoute": ["/tjanster", "rapporter-och-dashboards"]
   },
   {
+    "id": "service-ai-machine-learning",
+    "name": "AI och Machine Learning",
+    "shortDescription": "Utveckla, experimentera och arbeta med AI- och Machine Learning-lösningar, utvecklingsmiljöer och generativ AI.",
+    "longDescription": "En samlad ingång för behov inom AI och Machine Learning, från experiment och utvecklingsmiljöer till AI-lösningar och generativ AI. Innehåll och åtgärder fördjupas stegvis utan att låsas till en viss teknisk produkt.",
+    "category": "AI och Machine Learning",
+    "targetAudience": ["Verksamhetsanvändare", "Utvecklare", "Data scientists"],
+    "ownerTeamId": "team-ai-platform",
+    "contactPointId": "contact-ai-advisory",
+    "platformCapabilityIds": ["platform-ai", "platform-genai"],
+    "relatedSystemIds": [],
+    "technicalComponentIds": [],
+    "guideIds": [],
+    "orderTypeIds": [],
+    "relatedServiceIds": ["service-order-ai-ml-yta", "service-order-devspace", "service-find-ai-chat"],
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "tags": ["ai", "machine-learning", "generativ-ai", "utvecklingsmiljö"],
+    "lastUpdated": "2026-07-12",
+    "source": "Lokal portal-konfiguration",
+    "featured": true
+  },
+  {
+    "id": "service-automation-workflows",
+    "name": "Automation och arbetsflöden",
+    "shortDescription": "Digitalisera och automatisera manuella eller återkommande arbetsmoment med formulär, arbetsflöden och processautomation.",
+    "longDescription": "En samlad ingång för att digitalisera och automatisera arbetsmoment och processer. Tjänsten är övergripande och inte begränsad till en viss yta, plattform eller teknisk produkt.",
+    "category": "Automation",
+    "targetAudience": ["Verksamhetsanvändare", "Utvecklare", "Beställare"],
+    "ownerTeamId": "team-automation",
+    "contactPointId": "contact-automation-support",
+    "platformCapabilityIds": ["platform-automation"],
+    "relatedSystemIds": [],
+    "technicalComponentIds": [],
+    "guideIds": [],
+    "orderTypeIds": [],
+    "relatedServiceIds": ["service-order-nintex-k2"],
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "tags": ["automation", "arbetsflöde", "formulär", "processautomation"],
+    "lastUpdated": "2026-07-12",
+    "source": "Lokal portal-konfiguration",
+    "featured": true
+  },
+  {
     "id": "service-order-dashboard",
     "name": "Beställ dashboard",
     "shortDescription": "Beställ en ny dashboard eller rapport baserad på befintlig eller ny data.",
@@ -61,7 +105,7 @@
     "orderTypeIds": ["order-type-new-bi-app"],
     "relatedServiceIds": ["service-combine-datasets-report"],
     "lifecycleStatus": "active",
-    "visibility": "all-users",
+    "visibility": "hidden",
     "tags": ["dashboard", "qlik", "bi"],
     "lastUpdated": "2026-03-12",
     "source": "Lokal portal-konfiguration",
@@ -82,11 +126,11 @@
     "guideIds": ["guide-get-started-devspace"],
     "orderTypeIds": ["order-type-ai-ml-yta"],
     "lifecycleStatus": "active",
-    "visibility": "data-scientists",
+    "visibility": "hidden",
     "tags": ["ai", "machine-learning", "devspace"],
     "lastUpdated": "2026-03-01",
     "source": "Lokal portal-konfiguration",
-    "featured": true
+    "featured": false
   },
   {
     "id": "service-order-devspace",
@@ -103,11 +147,11 @@
     "guideIds": ["guide-get-started-devspace"],
     "orderTypeIds": ["order-type-devspace"],
     "lifecycleStatus": "active",
-    "visibility": "data-scientists",
+    "visibility": "hidden",
     "tags": ["devspace", "data-science"],
     "lastUpdated": "2026-02-18",
     "source": "Lokal portal-konfiguration",
-    "featured": true
+    "featured": false
   },
   {
     "id": "service-order-nintex-k2",
@@ -124,10 +168,11 @@
     "guideIds": ["guide-get-started-nintex"],
     "orderTypeIds": ["order-type-nintex-k2-yta"],
     "lifecycleStatus": "active",
-    "visibility": "all-users",
+    "visibility": "hidden",
     "tags": ["automation", "nintex"],
     "lastUpdated": "2026-01-25",
-    "source": "Lokal portal-konfiguration"
+    "source": "Lokal portal-konfiguration",
+    "featured": false
   },
   {
     "id": "service-request-dataset-access",
@@ -205,11 +250,11 @@
     "guideIds": ["guide-genai-chat-intro"],
     "orderTypeIds": [],
     "lifecycleStatus": "active",
-    "visibility": "all-users",
+    "visibility": "hidden",
     "tags": ["ai", "genai", "chatt"],
     "lastUpdated": "2026-03-15",
     "source": "Lokal portal-konfiguration",
-    "featured": true
+    "featured": false
   },
   {
     "id": "service-find-guides",
@@ -226,10 +271,11 @@
     "guideIds": ["guide-dev-guide-data-platform"],
     "orderTypeIds": [],
     "lifecycleStatus": "active",
-    "visibility": "developers",
+    "visibility": "hidden",
     "tags": ["guide", "dokumentation"],
     "lastUpdated": "2025-12-20",
-    "source": "Lokal portal-konfiguration"
+    "source": "Lokal portal-konfiguration",
+    "featured": false
   },
   {
     "id": "service-find-contact",
@@ -246,9 +292,10 @@
     "guideIds": [],
     "orderTypeIds": [],
     "lifecycleStatus": "active",
-    "visibility": "all-users",
+    "visibility": "hidden",
     "tags": ["support", "kontakt"],
     "lastUpdated": "2026-01-10",
-    "source": "Lokal portal-konfiguration"
+    "source": "Lokal portal-konfiguration",
+    "featured": false
   }
 ]
