@@ -20,7 +20,12 @@
       <main>
         <section><h2>Vad kan datan användas till?</h2><p>Använd datamängden som underlag för fiktiv uppföljning, analys och rapportering inom {{ dataset.dataDomain.toLowerCase() }}. Kontrollera alltid aktualitet och åtkomst innan du börjar.</p></section>
         @if (dataset.sampleFields?.length) {
-          <app-dataset-fields-preview [fields]="dataset.sampleFields!" objectLabel="datamängden" />
+          <app-dataset-fields-preview
+            [fields]="dataset.sampleFields!"
+            objectLabel="datamängden"
+            [previewRows]="view.previewRows"
+            [previewError]="view.previewError"
+          />
         }
         <section>
           <h2>Relaterade resurser</h2>

@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-027 - Visa fiktiv SQL Server-preview via lokalt .NET API
+  See: docs/work-items/AB-027.md
+  Completed: 2026-07-13
+
 - AB-026 - Etablera fyra primära tjänsteområden i tjänstekatalogen
   See: docs/work-items/AB-026.md
   Completed: 2026-07-12

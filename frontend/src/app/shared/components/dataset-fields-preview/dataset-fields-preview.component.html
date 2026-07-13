@@ -24,27 +24,44 @@
   </div>
 
   <div class="dataset-fields-preview-example">
-    <p class="text-muted-custom dataset-fields-preview-note">
-      <i class="bi bi-info-circle" aria-hidden="true"></i>
-      Exempeldata är syntetisk och visar struktur, inte verkligt innehåll.
-    </p>
-    <div class="table-responsive">
-      <table class="table table-sm table-bordered">
-        <thead>
-          <tr>
-            @for (field of fields(); track field.name) {
-              <th scope="col"><code>{{ field.name }}</code></th>
+    @if (previewError()) {
+      <p class="text-danger dataset-fields-preview-note">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        Kunde inte hämta exempeldata från den lokala datakällan just nu.
+      </p>
+    } @else {
+      <p class="text-muted-custom dataset-fields-preview-note">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        Exempeldata är syntetisk och visar struktur, inte verkligt innehåll.
+      </p>
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              @for (field of fields(); track field.name) {
+                <th scope="col"><code>{{ field.name }}</code></th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (previewRows(); as rows) {
+              @for (row of rows; track $index) {
+                <tr>
+                  @for (value of row; track $index) {
+                    <td>{{ value }}</td>
+                  }
+                </tr>
+              }
+            } @else {
+              <tr>
+                @for (field of fields(); track field.name) {
+                  <td>{{ field.exampleValue }}</td>
+                }
+              </tr>
             }
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            @for (field of fields(); track field.name) {
-              <td>{{ field.exampleValue }}</td>
-            }
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
+    }
   </div>
 </section>
