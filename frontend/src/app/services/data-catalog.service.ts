@@ -1,10 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { combineLatest, Observable, map, shareReplay } from 'rxjs';
+import { RuntimeConfigService } from '../core/config/runtime-config.service';
 import { MockDataService } from '../core/services/mock-data.service';
 import {
   BusinessApplication,
   DataService as DataServiceOffering,
   Dataset,
+  DatasetPreview,
   InformationMart,
 } from '../models';
 import { validateDataClassifications } from './data-classification-validation';
@@ -18,6 +21,8 @@ import { validateDataClassifications } from './data-classification-validation';
 @Injectable({ providedIn: 'root' })
 export class DataCatalogService {
   private readonly mockData = inject(MockDataService);
+  private readonly http = inject(HttpClient);
+  private readonly runtimeConfig = inject(RuntimeConfigService);
 
   private readonly rawDatasets$ = this.mockData.load<Dataset[]>('datasets.mock.json');
 
@@ -50,6 +55,35 @@ export class DataCatalogService {
 
   getDatasetsByIds(ids: string[]): Observable<Dataset[]> {
     return this.datasets$.pipe(map((items) => items.filter((item) => ids.includes(item.id))));
+  }
+
+  /**
+   * Hämtar previewrader för en datamängd (AB-027). I mockläge
+   * (features.useMockData: true, standard) härleds en syntetisk rad från
+   * dataset.sampleFields, precis som tidigare - ingen faktisk nätverksanropslogik.
+   * I lokalt API-läge hämtas riktiga fiktiva rader från backendens
+   * GET /api/datasets/{id}/preview. Frontend ansluter aldrig direkt till SQL Server.
+   * Fel vid API-anrop fångas medvetet inte här - se data-detail.component.ts för
+   * kontrollerad felhantering utan tyst fallback till mockdata.
+   */
+  getDatasetPreview(id: string): Observable<DatasetPreview | undefined> {
+    if (this.runtimeConfig.config().features.useMockData) {
+      return this.getDatasetById(id).pipe(map((dataset) => this.deriveMockPreview(dataset)));
+    }
+
+    const apiBaseUrl = this.runtimeConfig.config().apiBaseUrl;
+    return this.http.get<DatasetPreview>(`${apiBaseUrl}/datasets/${id}/preview`);
+  }
+
+  private deriveMockPreview(dataset: Dataset | undefined): DatasetPreview | undefined {
+    if (!dataset?.sampleFields?.length) {
+      return undefined;
+    }
+    return {
+      datasetId: dataset.id,
+      columns: dataset.sampleFields.map((field) => field.name),
+      rows: [dataset.sampleFields.map((field) => field.exampleValue)],
+    };
   }
 
   getAllDataServices(): Observable<DataServiceOffering[]> {

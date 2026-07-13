@@ -6,13 +6,46 @@ enda konfiguration frontend-koden känner till. Se `docs/05_Konfiguration.md` oc
 
 ## Filer
 
-| Fil                     | Versionshanterad? | Beskrivning                                                        |
-| ------------------------ | ------------------- | --------------------------------------------------------------------- |
-| `runtime-config.json`   | Ja                 | Läses av mockupen vid uppstart. Innehåller endast säkra exempelvärden (`example.local`-länkar) – se nedan för varför den ändå är säker att versionshantera i det här projektet. |
+| Fil                                    | Versionshanterad? | Beskrivning                                                        |
+| ---------------------------------------- | ------------------- | --------------------------------------------------------------------- |
+| `runtime-config.json`                   | Ja                 | Obligatorisk grundkonfiguration, läses av mockupen vid uppstart. Innehåller endast säkra exempelvärden (`example.local`-länkar) och `useMockData: true` – se nedan för varför den ändå är säker att versionshantera i det här projektet. |
+| `runtime-config.local.example.json`     | Ja                 | Mall/exempel för en valfri **lokal override** (se nedan). Kopiera till `runtime-config.local.json` lokalt för att aktivera den. |
+| `runtime-config.local.json`             | Nej (`.gitignore`) | Valfri, ej versionshanterad lokal override av grundkonfigurationen. Saknas den helt normalt – portalen kör då bara på `runtime-config.json`. |
 
 Den generella mallen för framtida miljöer ligger separat i
 `config/examples/runtime-config.example.json` (repositoryts rotkatalog) – se
 `config/README.md`.
+
+## Valfri lokal override: `runtime-config.local.json`
+
+För det lokala SQL Server-preview-POC:t (AB-027) kan en utvecklare aktivera lokalt
+API-läge utan att röra den versionshanterade `runtime-config.json`:
+
+1. Kopiera `runtime-config.local.example.json` till `runtime-config.local.json` i
+   samma katalog.
+2. Ändra bara de nycklar som ska avvika, t.ex.:
+   ```json
+   {
+     "apiBaseUrl": "http://localhost:5104/api",
+     "features": {
+       "useMockData": false
+     }
+   }
+   ```
+3. Starta om `npm.cmd --prefix frontend start`.
+
+`RuntimeConfigService` (`frontend/src/app/core/config/runtime-config.service.ts`)
+slår ihop denna fil ovanpå `runtime-config.json` – övriga feature flags och
+`systemUrls`-nycklar som inte anges i den lokala filen påverkas inte. Saknas filen
+är det normalt standardläge, inte ett fel. En lokal fil som inte går att tolka som
+giltig JSON eller har fel form (t.ex. `features` som inte är ett objekt) ger istället
+ett tydligt konfigurationsfel i webbläsarens konsol, så ett misstag i den lokala
+filen inte tyst ignoreras.
+
+`runtime-config.local.json` ska **aldrig** checkas in – den är redan undantagen i
+`.gitignore` (`**/runtime-config.local.json`). Endast `runtime-config.local.example.json`
+versionshanteras, och den får bara innehålla säkra platshållarvärden enligt samma
+regler som `runtime-config.json` (se nedan).
 
 ## Vad filen innehåller
 

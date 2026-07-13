@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { combineLatest, map, of, switchMap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { DataCatalogService } from '../../services/data-catalog.service';
 import { GuideService } from '../../services/guide.service';
 import { OrderService } from '../../services/order.service';
@@ -34,8 +34,9 @@ export class DataDetailComponent {
             this.guides.getByIds(dataset.relatedGuideIds ?? []),
             this.orders.getOrderTypesByIds(dataset.relatedOrderTypeIds ?? []),
             this.systems.getByIds(dataset.relatedSystemIds ?? []),
+            this.getPreviewState(dataset.id, !!dataset.sampleFields?.length),
           ]).pipe(
-            map(([marts, applications, relatedGuides, relatedOrderTypes, relatedSystems]) => ({
+            map(([marts, applications, relatedGuides, relatedOrderTypes, relatedSystems, previewState]) => ({
               dataset,
               marts: marts.filter((mart) => mart.relatedDatasetIds?.includes(dataset.id)),
               applications: applications.filter(
@@ -46,6 +47,8 @@ export class DataDetailComponent {
               relatedOrderTypes,
               relatedSystems,
               targetAudience: Array.from(new Set(relatedGuides.flatMap((guide) => guide.targetAudience))),
+              previewRows: previewState.previewRows,
+              previewError: previewState.previewError,
             }))
           )
         : of({
@@ -56,7 +59,27 @@ export class DataDetailComponent {
             relatedOrderTypes: [],
             relatedSystems: [],
             targetAudience: [] as string[],
+            previewRows: undefined as string[][] | undefined,
+            previewError: false,
           })
     )
   );
+
+  /**
+   * Hämtar previewradernas tillstånd för dataset-detaljsidan (AB-027). Vid fel
+   * (t.ex. lokalt API nere) visas ett kontrollerat felmeddelande i stället för
+   * tabellen - ingen tyst fallback till den klientderiverade mockraden.
+   */
+  private getPreviewState(
+    datasetId: string,
+    hasSampleFields: boolean
+  ): Observable<{ previewRows: string[][] | undefined; previewError: boolean }> {
+    if (!hasSampleFields) {
+      return of({ previewRows: undefined, previewError: false });
+    }
+    return this.catalog.getDatasetPreview(datasetId).pipe(
+      map((preview) => ({ previewRows: preview?.rows, previewError: false })),
+      catchError(() => of({ previewRows: undefined, previewError: true }))
+    );
+  }
 }

@@ -17,4 +17,14 @@ import { DatasetFieldPreview } from '../../../models';
 export class DatasetFieldsPreviewComponent {
   readonly fields = input.required<DatasetFieldPreview[]>();
   readonly objectLabel = input<string>('dataobjektet');
+  /**
+   * Riktiga previewrader, t.ex. hämtade från ett lokalt API (AB-027). Saknas
+   * denna input helt visas istället en syntetisk rad härledd från fields().
+   */
+  readonly previewRows = input<string[][] | undefined>(undefined);
+  /**
+   * Sant om en riktig previewkälla misslyckades. Visar då ett kontrollerat
+   * felmeddelande istället för previewtabellen - ingen tyst fallback.
+   */
+  readonly previewError = input<boolean>(false);
 }
