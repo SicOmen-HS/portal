@@ -1,18 +1,31 @@
 import { createServer } from "node:http";
+import { queryTrino } from "./trino.js";
 
 const port = Number(process.env.PORT ?? 4000);
 
-const server = createServer((req, res) => {
+const server = createServer(async (req, res) => {
   if (req.method === "GET" && req.url === "/api/lakehouse/hello") {
-    const body = JSON.stringify([
-      { id: 1, name: "hello" },
-      { id: 2, name: "lakehouse" }
-    ]);
+    try {
+      const rows = await queryTrino(`
+        SELECT id, name
+        FROM lakekeeper.labtest.hello_iceberg
+        ORDER BY id
+      `);
 
-    res.writeHead(200, {
-      "content-type": "application/json; charset=utf-8"
-    });
-    res.end(body);
+      res.writeHead(200, {
+        "content-type": "application/json; charset=utf-8"
+      });
+      res.end(JSON.stringify(rows));
+    } catch (error) {
+      res.writeHead(500, {
+        "content-type": "application/json; charset=utf-8"
+      });
+      res.end(JSON.stringify({
+        error: "lakehouse_query_failed",
+        message: error instanceof Error ? error.message : "unknown error"
+      }));
+    }
+
     return;
   }
 
