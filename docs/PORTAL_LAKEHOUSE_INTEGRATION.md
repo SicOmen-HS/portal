@@ -110,3 +110,61 @@ Start lakehouse:
 Stop lakehouse:
 
     /srv/lab/scripts/stop-lakehouse-lab.sh
+
+## Verified backend-to-lakehouse POC
+
+Date: 2026-07-15
+
+A first real backend-to-lakehouse path has been verified.
+
+Verified chain:
+
+    Portal backend
+    -> Trino HTTP API
+    -> Lakekeeper catalog
+    -> Iceberg table
+    -> SeaweedFS/S3 storage
+
+Backend endpoint:
+
+    GET /api/lakehouse/hello
+
+Query used by backend:
+
+    SELECT id, name
+    FROM lakekeeper.labtest.hello_iceberg
+    ORDER BY id
+
+Observed API response:
+
+    [
+      { "id": 1, "name": "hello" },
+      { "id": 2, "name": "lakehouse" }
+    ]
+
+Configuration draft:
+
+    PORT=4000
+    TRINO_HOST=localhost
+    TRINO_PORT=9999
+    TRINO_CATALOG=lakekeeper
+    TRINO_SCHEMA=labtest
+    TRINO_USER=portal_lab
+
+Operational note:
+
+    The optional lakehouse stack must be running before this endpoint can query Trino.
+
+Start lakehouse:
+
+    /srv/lab/scripts/start-lakehouse-lab.sh
+
+Stop lakehouse:
+
+    /srv/lab/scripts/stop-lakehouse-lab.sh
+
+Current limitation:
+
+    The endpoint uses a fixed safe query.
+    No user-provided SQL is accepted.
+    Authentication and authorization are not implemented yet.

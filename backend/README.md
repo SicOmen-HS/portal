@@ -26,3 +26,21 @@ Test:
 
     curl http://localhost:4000/health
     curl http://localhost:4000/api/lakehouse/hello
+
+## Lakehouse integration status
+
+The endpoint below has been verified against the local lab lakehouse:
+
+    GET /api/lakehouse/hello
+
+It reads from Trino using a fixed query against:
+
+    lakekeeper.labtest.hello_iceberg
+
+The lakehouse stack must be running first:
+
+    /srv/lab/scripts/start-lakehouse-lab.sh
+
+Stop it after testing to save RAM:
+
+    /srv/lab/scripts/stop-lakehouse-lab.sh
