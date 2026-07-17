@@ -1,46 +1,15 @@
-# Portal backend POC
+# Backend
 
-Minimal backend proof of concept for portal-to-lakehouse integration.
+Denna katalog innehåller för närvarande **mer än en avgränsad backend-POC**,
+inte en enda sammanhållen backend. Se respektive fil för detaljer:
 
-Current endpoint:
+* [`Portal.Api/README.md`](Portal.Api/README.md) — den .NET-baserade
+  backend-POC:n från AB-027 (Angular → .NET Web API → adapter → lokal SQL
+  Server-preview). **.NET Web API är portalens dokumenterade ordinarie
+  backendriktning** (se [`docs/04_Systemarkitektur.md`](../docs/04_Systemarkitektur.md)).
+* [`LAKEHOUSE_POC.md`](LAKEHOUSE_POC.md) — ett separat, tillfälligt tekniskt
+  labb (Node.js/TypeScript/Trino) för dataåtkomst mot en lokal
+  lakehouse-miljö. Detta labb är **inte** portalens ordinarie backend.
 
-    GET /api/lakehouse/hello
-
-Current behavior:
-
-    Returns fixed JSON matching the verified lab Iceberg table.
-
-Important boundary:
-
-    The frontend must not connect directly to Trino, Lakekeeper, S3 or internal databases.
-    The backend owns those integrations.
-
-Run locally:
-
-    cd backend
-    npm install
-    npm run check
-    PORT=4000 npm run dev
-
-Test:
-
-    curl http://localhost:4000/health
-    curl http://localhost:4000/api/lakehouse/hello
-
-## Lakehouse integration status
-
-The endpoint below has been verified against the local lab lakehouse:
-
-    GET /api/lakehouse/hello
-
-It reads from Trino using a fixed query against:
-
-    lakekeeper.labtest.hello_iceberg
-
-The lakehouse stack must be running first:
-
-    /srv/lab/scripts/start-lakehouse-lab.sh
-
-Stop it after testing to save RAM:
-
-    /srv/lab/scripts/stop-lakehouse-lab.sh
+Denna fil innehåller medvetet inga detaljerade körinstruktioner för någondera
+POC — se länkarna ovan.

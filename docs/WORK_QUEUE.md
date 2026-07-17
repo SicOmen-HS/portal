@@ -20,6 +20,10 @@
 
 ## Done
 
+- AB-028 - Separera och återställ backend-POC-dokumentation
+  See: docs/work-items/AB-028.md
+  Completed: 2026-07-17
+
 - AN-010 - Klassificera lakehouse-POC och backendansvar
   See: docs/work-items/AN-010.md
   Completed: 2026-07-17
