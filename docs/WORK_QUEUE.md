@@ -20,6 +20,10 @@
 
 ## Done
 
+- AN-010 - Klassificera lakehouse-POC och backendansvar
+  See: docs/work-items/AN-010.md
+  Completed: 2026-07-17
+
 - AB-027 - Visa fiktiv SQL Server-preview via lokalt .NET API
   See: docs/work-items/AB-027.md
   Completed: 2026-07-13
