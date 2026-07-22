@@ -14,6 +14,8 @@
 
 ## Needs Review
 
+- AN-011 - Avgränsa datamängd, dataprodukt och direkta relationer mellan DM, IM och rapport/dashboard
+  See: docs/work-items/AN-011.md
 
 - AB-016 - Bygg tjänsteflöde för Skapa ny rapport eller dashboard
   See: docs/work-items/AB-016.md
