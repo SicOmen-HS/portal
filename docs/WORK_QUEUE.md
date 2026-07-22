@@ -14,6 +14,9 @@
 
 ## Needs Review
 
+- AB-029 - Skapa lokal SQL Server-POC för DW till DM till IM med fiktiv vädervarningsdata
+  See: docs/work-items/AB-029.md
+
 - AN-011 - Avgränsa datamängd, dataprodukt och direkta relationer mellan DM, IM och rapport/dashboard
   See: docs/work-items/AN-011.md
 
