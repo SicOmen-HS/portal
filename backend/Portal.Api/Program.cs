@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSingleton<IDatasetSourceAdapter, SqlServerDatasetSourceAdapter>();
+builder.Services.AddSingleton<IDeclaredDatasetOriginAdapter, SqlServerDeclaredOriginAdapter>();
 
 var app = builder.Build();
 

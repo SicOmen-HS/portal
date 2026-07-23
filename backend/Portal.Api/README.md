@@ -1,4 +1,4 @@
-# Portal.Api – lokal SQL Server-preview-POC (AB-027, AB-030)
+# Portal.Api – lokal SQL Server-preview-POC (AB-027, AB-030, AB-031)
 
 ## Syfte och avgränsning
 
@@ -31,7 +31,15 @@ datamängd utan ny kod:
 | `dataset-sales-transactions-demo` | `dbo.SalesTransactionsDemoPreview` (tabell) | `database/sqlserver-preview-poc.sql` (AB-027) |
 | `dataset-weather-warning-events-demo` | `demo_dm.weather_warning_events` (läsbar DM-vy) | `database/sqlserver-weather-warning-dw-dm-im-poc.sql` (AB-029) |
 
-Fyra begrepp skiljs tydligt åt i denna POC:
+Sedan AB-031 kan `dataset-weather-warning-events-demo` dessutom visa sitt manuellt
+deklarerade, omedelbara ursprung
+(`demo_dw.weather_warning_event_source`), registrerat av
+`database/sqlserver-weather-warning-declared-origin-poc.sql`. Detta är en
+teknisk källreferens, inte full eller automatiskt upptäckt lineage, och inte en
+relation till ett annat katalogobjekt (`Dataset`, `InformationMart` eller
+Dataprodukt) — se [`../WEATHER_WARNING_POC.md`](../WEATHER_WARNING_POC.md).
+
+Fem begrepp skiljs tydligt åt i denna POC:
 
 * **Frontendens mockläge** (`features.useMockData: true`, standard) — Angular
   visar en syntetisk previewrad härledd client-side från dataobjektets
@@ -49,6 +57,13 @@ Fyra begrepp skiljs tydligt åt i denna POC:
   delen som faktiskt läser från SQL Server, via en parameteriserad,
   radbegränsad `SELECT` mot exakt det tabell- eller vynamn som
   `KnownDatasetsRegistry` anger för respektive dataset-id.
+* **Deklarerat ursprung** (`GET /api/datasets/{id}/declared-origins`,
+  AB-031) — en separat, liten SQL-läsande väg som returnerar samtliga
+  manuellt registrerade, omedelbara uppströmskällor för ett känt dataset-id
+  från `demo_metadata.declared_dataset_origins`, sorterade deterministiskt.
+  Ett känt dataset utan registrerat ursprung ger en tom lista, inte ett fel.
+  Detta är skilt från `SqlServerDatasetSourceAdapter`/`IDatasetSourceAdapter`,
+  som fortsatt endast hanterar previewdata.
 
 ## Projektstruktur
 
@@ -56,10 +71,10 @@ Fyra begrepp skiljs tydligt åt i denna POC:
 backend/
   Portal.slnx
   Portal.Api/            Denna .NET Web API (net10.0)
-    Contracts/           Backendägda DTO:er (DatasetDetailDto, DatasetFieldDto, DatasetPreviewDto)
-    Datasets/            IDatasetSourceAdapter, SqlServerDatasetSourceAdapter, KnownDatasetsRegistry
+    Contracts/           Backendägda DTO:er (DatasetDetailDto, DatasetFieldDto, DatasetPreviewDto, DeclaredDatasetOriginDto)
+    Datasets/            IDatasetSourceAdapter, SqlServerDatasetSourceAdapter, IDeclaredDatasetOriginAdapter, SqlServerDeclaredOriginAdapter, KnownDatasetsRegistry
     Controllers/         DatasetsController
-  Portal.Api.Tests/      Databasfria enhetstester (KnownDatasetsRegistry)
+  Portal.Api.Tests/      Databasfria enhetstester (KnownDatasetsRegistry, DatasetsController)
   database/
     sqlserver-preview-poc.sql   Fiktivt schema + seed-data
 ```
@@ -114,6 +129,15 @@ körinstruktioner. Scriptet är fristående och hör inte till `Portal.Api`,
 men kan köras mot samma lokala POC-databas (t.ex. `PortalPocLocal`) som
 denna sida beskriver.
 
+För att även kunna hämta `dataset-weather-warning-events-demo`s deklarerade
+ursprung (`GET .../declared-origins`) behöver
+`demo_metadata.declared_dataset_origins` finnas i samma databas. Den skapas
+av ytterligare ett separat script,
+[`../database/sqlserver-weather-warning-declared-origin-poc.sql`](../database/sqlserver-weather-warning-declared-origin-poc.sql)
+(AB-031), som i sin tur kräver att `demo_dw.weather_warning_event_source`
+(från AB-029:s script) redan finns. Se
+[`../WEATHER_WARNING_POC.md`](../WEATHER_WARNING_POC.md) för körinstruktioner.
+
 ## Konfigurera lokal connection string (.NET user secrets)
 
 Kör från `backend/Portal.Api/`:
@@ -165,6 +189,14 @@ Angular-instans körs på en annan lokal port.
   respektive `demo_dm.weather_warning_events`). Kräver att databasen och
   connection string ovan är på plats, samt (för vädervarningsdatamängden)
   att `demo_dm.weather_warning_events` finns i samma databas.
+* `GET /api/datasets/{id}/declared-origins` (AB-031) — samtliga manuellt
+  registrerade, omedelbara uppströmskällor för ett känt dataset-id, lästa
+  från `demo_metadata.declared_dataset_origins`. Ett okänt dataset-id ger
+  `404` utan SQL-anrop; ett känt dataset utan registrerat ursprung ger `200`
+  med en tom array. Kräver att databasen, connection string och (för
+  vädervarningsdatamängden) `demo_metadata.declared_dataset_origins` finns på
+  plats — se
+  [`../database/sqlserver-weather-warning-declared-origin-poc.sql`](../database/sqlserver-weather-warning-declared-origin-poc.sql).
 
 ## Verifiera
 
@@ -190,7 +222,15 @@ Med databasanslutning:
   ska svara med upp till 10 fiktiva rader lästa från
   `demo_dm.weather_warning_events`, förutsatt att den vyn finns i samma
   databas (se ovan).
-* Öppna `http://localhost:5104/api/datasets/okant-id/preview` — ska ge `404`.
+* Öppna `http://localhost:5104/api/datasets/dataset-weather-warning-events-demo/declared-origins` —
+  ska svara med en JSON-array som innehåller exakt en post
+  (`demo_dw`/`weather_warning_event_source`), förutsatt att
+  `demo_metadata.declared_dataset_origins` finns i samma databas (se
+  [`../WEATHER_WARNING_POC.md`](../WEATHER_WARNING_POC.md)).
+* Öppna `http://localhost:5104/api/datasets/dataset-sales-transactions-demo/declared-origins` —
+  ska svara med en tom JSON-array (`[]`), inte ett fel.
+* Öppna `http://localhost:5104/api/datasets/okant-id/preview` respektive
+  `/declared-origins` — ska ge `404` på båda, utan SQL-anrop.
 
 Valfritt, för att se resultatet i Angular: kopiera
 `frontend/public/assets/config/runtime-config.local.example.json` till
@@ -219,6 +259,12 @@ justera `apiBaseUrl` vid behov och starta om
 * Metadata-endpointen (`GET /api/datasets/{id}`) läser inte från SQL Server
   — den är medvetet statisk/registerbaserad; endast previewendpointen
   bevisar den riktiga SQL-läsningen (se AN-009/AN-010 för resonemanget).
-* `Portal.Api.Tests` testar endast den databasfria registerlogiken, inte
-  den faktiska SQL Server-läsningen.
+* `Portal.Api.Tests` testar endast den databasfria registerlogiken och
+  `DatasetsController`s känd/okänd-gate (med handskrivna fejkimplementationer
+  av adaptrarna), inte den faktiska SQL Server-läsningen.
+* Deklarerat ursprung (AB-031) är en manuellt registrerad, teknisk
+  källreferens - inte full eller automatiskt upptäckt lineage, och inte en
+  relation till ett annat katalogobjekt. Endast
+  `dataset-weather-warning-events-demo` har ett registrerat ursprung i denna
+  POC.
 * Ingen autentisering, auktorisering eller deployment.

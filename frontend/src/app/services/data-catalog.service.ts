@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { combineLatest, Observable, map, shareReplay } from 'rxjs';
+import { catchError, combineLatest, Observable, map, of, shareReplay } from 'rxjs';
 import { RuntimeConfigService } from '../core/config/runtime-config.service';
 import { MockDataService } from '../core/services/mock-data.service';
 import {
   BusinessApplication,
   DataService as DataServiceOffering,
   Dataset,
+  DatasetDeclaredOrigin,
   DatasetPreview,
   InformationMart,
 } from '../models';
@@ -84,6 +85,25 @@ export class DataCatalogService {
       columns: dataset.sampleFields.map((field) => field.name),
       rows: [dataset.sampleFields.map((field) => field.exampleValue)],
     };
+  }
+
+  /**
+   * Hämtar manuellt deklarerade, omedelbara uppströmskällor för en datamängd
+   * (AB-031). I mockläge läses dataset.declaredOrigins direkt, utan härledning.
+   * I lokalt API-läge hämtas listan från backendens
+   * GET /api/datasets/{id}/declared-origins. Ett fel vid API-anropet ger en tom
+   * lista - avsaknad av deklarerat ursprung är ett normalt, icke-felaktigt
+   * tillstånd som döljer sektionen i UI:t, inte ett kontrollerat felmeddelande.
+   */
+  getDatasetOrigins(id: string): Observable<DatasetDeclaredOrigin[]> {
+    if (this.runtimeConfig.config().features.useMockData) {
+      return this.getDatasetById(id).pipe(map((dataset) => dataset?.declaredOrigins ?? []));
+    }
+
+    const apiBaseUrl = this.runtimeConfig.config().apiBaseUrl;
+    return this.http
+      .get<DatasetDeclaredOrigin[]>(`${apiBaseUrl}/datasets/${id}/declared-origins`)
+      .pipe(catchError(() => of([])));
   }
 
   getAllDataServices(): Observable<DataServiceOffering[]> {

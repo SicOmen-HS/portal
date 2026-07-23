@@ -14,6 +14,9 @@
 
 ## Needs Review
 
+- AB-031 - Visa deklarerat ursprung för demodatamängd
+  See: docs/work-items/AB-031.md
+
 - AB-030 - Visa Vädervarningshändelser med lokal SQL-preview
   See: docs/work-items/AB-030.md
 
