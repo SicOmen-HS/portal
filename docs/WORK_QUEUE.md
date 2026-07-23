@@ -14,6 +14,9 @@
 
 ## Needs Review
 
+- AB-030 - Visa Vädervarningshändelser med lokal SQL-preview
+  See: docs/work-items/AB-030.md
+
 - AB-029 - Skapa lokal SQL Server-POC för DW till DM till IM med fiktiv vädervarningsdata
   See: docs/work-items/AB-029.md
 

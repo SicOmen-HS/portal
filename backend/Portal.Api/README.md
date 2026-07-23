@@ -1,4 +1,4 @@
-# Portal.Api – lokal SQL Server-preview-POC (AB-027)
+# Portal.Api – lokal SQL Server-preview-POC (AB-027, AB-030)
 
 ## Syfte och avgränsning
 
@@ -18,8 +18,37 @@ integrationsadaptrar) — till skillnad från den separata, tillfälliga
 Node.js/TypeScript/Trino-lakehouse-labb-POC:n som beskrivs i
 [`../LAKEHOUSE_POC.md`](../LAKEHOUSE_POC.md).
 
-Bakgrund och avgränsning: [`../../docs/analysis/AN-009_lokal_backend_poc_datamarknad.md`](../../docs/analysis/AN-009_lokal_backend_poc_datamarknad.md)
-och work item [`../../docs/work-items/AB-027.md`](../../docs/work-items/AB-027.md).
+Bakgrund och avgränsning: [`../../docs/analysis/AN-009_lokal_backend_poc_datamarknad.md`](../../docs/analysis/AN-009_lokal_backend_poc_datamarknad.md),
+work item [`../../docs/work-items/AB-027.md`](../../docs/work-items/AB-027.md)
+och work item [`../../docs/work-items/AB-030.md`](../../docs/work-items/AB-030.md).
+
+Sedan AB-030 registrerar `KnownDatasetsRegistry` två fiktiva demodatamängder,
+för att visa att samma vertikala kedja generaliserar till mer än en
+datamängd utan ny kod:
+
+| Dataset-id | Previewkälla (SQL Server) | Skapad av |
+| --- | --- | --- |
+| `dataset-sales-transactions-demo` | `dbo.SalesTransactionsDemoPreview` (tabell) | `database/sqlserver-preview-poc.sql` (AB-027) |
+| `dataset-weather-warning-events-demo` | `demo_dm.weather_warning_events` (läsbar DM-vy) | `database/sqlserver-weather-warning-dw-dm-im-poc.sql` (AB-029) |
+
+Fyra begrepp skiljs tydligt åt i denna POC:
+
+* **Frontendens mockläge** (`features.useMockData: true`, standard) — Angular
+  visar en syntetisk previewrad härledd client-side från dataobjektets
+  `sampleFields`, utan något API-anrop. Se
+  [`../../frontend/public/assets/mock/README.md`](../../frontend/public/assets/mock/README.md).
+* **Lokalt API-läge** — Angular anropar detta API istället för att härleda
+  raden client-side (aktiveras via `runtime-config.local.json`, se nedan).
+* **Statisk metadata** (`GET /api/datasets/{id}`) — registerbaserad
+  beskrivning av datamängden (namn, ägare, fält osv.). Kräver ingen SQL
+  Server-anslutning, oavsett vilket dataset-id som frågas.
+  `dataset-weather-warning-events-demo`s metadata beskriver **fiktiv,
+  SMHI-inspirerad** exempeldata — den är varken verklig SMHI-data eller en
+  integration med SMHI.
+* **SQL-baserad preview** (`GET /api/datasets/{id}/preview`) — den enda
+  delen som faktiskt läser från SQL Server, via en parameteriserad,
+  radbegränsad `SELECT` mot exakt det tabell- eller vynamn som
+  `KnownDatasetsRegistry` anger för respektive dataset-id.
 
 ## Projektstruktur
 
@@ -76,6 +105,15 @@ eller `tempdb`.
 Scriptet innehåller inget servernamn, ingen connection string och ingen
 produktionsdata.
 
+För att även kunna previewa `dataset-weather-warning-events-demo` behöver
+`demo_dm.weather_warning_events` finnas i samma databas. Den skapas av ett
+separat script,
+[`../database/sqlserver-weather-warning-dw-dm-im-poc.sql`](../database/sqlserver-weather-warning-dw-dm-im-poc.sql)
+(AB-029) — se [`../WEATHER_WARNING_POC.md`](../WEATHER_WARNING_POC.md) för
+körinstruktioner. Scriptet är fristående och hör inte till `Portal.Api`,
+men kan köras mot samma lokala POC-databas (t.ex. `PortalPocLocal`) som
+denna sida beskriver.
+
 ## Konfigurera lokal connection string (.NET user secrets)
 
 Kör från `backend/Portal.Api/`:
@@ -118,11 +156,15 @@ Angular-instans körs på en annan lokal port.
 ## Endpoints
 
 * `GET /health` — enkel hälsokontroll, kräver ingen SQL Server-anslutning.
-* `GET /api/datasets/{id}` — statisk, registerbaserad metadata (t.ex.
-  `dataset-sales-transactions-demo`). Kräver ingen SQL Server-anslutning.
+* `GET /api/datasets/{id}` — statisk, registerbaserad metadata för ett känt
+  id (`dataset-sales-transactions-demo` eller
+  `dataset-weather-warning-events-demo`). Kräver ingen SQL Server-anslutning.
 * `GET /api/datasets/{id}/preview` — riktiga fiktiva datarader via en
-  parameteriserad `SELECT` mot `PortalPocLocal`. Kräver att databasen och
-  connection string ovan är på plats.
+  parameteriserad `SELECT` mot det tabell- eller vynamn
+  `KnownDatasetsRegistry` anger för respektive id (`dbo.SalesTransactionsDemoPreview`
+  respektive `demo_dm.weather_warning_events`). Kräver att databasen och
+  connection string ovan är på plats, samt (för vädervarningsdatamängden)
+  att `demo_dm.weather_warning_events` finns i samma databas.
 
 ## Verifiera
 
@@ -142,6 +184,12 @@ Med databasanslutning:
   ska svara med statisk metadata.
 * Öppna `http://localhost:5104/api/datasets/dataset-sales-transactions-demo/preview` —
   ska svara med upp till 10 fiktiva rader lästa från `PortalPocLocal`.
+* Öppna `http://localhost:5104/api/datasets/dataset-weather-warning-events-demo` —
+  ska svara med statisk metadata.
+* Öppna `http://localhost:5104/api/datasets/dataset-weather-warning-events-demo/preview` —
+  ska svara med upp till 10 fiktiva rader lästa från
+  `demo_dm.weather_warning_events`, förutsatt att den vyn finns i samma
+  databas (se ovan).
 * Öppna `http://localhost:5104/api/datasets/okant-id/preview` — ska ge `404`.
 
 Valfritt, för att se resultatet i Angular: kopiera
@@ -163,7 +211,9 @@ justera `apiBaseUrl` vid behov och starta om
 
 ## Kända avgränsningar
 
-* Endast en fiktiv datamängd stöds (`dataset-sales-transactions-demo`).
+* Två fiktiva datamängder stöds (`dataset-sales-transactions-demo` och
+  `dataset-weather-warning-events-demo`); ingen kataloglistendpoint listar
+  dem åt klienten (se nedan).
 * Ingen kataloglistendpoint (`GET /api/datasets`) — endast detalj- och
   previewendpoints för ett känt id.
 * Metadata-endpointen (`GET /api/datasets/{id}`) läser inte från SQL Server

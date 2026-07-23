@@ -52,6 +52,36 @@ public static class KnownDatasetsRegistry
                     "antal_transaktioner",
                     "beloppsintervall",
                 ]),
+
+            ["dataset-weather-warning-events-demo"] = new KnownDatasetEntry(
+                Metadata: new DatasetDetailDto(
+                    Id: "dataset-weather-warning-events-demo",
+                    Name: "Vädervarningshändelser",
+                    Description: "Fiktiv datamängd med vädervarningshändelser och berörda områden, framtagen för att demonstrera portalens previewfunktion.",
+                    DataDomain: "Väder och klimat",
+                    Owner: "Exempelteam Väderdata",
+                    Steward: "Exempelförvaltare Väderdata",
+                    Classification: "internal",
+                    UpdateFrequency: "Vid behov i POC",
+                    Fields:
+                    [
+                        new DatasetFieldDto("warning_id", "heltal", "Unikt tekniskt id för vädervarningen", "1001"),
+                        new DatasetFieldDto("event_name", "text", "Namn på händelsetypen som varningen avser", "Thunderstorm"),
+                        new DatasetFieldDto("warning_level_name", "text", "Varningsnivåns namn", "Yellow"),
+                        new DatasetFieldDto("warning_area_name", "text", "Namn på det övergripande varningsområdet", "Example Region South"),
+                        new DatasetFieldDto("affected_area_name", "text", "Namn på ett specifikt påverkat område inom varningsområdet", "Example Area A"),
+                        new DatasetFieldDto("published_at", "datum och tid", "Tidpunkt då varningen publicerades", "2026-04-01T08:15:00"),
+                    ]),
+                PreviewTableName: "demo_dm.weather_warning_events",
+                PreviewColumns:
+                [
+                    "warning_id",
+                    "event_name",
+                    "warning_level_name",
+                    "warning_area_name",
+                    "affected_area_name",
+                    "published_at",
+                ]),
         };
 
     public static KnownDatasetEntry? TryGet(string datasetId) =>

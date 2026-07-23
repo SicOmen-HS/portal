@@ -196,6 +196,60 @@
     "visibility": "maintainers"
   },
   {
+    "id": "dataset-weather-warning-events-demo",
+    "name": "Vädervarningshändelser",
+    "description": "Fiktiv datamängd med vädervarningshändelser och berörda områden, framtagen för att demonstrera portalens previewfunktion.",
+    "dataDomain": "Väder och klimat",
+    "owner": "Exempelteam Väderdata",
+    "steward": "Exempelförvaltare Väderdata",
+    "source": "Lokal SQL Server-POC (exempel)",
+    "technicalSource": "SQL Server-vy (exempel)",
+    "accessModel": "Öppen för alla interna användare",
+    "classification": "internal",
+    "updateFrequency": "Vid behov i POC",
+    "metadataSource": "Manuellt förvaltad innehållsfil (exempel)",
+    "lifecycleStatus": "active",
+    "visibility": "all-users",
+    "sampleFields": [
+      {
+        "name": "warning_id",
+        "dataType": "heltal",
+        "description": "Unikt tekniskt id för vädervarningen",
+        "exampleValue": "1001"
+      },
+      {
+        "name": "event_name",
+        "dataType": "text",
+        "description": "Namn på händelsetypen som varningen avser",
+        "exampleValue": "Thunderstorm"
+      },
+      {
+        "name": "warning_level_name",
+        "dataType": "text",
+        "description": "Varningsnivåns namn",
+        "exampleValue": "Yellow"
+      },
+      {
+        "name": "warning_area_name",
+        "dataType": "text",
+        "description": "Namn på det övergripande varningsområdet",
+        "exampleValue": "Example Region South"
+      },
+      {
+        "name": "affected_area_name",
+        "dataType": "text",
+        "description": "Namn på ett specifikt påverkat område inom varningsområdet",
+        "exampleValue": "Example Area A"
+      },
+      {
+        "name": "published_at",
+        "dataType": "datum och tid",
+        "description": "Tidpunkt då varningen publicerades",
+        "exampleValue": "2026-04-01T08:15:00"
+      }
+    ]
+  },
+  {
     "id": "dataset-legacy-reporting-extract-demo",
     "name": "Äldre rapportuttag (exempel)",
     "description": "Fiktiv äldre datamängd som ersätts av nyare dataprodukter.",
