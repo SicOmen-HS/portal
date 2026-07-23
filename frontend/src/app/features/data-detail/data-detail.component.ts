@@ -6,7 +6,7 @@ import { DataCatalogService } from '../../services/data-catalog.service';
 import { GuideService } from '../../services/guide.service';
 import { OrderService } from '../../services/order.service';
 import { SystemService } from '../../services/system.service';
-import { INFORMATION_SECURITY_CLASSIFICATION_LABELS } from '../../models';
+import { DatasetDeclaredOrigin, INFORMATION_SECURITY_CLASSIFICATION_LABELS } from '../../models';
 import { DatasetFieldsPreviewComponent } from '../../shared/components/dataset-fields-preview/dataset-fields-preview.component';
 
 @Component({
@@ -35,21 +35,33 @@ export class DataDetailComponent {
             this.orders.getOrderTypesByIds(dataset.relatedOrderTypeIds ?? []),
             this.systems.getByIds(dataset.relatedSystemIds ?? []),
             this.getPreviewState(dataset.id, !!dataset.sampleFields?.length),
+            this.catalog.getDatasetOrigins(dataset.id),
           ]).pipe(
-            map(([marts, applications, relatedGuides, relatedOrderTypes, relatedSystems, previewState]) => ({
-              dataset,
-              marts: marts.filter((mart) => mart.relatedDatasetIds?.includes(dataset.id)),
-              applications: applications.filter(
-                (app) =>
-                  marts.some((mart) => mart.relatedDatasetIds?.includes(dataset.id) && app.informationMartIds.includes(mart.id))
-              ),
-              relatedGuides,
-              relatedOrderTypes,
-              relatedSystems,
-              targetAudience: Array.from(new Set(relatedGuides.flatMap((guide) => guide.targetAudience))),
-              previewRows: previewState.previewRows,
-              previewError: previewState.previewError,
-            }))
+            map(
+              ([
+                marts,
+                applications,
+                relatedGuides,
+                relatedOrderTypes,
+                relatedSystems,
+                previewState,
+                declaredOrigins,
+              ]) => ({
+                dataset,
+                marts: marts.filter((mart) => mart.relatedDatasetIds?.includes(dataset.id)),
+                applications: applications.filter(
+                  (app) =>
+                    marts.some((mart) => mart.relatedDatasetIds?.includes(dataset.id) && app.informationMartIds.includes(mart.id))
+                ),
+                relatedGuides,
+                relatedOrderTypes,
+                relatedSystems,
+                targetAudience: Array.from(new Set(relatedGuides.flatMap((guide) => guide.targetAudience))),
+                previewRows: previewState.previewRows,
+                previewError: previewState.previewError,
+                declaredOrigins,
+              })
+            )
           )
         : of({
             dataset: undefined,
@@ -61,6 +73,7 @@ export class DataDetailComponent {
             targetAudience: [] as string[],
             previewRows: undefined as string[][] | undefined,
             previewError: false,
+            declaredOrigins: [] as DatasetDeclaredOrigin[],
           })
     )
   );

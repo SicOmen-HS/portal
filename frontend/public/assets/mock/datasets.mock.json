@@ -247,6 +247,13 @@
         "description": "Tidpunkt då varningen publicerades",
         "exampleValue": "2026-04-01T08:15:00"
       }
+    ],
+    "declaredOrigins": [
+      {
+        "datasetId": "dataset-weather-warning-events-demo",
+        "upstreamSchemaName": "demo_dw",
+        "upstreamObjectName": "weather_warning_event_source"
+      }
     ]
   },
   {

@@ -2,6 +2,7 @@ import { Visibility } from './visibility.model';
 import { LifecycleStatus } from './lifecycle-status.model';
 import { InformationSecurityClassification } from './information-security-classification.model';
 import { DatasetFieldPreview } from './dataset-field-preview.model';
+import { DatasetDeclaredOrigin } from './dataset-declared-origin.model';
 
 /**
  * Dataset beskriver en datamängd som användare kan hitta, förstå,
@@ -28,4 +29,10 @@ export interface Dataset {
   visibility: Visibility;
   /** Fältstruktur med fiktiva exempelvärden, visad före åtkomst är beviljad. Aldrig verklig eller anonymiserad produktionsdata. */
   sampleFields?: DatasetFieldPreview[];
+  /**
+   * Manuellt deklarerade, omedelbara uppströmskällor (AB-031) i mockläge. Visar det
+   * registrerade tekniska ursprunget, inte full eller automatiskt upptäckt lineage,
+   * och inte en relation till ett annat katalogobjekt.
+   */
+  declaredOrigins?: DatasetDeclaredOrigin[];
 }

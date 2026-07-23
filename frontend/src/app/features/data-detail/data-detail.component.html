@@ -43,7 +43,21 @@
             }
           </div>
         </section>
-        <details class="technical-details"><summary>Teknisk metadata</summary><dl><div><dt>Källa</dt><dd>{{ dataset.source }}</dd></div><div><dt>Teknisk källa</dt><dd>{{ dataset.technicalSource ?? 'Ej angiven' }}</dd></div><div><dt>Metadatakälla</dt><dd>{{ dataset.metadataSource }}</dd></div><div><dt>Livscykel</dt><dd>{{ dataset.lifecycleStatus }}</dd></div></dl></details>
+        <details class="technical-details"><summary>Teknisk metadata</summary><dl><div><dt>Källa</dt><dd>{{ dataset.source }}</dd></div><div><dt>Teknisk källa</dt><dd>{{ dataset.technicalSource ?? 'Ej angiven' }}</dd></div><div><dt>Metadatakälla</dt><dd>{{ dataset.metadataSource }}</dd></div><div><dt>Livscykel</dt><dd>{{ dataset.lifecycleStatus }}</dd></div>
+          @if (view.declaredOrigins.length) {
+            <div>
+              <dt>Deklarerat ursprung</dt>
+              <dd>
+                <ul class="declared-origins-list">
+                  @for (origin of view.declaredOrigins; track origin.upstreamSchemaName + '.' + origin.upstreamObjectName) {
+                    <li><code>{{ origin.upstreamSchemaName }}.{{ origin.upstreamObjectName }}</code></li>
+                  }
+                </ul>
+                <p class="text-muted-custom">Visar registrerat omedelbart ursprung, inte fullständig lineage.</p>
+              </dd>
+            </div>
+          }
+        </dl></details>
       </main>
       <aside class="owner-card">
         <p class="eyebrow">Ägare och support</p>

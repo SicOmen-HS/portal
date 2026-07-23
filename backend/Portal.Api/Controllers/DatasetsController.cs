@@ -12,10 +12,12 @@ public sealed class DatasetsController : ControllerBase
     private const int PreviewRowLimit = 10;
 
     private readonly IDatasetSourceAdapter _datasetSourceAdapter;
+    private readonly IDeclaredDatasetOriginAdapter _declaredDatasetOriginAdapter;
 
-    public DatasetsController(IDatasetSourceAdapter datasetSourceAdapter)
+    public DatasetsController(IDatasetSourceAdapter datasetSourceAdapter, IDeclaredDatasetOriginAdapter declaredDatasetOriginAdapter)
     {
         _datasetSourceAdapter = datasetSourceAdapter;
+        _declaredDatasetOriginAdapter = declaredDatasetOriginAdapter;
     }
 
     /// <summary>
@@ -34,5 +36,23 @@ public sealed class DatasetsController : ControllerBase
     {
         var preview = await _datasetSourceAdapter.GetPreviewRowsAsync(id, PreviewRowLimit, cancellationToken);
         return preview is null ? NotFound() : Ok(preview);
+    }
+
+    /// <summary>
+    /// Manually declared, immediate upstream origins for a known dataset - not full or
+    /// automatically discovered lineage. An unknown dataset-id is rejected here,
+    /// against the same registry as GetDataset/GetPreview, before any SQL Server call.
+    /// A known dataset with no registered origin returns an empty list, not a 404.
+    /// </summary>
+    [HttpGet("{id}/declared-origins")]
+    public async Task<ActionResult<IReadOnlyList<DeclaredDatasetOriginDto>>> GetDeclaredOrigins(string id, CancellationToken cancellationToken)
+    {
+        if (KnownDatasetsRegistry.TryGet(id) is null)
+        {
+            return NotFound();
+        }
+
+        var origins = await _declaredDatasetOriginAdapter.GetDeclaredOriginsAsync(id, cancellationToken);
+        return Ok(origins);
     }
 }
