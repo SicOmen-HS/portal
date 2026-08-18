@@ -14,6 +14,7 @@
 
 ## Needs Review
 
+
 - AB-032 - Generisk teknisk SQL Server-discovery inom konfigurerat scope
   See: docs/work-items/AB-032.md
 
@@ -33,6 +34,10 @@
   See: docs/work-items/AB-016.md
 
 ## Done
+
+- AB-033 - Besluta deploymentmodell för persistent portalinstans i labbmiljön
+  See: docs/work-items/AB-033.md
+  Completed: 2026-08-18
 
 - AB-028 - Separera och återställ backend-POC-dokumentation
   See: docs/work-items/AB-028.md

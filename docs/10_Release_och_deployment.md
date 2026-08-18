@@ -106,6 +106,16 @@ Frontend och backend bör kunna paketeras och driftsättas som separata komponen
 
 ---
 
+# Persistent instans i labbmiljön (ADR-0007)
+
+Utöver den framtida produktionsmodellen ovan finns ett separat, tidigare beslut om en
+persistent portalinstans i en jobb-liknande labbmiljö, se
+`docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` (status
+Föreslagen). Labbmiljöinstansen är avsedd att vara containerbaserad och ligga i linje
+med denna dokumentation, men dess faktiska drift (runtime, nätverk, reverse proxy,
+secrets-injektion) ägs av en separat Hosting Lab-funktion utanför detta repository och
+utanför detta dokuments mandat.
+
 # Huvudkomponenter vid deployment
 
 Följande komponenter ingår normalt i deployment:
