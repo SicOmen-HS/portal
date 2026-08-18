@@ -1,6 +1,6 @@
 # Data- och analysportalen Project Context
 
-Last reviewed: `2026-07-11`
+Last reviewed: `2026-08-18`
 
 ## Purpose
 
@@ -13,15 +13,20 @@ that portal plus its full governing documentation.
 
 ## Current State
 
-- Phase: early mockup / prototype (no backend, no database, no real integrations).
+- Phase: early mockup / prototype frontend; a .NET Web API backend (`Portal.Api`)
+  exists as a local proof-of-concept with a local SQL Server integration, but no
+  application database, no real integrations with other external systems, and no
+  persistent/deployed instance of either.
 - Primary objective: a clear, generic, configuration-driven, handoff-ready mockup that
   demonstrates structure, navigation and content without needing the company's
   internal environment.
 - Current capabilities: full Angular frontend (10 pages/areas), fictional mockdata for
-  every information object, a `urlKey`-based link-resolution mechanism, layered
+  every information object, a `urlKey`-based link-resolution mechanism, a .NET Web API
+  backend proof-of-concept with local SQL Server dataset/discovery integration, layered
   documentation (reference + operational), Worksmith work-item tooling.
-- Current limitations: no backend/.NET API, no PostgreSQL application database, no
-  real system integrations, no authentication.
+- Current limitations: no PostgreSQL application database, no real system integrations
+  beyond the local SQL Server proof-of-concept, no authentication, no persistent/
+  deployed portal instance yet (deployment model proposed in ADR-0007).
 
 Authoritative current state: [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
@@ -45,9 +50,9 @@ cannot remain safely summarized.
 
 | Area | Current choice | Detail owner |
 | --- | --- | --- |
-| Application | Angular (standalone, signals) + Bootstrap 5/SCSS | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md` |
-| Data | Fictional local mockdata (JSON); no database yet | `frontend/public/assets/mock/README.md` |
-| Delivery | Local `npm.cmd --prefix frontend start` from the repository root; no deployment pipeline yet | `docs/10_Release_och_deployment.md` |
+| Application | Angular (standalone, signals) + Bootstrap 5/SCSS frontend; .NET Web API backend (`Portal.Api`) as a local proof-of-concept | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md`, `backend/Portal.Api/README.md` |
+| Data | Fictional local frontend mockdata (JSON); local SQL Server proof-of-concept for backend; no application database yet | `frontend/public/assets/mock/README.md`, `backend/Portal.Api/README.md` |
+| Delivery | Local `ng serve` / `dotnet run`; no deployment pipeline yet; deployment model proposed in ADR-0007 | `docs/10_Release_och_deployment.md`, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` |
 
 ## Authority And Discovery
 
@@ -69,8 +74,10 @@ and may be stale.
   page or component).
 - For architecture or dependencies: read `docs/04_Systemarkitektur.md` and
   `DECISIONS.md`.
-- For delivery: read `docs/10_Release_och_deployment.md` (not yet in active use — no
-  deployment pipeline exists for this mockup).
+- For delivery: read `docs/10_Release_och_deployment.md` (target production model, not
+  yet in active use) and, for the labbmiljö-specific persistent-instance decision,
+  `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` (Föreslagen —
+  no deployment pipeline or implementation exists yet).
 
 Request missing authoritative context rather than guessing. Load only what the
 current task needs.

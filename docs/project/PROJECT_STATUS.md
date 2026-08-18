@@ -1,15 +1,19 @@
 # Data- och analysportalen Project Status
 
-Last reviewed: `2026-07-11`
+Last reviewed: `2026-08-18`
 
 ## Current Phase
 
 **Version or phase:** Early mockup / prototype.
 
-Data- och analysportalen is in an early, local, mockup stage. There is no backend, no
-application database and no real integrations. The Angular frontend is a visual and
-functional prototype driven entirely by fictional mockdata and a configuration-driven
-link-resolution mechanism, so it can be cloned and run fully offline.
+Data- och analysportalen is in an early, local stage. The Angular frontend is a visual
+and functional prototype driven entirely by fictional mockdata and a
+configuration-driven link-resolution mechanism, so it can be cloned and run fully
+offline. A .NET Web API backend (`Portal.Api`) also exists as a local proof-of-concept
+with a local SQL Server integration (AB-027, AB-030, AB-031, AB-032), but there is no
+application database and no real integrations with other external systems, and no
+persistent/deployed instance of either frontend or backend yet — see "Current
+Architecture" below and ADR-0007 (proposed).
 
 ## Current Focus
 
@@ -47,11 +51,16 @@ Implemented and available:
   `docs/14_Rekommenderade_extensions.md`) and a working `.vscode/extensions.json`.
 - Worksmith project administration (this adoption): work-item lifecycle, queue,
   validation, topic catalog, and layered project/operational documentation.
+- A .NET Web API backend (`backend/Portal.Api/`) as a local proof-of-concept: dataset
+  metadata/preview, declared origin and generic technical SQL Server asset discovery
+  (AB-027, AB-030, AB-031, AB-032), plus a `/health` endpoint. See
+  `backend/Portal.Api/README.md`. No persistent/deployed instance exists yet.
 
 Not currently implemented or not yet production-ready:
 
-- No backend (.NET Web API) and no application database (PostgreSQL) — see
-  `docs/04_Systemarkitektur.md` for the target architecture.
+- No application database (PostgreSQL) — see `docs/04_Systemarkitektur.md` for the
+  target architecture. The .NET Web API backend itself exists as a local
+  proof-of-concept (see above) but has no persistent, deployed instance.
 - No real integrations with OpenMetadata, Qlik Sense, Grafana, the Generativ AI
   Chattportal, UiPath, Nintex or any other external system.
 - No authentication/authorization implementation.
@@ -63,9 +72,9 @@ Not currently implemented or not yet production-ready:
 
 | Area | Current choice | Authoritative detail |
 | --- | --- | --- |
-| Application | Angular (standalone, signals) + Bootstrap 5/SCSS, no backend yet | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md` |
-| Data | Fictional local mockdata (JSON), no database yet | `frontend/public/assets/mock/README.md` |
-| Hosting | Local development only (`npm.cmd --prefix frontend start` from the repository root); no deployment yet | `docs/10_Release_och_deployment.md` |
+| Application | Angular (standalone, signals) + Bootstrap 5/SCSS frontend; .NET Web API backend (`Portal.Api`) as a local proof-of-concept | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md`, `backend/Portal.Api/README.md` |
+| Data | Fictional local frontend mockdata (JSON); local SQL Server proof-of-concept for backend datasets/discovery; no application database yet | `frontend/public/assets/mock/README.md`, `backend/Portal.Api/README.md` |
+| Hosting | Local development only (`ng serve` / `dotnet run`); no persistent deployment yet — deployment model proposed in ADR-0007 (`docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Föreslagen, pending owner approval) | `docs/10_Release_och_deployment.md` |
 
 Keep this summary factual. Record approved reasoning in `DECISIONS.md` and technical
 detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
@@ -88,7 +97,10 @@ detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
 
 ## Next Major Milestones
 
-- Design and implement the .NET Web API backend and PostgreSQL application database
+- Review and, if approved, implement ADR-0007's proposed containerized deployment
+  artifacts (e.g. Dockerfiles) for a persistent portal instance in the lab environment,
+  as a separately approved implementation work item.
+- Design and implement the PostgreSQL application database
   (`docs/04_Systemarkitektur.md`), once approved via a work item and, if it changes
   architecture, an ADR.
 - Introduce real (adapter-based, mockable) integrations incrementally, starting with
