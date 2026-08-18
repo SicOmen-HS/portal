@@ -23,6 +23,12 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IDatasetSourceAdapter, SqlServerDatasetSourceAdapter>();
 builder.Services.AddSingleton<IDeclaredDatasetOriginAdapter, SqlServerDeclaredOriginAdapter>();
 
+// Discovery scope (source, schema pattern, allowed object types) is configuration-
+// driven - see DatasetDiscoveryOptions - and never lists individual tables/views.
+// The database scope is implicit in ConnectionStrings:Default, not a separate field.
+builder.Services.Configure<DatasetDiscoveryOptions>(builder.Configuration.GetSection(DatasetDiscoveryOptions.SectionName));
+builder.Services.AddSingleton<ITechnicalAssetDiscoveryAdapter, SqlServerTechnicalAssetDiscoveryAdapter>();
+
 var app = builder.Build();
 
 // Controlled, generic error handling: never expose stack traces, connection

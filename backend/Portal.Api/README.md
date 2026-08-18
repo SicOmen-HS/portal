@@ -1,4 +1,4 @@
-# Portal.Api – lokal SQL Server-preview-POC (AB-027, AB-030, AB-031)
+# Portal.Api – lokal SQL Server-preview-POC (AB-027, AB-030, AB-031, AB-032)
 
 ## Syfte och avgränsning
 
@@ -39,7 +39,12 @@ teknisk källreferens, inte full eller automatiskt upptäckt lineage, och inte e
 relation till ett annat katalogobjekt (`Dataset`, `InformationMart` eller
 Dataprodukt) — se [`../WEATHER_WARNING_POC.md`](../WEATHER_WARNING_POC.md).
 
-Fem begrepp skiljs tydligt åt i denna POC:
+Sedan AB-032 finns dessutom en **helt separat, generisk teknisk
+discovery-mekanism** (`GET /api/technical-assets`) som inte hör till ovanstående
+per-dataset-registrering. Se avsnittet "Generisk teknisk discovery (AB-032)"
+nedan för vad den bevisar och hur den skiljer sig från allt ovan.
+
+Sex begrepp skiljs tydligt åt i denna POC:
 
 * **Frontendens mockläge** (`features.useMockData: true`, standard) — Angular
   visar en syntetisk previewrad härledd client-side från dataobjektets
@@ -64,6 +69,138 @@ Fem begrepp skiljs tydligt åt i denna POC:
   Ett känt dataset utan registrerat ursprung ger en tom lista, inte ett fel.
   Detta är skilt från `SqlServerDatasetSourceAdapter`/`IDatasetSourceAdapter`,
   som fortsatt endast hanterar previewdata.
+* **Generisk teknisk discovery** (`GET /api/technical-assets`, AB-032) — läser
+  SQL Servers egen systemkatalog (`INFORMATION_SCHEMA`) inom ett konfigurerat
+  schema-scope och returnerar tekniska asset-kandidater (tabeller/vyer och
+  deras kolumner). Se nedan för avgränsningen mot `KnownDatasetsRegistry`.
+
+## Generisk teknisk discovery (AB-032)
+
+`GET /api/technical-assets` bevisar ett annat, mindre steg än allt ovan:
+**teknisk discovery inom ett konfigurerat scope**, inte publicering av en ny
+datamängd.
+
+```
+SQL Server INFORMATION_SCHEMA
+        -> konfigurerat schema-scope (DatasetDiscovery-konfiguration, se "Konfigurationsmodell")
+        -> SqlServerTechnicalAssetDiscoveryAdapter
+        -> DiscoveredTechnicalAssetDto (teknisk kandidat, INTE en Dataset)
+        -> GET /api/technical-assets
+```
+
+Skillnader mot `KnownDatasetsRegistry`/`GET /api/datasets/{id}`:
+
+* Konfigurationen (`DatasetDiscovery`-sektionen) anger **var** discovery får
+  leta (en käll-identifierare, ett SQL `LIKE`-mönster för schema, samt
+  tillåtna objekttyper `Table`/`View`) — den listar **aldrig** enskilda
+  tabell-, vy- eller dataset-namn. Ett nytt objekt inom redan konfigurerat
+  scope upptäcks alltså av nästa anrop utan någon ändring i repositoryt.
+* Det finns **inget separat databas-/catalog-fält** i konfigurationen.
+  Databasscopet är implicit: det är den databas som
+  `ConnectionStrings:Default` pekar mot. Adaptern läser databasnamnet
+  dynamiskt (`SELECT DB_NAME();`) för att inkludera det i svaret, men
+  frågar aldrig över flera databaser. Se avsnittet "Konfigurationsmodell"
+  nedan.
+* Svaret är en egen `DiscoveredTechnicalAssetDto` (teknisk identitet,
+  källa, databas, schema, objektnamn, objekttyp, kolumner med SQL-datatyp) —
+  **inte** `DatasetDetailDto`. Ett upptäckt tekniskt objekt är inte
+  automatiskt en publicerad `Dataset`- eller `InformationMart`-post:
+  `Dataset.classification` är obligatorisk (ADR-0006), och discovery har
+  ingen grund för att gissa klassning, ägare, visningsnamn eller
+  beskrivning. Publicering till `/data`/Datamarknaden är medvetet **inte**
+  löst av detta AB.
+* `KnownDatasetsRegistry`, `IDatasetSourceAdapter`,
+  `SqlServerDatasetSourceAdapter`, `IDeclaredDatasetOriginAdapter`,
+  `SqlServerDeclaredOriginAdapter` och de två redan registrerade
+  demodatamängderna är helt oförändrade och opåverkade. De två mekanismerna
+  (den befintliga per-dataset-registreringen och den nya, generiska
+  discoveryn) existerar medvetet parallellt.
+* Endpointen tar inget schema- eller tabellnamn från klienten. Scopet är
+  uteslutande serverkonfigurerat, och identifierare i den genererade SQL:en
+  kommer uteslutande från SQL Servers egen katalog inom det redan godkända
+  scopet.
+
+### Konfigurationsmodell
+
+Modellen, faktisk för denna implementation:
+
+```text
+connection/runtime-konfiguration (ConnectionStrings:Default)
+        ↓
+vald SQL Server-databas
+        ↓
+DatasetDiscovery.SchemaPattern (miljöspecifik)
+        ↓
+DatasetDiscovery.AllowedObjectTypes (generell default)
+```
+
+Den versionshanterade, miljöneutrala `appsettings.json` innehåller
+**endast** den generella defaulten:
+
+```json
+"DatasetDiscovery": {
+  "AllowedObjectTypes": ["Table", "View"]
+}
+```
+
+`SourceId` och `SchemaPattern` är **miljöspecifika** POC-antaganden (vilken
+källa, vilket schema-mönster) och ligger därför **inte** i basfilen — i
+linje med `docs/05_Konfiguration.md`s princip att miljöberoende värden inte
+ska hårdkodas i den generiska, deploybara konfigurationen. Utan dem ger
+`GET /api/technical-assets` ett kontrollerat 500-fel
+(`DatasetDiscovery:SourceId is not configured.` respektive
+`DatasetDiscovery:SchemaPattern is not configured.`) — API:et startar
+fortfarande normalt, precis som när `ConnectionStrings:Default` saknas.
+
+För lokal utveckling: kopiera den versionshanterade mallen
+`backend/Portal.Api/appsettings.Development.example.json` till
+`backend/Portal.Api/appsettings.Development.json` (redan gitignorad, se
+`.gitignore`). ASP.NET Core läser filen automatiskt när miljön är
+`Development` (samma miljö som redan krävs för `dotnet user-secrets`, se
+nedan) — ingen ny kod eller konfigurationsmekanism behövs. Mallen
+innehåller denna POC:s egna, redan versionshanterade fiktiva scheman
+(`demo_dw`/`demo_dm`/`demo_im` från AB-029/AB-031):
+
+```json
+"DatasetDiscovery": {
+  "SourceId": "local-sql-server-poc",
+  "SchemaPattern": "demo%"
+}
+```
+
+I en annan miljö (t.ex. en framtida jobbmiljö) tillförs motsvarande värden
+på samma sätt som andra miljöspecifika värden redan hanteras i projektet —
+via lokal `appsettings.{Environment}.json`, miljövariabler eller
+motsvarande godkänd runtime-mekanism (`docs/05_Konfiguration.md`) — aldrig
+genom att skriva in dem i den versionshanterade basfilen. Samma
+applikationskod och deploybara artefakt används; endast konfigurationen
+skiljer sig åt.
+
+Kräver att databasen, connection string (se ovan) och minst ett av
+AB-029/AB-031:s script är körda i samma lokala databas.
+
+### Schema-mönster med bokstavligt understreck (t.ex. `im_`)
+
+`SchemaPattern` tolkas som SQL Servers eget `LIKE`-mönster, **inte** som ett
+reguljärt uttryck. I T-SQL `LIKE` matchar `_` **ett godtyckligt tecken**, inte
+bokstavligt understreck. Mönstret `im_%` matchar därför **inte bara**
+scheman som bokstavligen börjar med `im_` (t.ex. `im_smhi`) utan **även**
+scheman som `imXfoo`, `im5bar` osv. — ett bredare, oavsiktligt scope.
+
+**För att matcha scheman som bokstavligen börjar med `im_`, använd SQL
+Servers egna hakparentes-escape i mönstret:**
+
+```json
+"SchemaPattern": "im[_]%"
+```
+
+`[_]` betyder "exakt ett tecken ur mängden `{_}`", dvs. exakt ett bokstavligt
+understreck — inte ett wildcard. `im[_]%` matchar alltså `im_smhi` men
+**inte** `imXfoo`. Detta kräver ingen kodändring eller nytt
+konfigurationsfält: `SchemaPattern` skickas oförändrat vidare som
+`LIKE`-parameterns värde (se `DiscoveryObjectsQuery` och dess
+databasfria tester i `Portal.Api.Tests`), så SQL Servers egen,
+inbyggda hakparentes-syntax gör jobbet.
 
 ## Projektstruktur
 
@@ -71,10 +208,13 @@ Fem begrepp skiljs tydligt åt i denna POC:
 backend/
   Portal.slnx
   Portal.Api/            Denna .NET Web API (net10.0)
-    Contracts/           Backendägda DTO:er (DatasetDetailDto, DatasetFieldDto, DatasetPreviewDto, DeclaredDatasetOriginDto)
-    Datasets/            IDatasetSourceAdapter, SqlServerDatasetSourceAdapter, IDeclaredDatasetOriginAdapter, SqlServerDeclaredOriginAdapter, KnownDatasetsRegistry
-    Controllers/         DatasetsController
-  Portal.Api.Tests/      Databasfria enhetstester (KnownDatasetsRegistry, DatasetsController)
+    appsettings.json                  Miljöneutral baskonfiguration (versionshanterad)
+    appsettings.Development.example.json  Mall för lokal DatasetDiscovery-config (versionshanterad)
+    Contracts/           Backendägda DTO:er (DatasetDetailDto, DatasetFieldDto, DatasetPreviewDto, DeclaredDatasetOriginDto, DiscoveredTechnicalAssetDto)
+    Datasets/            IDatasetSourceAdapter, SqlServerDatasetSourceAdapter, IDeclaredDatasetOriginAdapter, SqlServerDeclaredOriginAdapter, KnownDatasetsRegistry,
+                         DatasetDiscoveryOptions, DiscoveryObjectTypeMapper, DiscoveryObjectsQuery, TechnicalAssetIdentity, ITechnicalAssetDiscoveryAdapter, SqlServerTechnicalAssetDiscoveryAdapter
+    Controllers/         DatasetsController, TechnicalAssetsController
+  Portal.Api.Tests/      Databasfria enhetstester (KnownDatasetsRegistry, DatasetsController, teknisk discovery)
   database/
     sqlserver-preview-poc.sql   Fiktivt schema + seed-data
 ```
@@ -197,6 +337,15 @@ Angular-instans körs på en annan lokal port.
   vädervarningsdatamängden) `demo_metadata.declared_dataset_origins` finns på
   plats — se
   [`../database/sqlserver-weather-warning-declared-origin-poc.sql`](../database/sqlserver-weather-warning-declared-origin-poc.sql).
+* `GET /api/technical-assets` (AB-032) — generisk teknisk discovery inom det
+  konfigurerade `DatasetDiscovery`-scopet (se "Konfigurationsmodell" ovan;
+  kräver lokalt en `appsettings.Development.json`, t.ex. med schema-mönster
+  `demo%`, tabeller och vyer). Returnerar en lista
+  `DiscoveredTechnicalAssetDto` för varje objekt som matchar scopet, inte en
+  `Dataset`. Tar inget schema- eller tabellnamn från klienten. Kräver att
+  databasen och connection string ovan är på plats; ett tomt scope (inga
+  matchande objekt) ger `200` med en tom array, inte ett fel. Saknas
+  `SourceId`/`SchemaPattern` helt ger anropet ett kontrollerat 500-fel.
 
 ## Verifiera
 
@@ -231,6 +380,68 @@ Med databasanslutning:
   ska svara med en tom JSON-array (`[]`), inte ett fel.
 * Öppna `http://localhost:5104/api/datasets/okant-id/preview` respektive
   `/declared-origins` — ska ge `404` på båda, utan SQL-anrop.
+* Skapa först en lokal `appsettings.Development.json` (kopiera från
+  `appsettings.Development.example.json`, se "Konfigurationsmodell" ovan) —
+  utan den ger `/api/technical-assets` ett kontrollerat 500-fel istället för
+  ett resultat.
+* Öppna `http://localhost:5104/api/technical-assets` — ska svara med en
+  JSON-array av tekniska kandidater för samtliga tabeller/vyer i scheman som
+  matchar det lokalt konfigurerade `SchemaPattern` (standard i mallen:
+  `demo%`, dvs. bl.a. `demo_dm.weather_warning_events`, `demo_dm.dim_event`
+  m.fl. från AB-029, samt `demo_metadata.declared_dataset_origins` från
+  AB-031 om det scriptet är kört), förutsatt att motsvarande script är
+  körda i samma databas. Se "Test 2" nedan för det avgörande beviset: att ett
+  manuellt tillagt nytt objekt i samma redan konfigurerade scope upptäcks
+  utan någon ändring i repositoryt.
+
+### Manuell verifiering av generisk discovery (AB-032)
+
+Genomförd och bekräftad av projektägaren (se
+[`../../docs/work-items/AB-032.md`](../../docs/work-items/AB-032.md) för
+fullständig verifieringsrapport, inklusive en ytterligare verifiering mot en
+realistisk extern SQL Server-miljö). Stegen nedan är samma runbook och kan
+återanvändas för framtida regressionskontroll.
+
+**Test 0 – förbered lokal discovery-konfiguration:**
+
+Kopiera `appsettings.Development.example.json` till
+`appsettings.Development.json` (se "Konfigurationsmodell" ovan) om det inte
+redan är gjort.
+
+**Test 1 – befintligt scope:**
+
+1. Kör AB-029:s script (`../database/sqlserver-weather-warning-dw-dm-im-poc.sql`)
+   mot din lokala POC-databas, om det inte redan är gjort.
+2. Starta API:et och öppna `http://localhost:5104/api/technical-assets`.
+3. Bekräfta att svaret innehåller flera objekt vars `schemaName` börjar på
+   `demo_` (t.ex. `demo_dm.dim_event`, `demo_dm.fact_weather_warning_event`,
+   `demo_dm.weather_warning_events`), varav minst ett har `objectType: "Table"`
+   och minst ett har `objectType: "View"`.
+
+**Test 2 – det avgörande beviset:**
+
+1. Skapa i SSMS, i samma lokala POC-databas, en ny, egen, valfri tabell eller
+   vy i ett schema som redan matchar det konfigurerade mönstret (standard:
+   `demo%`), t.ex.:
+
+   ```sql
+   CREATE TABLE demo_dm.my_manual_verification_object (
+       id INT PRIMARY KEY,
+       note NVARCHAR(100)
+   );
+   ```
+
+2. Gör **ingen** ändring i repositoryt: ingen C#-fil, ingen `appsettings.json`,
+   ingen Angular-fil.
+3. Om API:et redan kör: anropa `GET http://localhost:5104/api/technical-assets`
+   på nytt (varje anrop kör en ny discovery mot databasen — ingen omstart
+   krävs).
+4. Bekräfta att svaret nu **även** innehåller
+   `demo_dm.my_manual_verification_object`, med kolumnerna `id`/`int` och
+   `note`/`nvarchar` — utan att du ändrat något i repositoryt.
+5. Städa bort testobjektet i SSMS när du är klar
+   (`DROP TABLE demo_dm.my_manual_verification_object;`) och bekräfta att den
+   försvinner ur nästa discoveryresultat.
 
 Valfritt, för att se resultatet i Angular: kopiera
 `frontend/public/assets/config/runtime-config.local.example.json` till
@@ -268,3 +479,26 @@ justera `apiBaseUrl` vid behov och starta om
   `dataset-weather-warning-events-demo` har ett registrerat ursprung i denna
   POC.
 * Ingen autentisering, auktorisering eller deployment.
+* Generisk teknisk discovery (`GET /api/technical-assets`, AB-032) upptäcker
+  tekniska kandidater inom scope, men publicerar dem inte som `Dataset`- eller
+  `InformationMart`-poster. Ingen koppling till `/data`, Datamarknaden eller
+  frontend finns eller är avsedd i detta AB. Databasnamnet (`Database` i
+  svaret) läses dynamiskt från den aktiva anslutningen (`SELECT DB_NAME()`),
+  inte från konfiguration — se "Konfigurationsmodell" ovan; det finns inget
+  separat databas-/catalog-konfigurationsfält, och discovery kan inte söka
+  över flera databaser. Schemamönstret tolkas som SQL Servers eget `LIKE`-
+  mönster (`%`/`_` är wildcard-tecken), inte som ett reguljärt uttryck — se
+  avsnittet "Schema-mönster med bokstavligt understreck" ovan för hur ett
+  bokstavligt `im_`-prefix uttrycks (`im[_]%`). Att `_`/`im[_]%` binds
+  oförändrat är verifierat databasfritt i `Portal.Api.Tests`
+  (`DiscoveryObjectsQuery`-testerna); att SQL Server faktiskt tolkar
+  `im[_]%` som avsett är dessutom manuellt verifierat mot en riktig SQL
+  Server-anslutning av projektägaren (se
+  [`../../docs/work-items/AB-032.md`](../../docs/work-items/AB-032.md)).
+  Endast metadata (schema, objektnamn, objekttyp, kolumnnamn och
+  SQL-datatyp) hämtas — ingen svensk beskrivning, ägare eller klassning.
+* `GET /api/technical-assets` kör en objektfråga plus **en separat
+  kolumnfråga per upptäckt objekt** (ett N+1-frågemönster). Det är en
+  accepterad avgränsning för denna POC:s begränsade volym — ingen batching,
+  cache eller prestandaoptimering är införd. Bör utvärderas om antalet
+  upptäckta objekt inom ett scope blir stort.

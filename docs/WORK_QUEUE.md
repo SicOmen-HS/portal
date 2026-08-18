@@ -14,6 +14,9 @@
 
 ## Needs Review
 
+- AB-032 - Generisk teknisk SQL Server-discovery inom konfigurerat scope
+  See: docs/work-items/AB-032.md
+
 - AB-031 - Visa deklarerat ursprung för demodatamängd
   See: docs/work-items/AB-031.md
 
