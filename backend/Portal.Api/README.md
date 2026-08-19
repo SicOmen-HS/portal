@@ -502,3 +502,89 @@ justera `apiBaseUrl` vid behov och starta om
   accepterad avgränsning för denna POC:s begränsade volym — ingen batching,
   cache eller prestandaoptimering är införd. Bör utvärderas om antalet
   upptäckta objekt inom ett scope blir stort.
+
+## Container-buildkontrakt (ADR-0007)
+
+Sedan AB-034 finns en produktionstjänlig, miljöoberoende container-
+builddefinition för `Portal.Api`: [`Dockerfile`](Dockerfile). Detta
+implementerar Portal / Data Platforms sida av
+[ADR-0007](../../docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md)s
+kontrakt — **inte** en persistent, deployad instans i Hosting Lab (se
+"Deploymentstatus" nedan).
+
+### Bygga imagen
+
+Byggkontext är `backend/Portal.Api/` (projektet har inga
+`ProjectReference` till `Portal.Api.Tests` eller andra projekt, så det
+räcker som fristående byggkontext). Från repositoryts rot:
+
+```powershell
+docker build -t portal-api:local backend/Portal.Api
+```
+
+Bygget är en multi-stage build: en build-stage med .NET SDK (`dotnet
+publish`), och en runtime-stage baserad enbart på den officiella
+ASP.NET Core-runtimeimagen (`mcr.microsoft.com/dotnet/aspnet:10.0`, ingen
+SDK). Runtime-stagen kör som den icke-root-användare (`app`) som redan
+finns i den imagen sedan .NET 8, och lyssnar på en generisk, containerintern
+port: `8080` (satt via `ASPNETCORE_HTTP_PORTS`, inte en Hosting
+Lab-specifik host-port).
+
+### Runtime-konfigurationskontrakt
+
+Imagen innehåller inga secrets, inga connection strings och ingen
+miljöspecifik `appsettings.*`-fil — endast den versionshanterade,
+miljöneutrala `appsettings.json`. All miljöspecifik konfiguration tillförs
+externt via ASP.NET Core:s redan befintliga, standardmässiga
+konfigurationsmekanismer (miljövariabler och/eller monterad
+konfiguration), t.ex.:
+
+| Nyckel (namn, inte värde) | Syfte |
+| --- | --- |
+| `ConnectionStrings__Default` | SQL Server-anslutning för preview-/discovery-adaptrarna. Tomt värde tillåtet vid start — endast de endpoints som faktiskt kör SQL misslyckas kontrollerat utan den. |
+| `AllowedOrigins__0`, `AllowedOrigins__1`, … | CORS — tillåtna frontend-origins. Behövs normalt inte i en same-origin-deployment (se ADR-0007), men finns kvar som kontrakt. |
+| `DatasetDiscovery__SourceId` | Källidentifierare för generisk teknisk discovery (AB-032). |
+| `DatasetDiscovery__SchemaPattern` | SQL `LIKE`-mönster för vilka scheman discovery får söka i. |
+| `DatasetDiscovery__AllowedObjectTypes__0`, … | Tillåtna objekttyper (`Table`/`View`) för discovery. Har redan en generell default i `appsettings.json`. |
+
+Nyckelnamnen är verifierade mot faktisk kod (`Program.cs`,
+`DatasetDiscoveryOptions`, `appsettings.json`) — inga verkliga värden
+förekommer i repositoryt eller i denna tabell. `ConnectionStrings:Default`
+skrivs som `ConnectionStrings__Default` ovan eftersom ASP.NET Core använder
+dubbla understreck som sektionsavgränsare i miljövariabelnamn.
+
+### Health
+
+`GET /health` (se `Program.cs`) är det generiska health-kontraktet mot
+containerruntimen — kräver ingen SQL Server-anslutning och exponerar ingen
+känslig information. Den officiella `aspnet`-runtimeimagen innehåller varken
+`curl` eller `wget`, så inget Docker `HEALTHCHECK` har lagts till i
+`Dockerfile` enbart för att tillfredsställa det (det hade krävt en onödig
+extra runtime-dependency). Hosting Lab kan istället använda `/health` direkt
+i sin Compose-/reverse-proxy-/övervakningskonfiguration.
+
+### `.dockerignore`
+
+[`Portal.Api/.dockerignore`](.dockerignore) utesluter bland annat
+`appsettings.Development.json`, `appsettings.Local.json` och
+`appsettings.Production.json` från byggkontexten. Detta är inte bara
+städning: `dotnet publish` kopierar som standard **alla**
+`appsettings*.json`-filer som ligger i projektkatalogen till
+publish-outputen, inklusive en utvecklares lokala, gitignorade
+`appsettings.Development.json` (som t.ex. kan innehålla en lokal
+connection string). Utan `.dockerignore`-undantaget skulle en sådan lokal
+fil — om den råkar finnas på byggmaskinen — kunna bakas in i imagen.
+Verifierat lokalt: en `dotnet publish` utan detta skydd kopierade faktiskt
+med den lokala `appsettings.Development.json` till publish-outputen (se
+handoff för AB-034).
+
+### Deploymentstatus
+
+**Implementerat och tekniskt verifierat i detta AB:** ett reproducerbart,
+miljöoberoende container-buildkontrakt för `Portal.Api`.
+
+**Inte gjort i detta AB:** ingen persistent, deployad instans finns i
+Hosting Lab. Den faktiska Compose-runtimen, nätverket, reverse proxyn,
+secrets-injektionen och serverdriften ägs av Hosting Lab och ligger utanför
+detta repository (ADR-0007). Portalen körs fortsatt lokalt via `dotnet run`
+i normal utveckling.

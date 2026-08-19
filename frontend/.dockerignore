@@ -1,0 +1,29 @@
+# Byggkontext för frontend/Dockerfile.
+# Se docs/05_Konfiguration.md och docs/07_AI_Instruktioner.md - inga
+# secrets eller miljöspecifika filer ska nå build context/image-lager.
+
+.git
+.gitignore
+
+# Beroenden och byggoutput byggs på nytt inne i containern
+node_modules/
+dist/
+.angular/
+coverage/
+
+# Lokal, ej versionshanterad runtime-config-override (gitignorad, kan
+# innehålla en utvecklares lokala API-adress)
+public/assets/config/runtime-config.local.json
+
+# IDE / systemfiler
+.vscode/
+.idea/
+*.suo
+.DS_Store
+Thumbs.db
+
+# Dokumentation och Docker-relaterade filer behövs inte i imagen
+README.md
+Dockerfile
+.dockerignore
+nginx.conf

@@ -1,6 +1,6 @@
 # Data- och analysportalen Project Status
 
-Last reviewed: `2026-08-19` (AB-035)
+Last reviewed: `2026-08-19` (AB-034)
 
 ## Current Phase
 
@@ -12,11 +12,11 @@ configuration-driven link-resolution mechanism, so it can be cloned and run full
 offline. A .NET Web API backend (`Portal.Api`) also exists as a local proof-of-concept
 with a local SQL Server integration (AB-027, AB-030, AB-031, AB-032), but there is no
 application database and no real integrations with other external systems. Frontend
-runs as a verified persistent Hosting Lab instance (non-containerized); `Portal.Api`
-has no persistent, deployed instance yet — see "Current Architecture" below.
-ADR-0007 (accepted) decides the containerized target; a Portal-owned container
-build contract was started on a separate branch (AB-034) but is parked before merge
-and not yet part of `main`.
+runs as a verified persistent Hosting Lab interim instance (non-containerized);
+`Portal.Api` has no persistent, deployed instance yet — see "Current Architecture"
+below. ADR-0007 (accepted) defines the containerized target. The Portal-owned
+container build contract for both frontend and `Portal.Api` is implemented in AB-034;
+remaining Docker build/run smoke verification is pending before AB-034 is completed.
 
 ## Current Focus
 
@@ -58,6 +58,15 @@ Implemented and available:
   metadata/preview, declared origin and generic technical SQL Server asset discovery
   (AB-027, AB-030, AB-031, AB-032), plus a `/health` endpoint. See
   `backend/Portal.Api/README.md`. No persistent/deployed instance exists yet.
+- Container build definitions for both frontend and backend (`frontend/Dockerfile`,
+  `backend/Portal.Api/Dockerfile`), implementing Portal / Data Platform's side of
+  ADR-0007's container contract (AB-034): reproducible, environment-independent
+  images, an externally replaceable frontend runtime-config path, and a documented
+  backend runtime-configuration contract. The underlying `dotnet publish`/`ng build`
+  steps are verified locally; the Docker image build/run smoke tests themselves still
+  require a container runtime to be executed (see `backend/Portal.Api/README.md` and
+  `frontend/README.md` for the exact commands). No persistent instance is deployed in
+  Hosting Lab.
 
 Not currently implemented or not yet production-ready:
 
@@ -71,8 +80,9 @@ Not currently implemented or not yet production-ready:
   configuration-driven URL resolution, data-classification validation and search
   behavior. It is not yet broad production-level coverage.
 - A Portal-owned container build contract for ADR-0007's target deployment model
-  (frontend and backend Dockerfiles) was started on a separate, not-yet-merged
-  branch (AB-034); parked before merge, not yet part of `main`.
+  is implemented in AB-034 for both frontend and `Portal.Api`. Remaining Docker
+  build/run smoke verification is pending before review/completion; the
+  containerized persistent portal instance is not yet deployed.
 
 ## Current Architecture
 
@@ -80,8 +90,7 @@ Not currently implemented or not yet production-ready:
 | --- | --- | --- |
 | Application | Angular (standalone, signals) + Bootstrap 5/SCSS frontend; .NET Web API backend (`Portal.Api`) as a local proof-of-concept | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md`, `backend/Portal.Api/README.md` |
 | Data | Fictional local frontend mockdata (JSON); local SQL Server proof-of-concept for backend datasets/discovery; no application database yet | `frontend/public/assets/mock/README.md`, `backend/Portal.Api/README.md` |
-| Hosting | Target deployment model is decided (ADR-0007, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Accepterad: container-based). A Portal-owned container build contract was started on a separate branch (AB-034) but is parked before merge, not yet part of `main`. As an interim, Hosting Lab runs a verified persistent, non-containerized frontend instance with automatic restart; `Portal.Api` is not included. This is a Hosting Lab-owned runtime choice, not a change to the ADR-0007 target | `docs/10_Release_och_deployment.md`, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` |
-
+| Hosting | Target deployment model is decided (ADR-0007, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Accepterad: container-based). The Portal-owned container build contract for frontend and `Portal.Api` is implemented in AB-034; remaining Docker build/run smoke verification is pending and the containerized portal instance is not yet deployed. As an interim, Hosting Lab runs a verified persistent, non-containerized frontend instance with automatic restart; `Portal.Api` is not included in the interim. The actual persistent container runtime remains separate Hosting Lab-owned work | `docs/10_Release_och_deployment.md`, `backend/Portal.Api/README.md`, `frontend/README.md` |
 Keep this summary factual. Record approved reasoning in `DECISIONS.md` and technical
 detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
 
@@ -103,13 +112,13 @@ detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
 
 ## Next Major Milestones
 
-- Resume AB-034 (container build contract, currently parked before merge) when
-  explicitly decided: merge it, complete outstanding Docker build/run verification,
-  and move it to review/completion.
-- Hosting Lab-owned follow-up: the actual Compose composition, reverse-proxy
-  configuration for same-origin exposure and secrets injection for a containerized,
-  persistent portal instance in the lab environment, superseding the current
-  non-container interim instance. This is explicitly outside the Portal repository.
+- Complete AB-034's remaining Docker build/run smoke verification, then move the
+  container build contract through review/completion and merge.
+- Hosting Lab-owned follow-up to ADR-0007/AB-034: establish the actual Compose
+  composition, persistent runtime, reverse-proxy configuration for same-origin
+  exposure and secrets injection for both frontend and `Portal.Api`, superseding the
+  current non-container frontend interim instance. This is explicitly outside the
+  Portal repository and outside AB-034's scope.
 - Design and implement the PostgreSQL application database
   (`docs/04_Systemarkitektur.md`), once approved via a work item and, if it changes
   architecture, an ADR.
