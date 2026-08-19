@@ -111,10 +111,22 @@ Frontend och backend bör kunna paketeras och driftsättas som separata komponen
 Utöver den framtida produktionsmodellen ovan finns ett separat, tidigare beslut om en
 persistent portalinstans i en jobb-liknande labbmiljö, se
 `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` (status
-Föreslagen). Labbmiljöinstansen är avsedd att vara containerbaserad och ligga i linje
-med denna dokumentation, men dess faktiska drift (runtime, nätverk, reverse proxy,
-secrets-injektion) ägs av en separat Hosting Lab-funktion utanför detta repository och
-utanför detta dokuments mandat.
+Accepterad). Den beslutade målbilden för labbmiljöinstansen är containerbaserad och
+ligger i linje med denna dokumentation, men dess faktiska drift (runtime, nätverk,
+reverse proxy, secrets-injektion) ägs av en separat Hosting Lab-funktion utanför
+detta repository och utanför detta dokuments mandat.
+
+Ett Portal-ägt container-buildkontrakt för denna målbild har påbörjats på en separat,
+ännu inte mergead branch (AB-034), men är pausat före merge och ingår därför inte i
+detta repositorys nuvarande `main`.
+
+# Interim: persistent frontend i labbmiljön
+
+Som ett separat runtime-läge, etablerat efter och inte i konflikt med ADR-0007, kör
+Hosting Lab en verifierad persistent, icke-containeriserad frontendinstans i
+labbmiljön, med automatisk återstart. `Portal.Api` ingår inte i denna interimlösning.
+Detta är en Hosting Lab-ägd driftdetalj inom den ansvarsgräns ADR-0007 redan
+definierar - inte en ändring av ADR-0007:s beslutade, containerbaserade målbild.
 
 # Huvudkomponenter vid deployment
 

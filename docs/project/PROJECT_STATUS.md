@@ -1,6 +1,6 @@
 # Data- och analysportalen Project Status
 
-Last reviewed: `2026-08-18`
+Last reviewed: `2026-08-19` (AB-035)
 
 ## Current Phase
 
@@ -11,9 +11,12 @@ and functional prototype driven entirely by fictional mockdata and a
 configuration-driven link-resolution mechanism, so it can be cloned and run fully
 offline. A .NET Web API backend (`Portal.Api`) also exists as a local proof-of-concept
 with a local SQL Server integration (AB-027, AB-030, AB-031, AB-032), but there is no
-application database and no real integrations with other external systems, and no
-persistent/deployed instance of either frontend or backend yet — see "Current
-Architecture" below and ADR-0007 (proposed).
+application database and no real integrations with other external systems. Frontend
+runs as a verified persistent Hosting Lab instance (non-containerized); `Portal.Api`
+has no persistent, deployed instance yet — see "Current Architecture" below.
+ADR-0007 (accepted) decides the containerized target; a Portal-owned container
+build contract was started on a separate branch (AB-034) but is parked before merge
+and not yet part of `main`.
 
 ## Current Focus
 
@@ -67,6 +70,9 @@ Not currently implemented or not yet production-ready:
 - A small automated frontend test suite exists and covers application creation,
   configuration-driven URL resolution, data-classification validation and search
   behavior. It is not yet broad production-level coverage.
+- A Portal-owned container build contract for ADR-0007's target deployment model
+  (frontend and backend Dockerfiles) was started on a separate, not-yet-merged
+  branch (AB-034); parked before merge, not yet part of `main`.
 
 ## Current Architecture
 
@@ -74,7 +80,7 @@ Not currently implemented or not yet production-ready:
 | --- | --- | --- |
 | Application | Angular (standalone, signals) + Bootstrap 5/SCSS frontend; .NET Web API backend (`Portal.Api`) as a local proof-of-concept | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md`, `backend/Portal.Api/README.md` |
 | Data | Fictional local frontend mockdata (JSON); local SQL Server proof-of-concept for backend datasets/discovery; no application database yet | `frontend/public/assets/mock/README.md`, `backend/Portal.Api/README.md` |
-| Hosting | Local development only (`ng serve` / `dotnet run`); no persistent deployment yet — deployment model proposed in ADR-0007 (`docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Föreslagen, pending owner approval) | `docs/10_Release_och_deployment.md` |
+| Hosting | Target deployment model is decided (ADR-0007, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Accepterad: container-based). A Portal-owned container build contract was started on a separate branch (AB-034) but is parked before merge, not yet part of `main`. As an interim, Hosting Lab runs a verified persistent, non-containerized frontend instance with automatic restart; `Portal.Api` is not included. This is a Hosting Lab-owned runtime choice, not a change to the ADR-0007 target | `docs/10_Release_och_deployment.md`, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` |
 
 Keep this summary factual. Record approved reasoning in `DECISIONS.md` and technical
 detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
@@ -97,9 +103,13 @@ detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
 
 ## Next Major Milestones
 
-- Review and, if approved, implement ADR-0007's proposed containerized deployment
-  artifacts (e.g. Dockerfiles) for a persistent portal instance in the lab environment,
-  as a separately approved implementation work item.
+- Resume AB-034 (container build contract, currently parked before merge) when
+  explicitly decided: merge it, complete outstanding Docker build/run verification,
+  and move it to review/completion.
+- Hosting Lab-owned follow-up: the actual Compose composition, reverse-proxy
+  configuration for same-origin exposure and secrets injection for a containerized,
+  persistent portal instance in the lab environment, superseding the current
+  non-container interim instance. This is explicitly outside the Portal repository.
 - Design and implement the PostgreSQL application database
   (`docs/04_Systemarkitektur.md`), once approved via a work item and, if it changes
   architecture, an ADR.
