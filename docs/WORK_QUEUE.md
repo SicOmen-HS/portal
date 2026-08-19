@@ -14,6 +14,8 @@
 
 ## Needs Review
 
+- AB-034 - Implementera container-buildkontrakt för portalinstansen
+  See: docs/work-items/AB-034.md
 
 - AB-032 - Generisk teknisk SQL Server-discovery inom konfigurerat scope
   See: docs/work-items/AB-032.md
