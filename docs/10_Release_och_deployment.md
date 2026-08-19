@@ -116,9 +116,17 @@ ligger i linje med denna dokumentation, men dess faktiska drift (runtime, nätve
 reverse proxy, secrets-injektion) ägs av en separat Hosting Lab-funktion utanför
 detta repository och utanför detta dokuments mandat.
 
-Ett Portal-ägt container-buildkontrakt för denna målbild har påbörjats på en separat,
-ännu inte mergead branch (AB-034), men är pausat före merge och ingår därför inte i
-detta repositorys nuvarande `main`.
+I AB-034 är Portal / Data Platforms sida av containerkontraktet implementerad:
+miljöoberoende container-builddefinitioner för `Portal.Api`
+(`backend/Portal.Api/Dockerfile`) och Angular-frontenden (`frontend/Dockerfile`),
+med externt ersättningsbar runtime-konfiguration. Se `backend/Portal.Api/README.md`
+respektive `frontend/README.md` för build- och runtimekontraktet. Den återstående
+Docker build/run-smoke-verifieringen genomförs innan AB-034 slutförs.
+
+Detta innebär inte att den containerbaserade portalinstansen är deployad i Hosting
+Lab. Den faktiska Compose-kompositionen, reverse-proxy-konfigurationen,
+secrets-injektionen och den persistenta driften av frontend och `Portal.Api` är ett
+separat Hosting Lab-ägt uppföljningssteg.
 
 # Interim: persistent frontend i labbmiljön
 

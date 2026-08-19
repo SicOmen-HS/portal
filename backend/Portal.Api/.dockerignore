@@ -1,0 +1,40 @@
+# Byggkontext för backend/Portal.Api/Dockerfile.
+# Se docs/05_Konfiguration.md och docs/07_AI_Instruktioner.md - inga
+# secrets eller miljöspecifika filer ska nå build context/image-lager.
+
+**/.git
+**/.gitignore
+
+# .NET build output (byggs på nytt inne i containern)
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Lokal, ej versionshanterad konfiguration och secrets
+appsettings.Local.json
+appsettings.Development.json
+appsettings.Production.json
+secrets.json
+.env
+.env.*
+
+# Certifikat och nycklar
+*.pfx
+*.pem
+*.key
+*.crt
+*.cer
+
+# IDE / systemfiler
+.vscode/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# Dokumentation och Docker-relaterade filer behövs inte i imagen
+README.md
+Dockerfile
+.dockerignore

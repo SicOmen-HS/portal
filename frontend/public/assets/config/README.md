@@ -112,3 +112,21 @@ utvecklarverktyg – därför gäller samma regler som för öppen källkod (se
 Se `docs/13_Utvecklarguide.md#lägga-till-ny-systemlänk` för en steg-för-steg-guide.
 Kom ihåg att lägga till nyckeln i **både** denna fil och
 `config/examples/runtime-config.example.json`.
+
+## Container-runtimekontrakt (ADR-0007)
+
+Sedan AB-034 byggs frontenden även som en containerimage (se
+`frontend/README.md` och `frontend/Dockerfile`). I den byggda imagen hamnar
+den här filen på:
+
+```text
+/usr/share/nginx/html/assets/config/runtime-config.json
+```
+
+Imagen innehåller den versionshanterade default-filen ovan (säkra
+exempelvärden). En miljöspecifik deployment ersätter filen på exakt denna
+sökväg **externt vid körning** (t.ex. via en fil-mount), utan att bygga om
+imagen. Vilken mekanism som faktiskt monterar filen i Compose ägs av
+Hosting Lab, inte av detta repository. `apiBaseUrl: "/api"` (relativ) i
+default-filen bevaras oförändrad och stödjer same-origin-exponering
+(`/` → frontend, `/api/...` → `Portal.Api`).

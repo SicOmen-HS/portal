@@ -1,6 +1,6 @@
 # Data- och analysportalen Project Context
 
-Last reviewed: `2026-08-18`
+Last reviewed: `2026-08-18` (AB-034)
 
 ## Purpose
 
@@ -26,7 +26,9 @@ that portal plus its full governing documentation.
   documentation (reference + operational), Worksmith work-item tooling.
 - Current limitations: no PostgreSQL application database, no real system integrations
   beyond the local SQL Server proof-of-concept, no authentication, no persistent/
-  deployed portal instance yet (deployment model proposed in ADR-0007).
+  deployed portal instance yet. The deployment model itself is decided (ADR-0007,
+  accepted, container-based) and Portal / Data Platform's container build contract is
+  implemented (AB-034); the persistent Hosting Lab instance is still not deployed.
 
 Authoritative current state: [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
@@ -52,7 +54,7 @@ cannot remain safely summarized.
 | --- | --- | --- |
 | Application | Angular (standalone, signals) + Bootstrap 5/SCSS frontend; .NET Web API backend (`Portal.Api`) as a local proof-of-concept | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md`, `backend/Portal.Api/README.md` |
 | Data | Fictional local frontend mockdata (JSON); local SQL Server proof-of-concept for backend; no application database yet | `frontend/public/assets/mock/README.md`, `backend/Portal.Api/README.md` |
-| Delivery | Local `ng serve` / `dotnet run`; no deployment pipeline yet; deployment model proposed in ADR-0007 | `docs/10_Release_och_deployment.md`, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` |
+| Delivery | Local `ng serve` / `dotnet run`; no deployment pipeline yet; deployment model decided (ADR-0007, accepted, container-based) and Portal-owned container build contract implemented (AB-034); no persistent Hosting Lab instance yet | `docs/10_Release_och_deployment.md`, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` |
 
 ## Authority And Discovery
 
@@ -76,8 +78,9 @@ and may be stale.
   `DECISIONS.md`.
 - For delivery: read `docs/10_Release_och_deployment.md` (target production model, not
   yet in active use) and, for the labbmiljö-specific persistent-instance decision,
-  `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` (Föreslagen —
-  no deployment pipeline or implementation exists yet).
+  `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md` (Accepterad;
+  Portal-owned container build contract implemented per AB-034 — no persistent Hosting
+  Lab deployment pipeline exists yet).
 
 Request missing authoritative context rather than guessing. Load only what the
 current task needs.

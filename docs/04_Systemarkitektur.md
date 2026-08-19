@@ -515,7 +515,7 @@ Portalen ska kunna köras i organisationens interna on-prem-miljö.
 
 Ett separat, tidigare deploymentsteg - en persistent portalinstans i en jobb-liknande
 labbmiljö - beslutas i `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`
-(status Föreslagen). Det beslutet är containerbaserat och avsett att ligga i linje med,
+(status Accepterad). Det beslutet är containerbaserat och avsett att ligga i linje med,
 men föregå, målbilden nedan.
 
 ## Relevanta plattformar

@@ -85,6 +85,82 @@ Från repositoryts rot:
 npm.cmd --prefix frontend test -- --watch=false
 ```
 
+## Container-buildkontrakt (ADR-0007)
+
+Sedan AB-034 finns en produktionstjänlig, miljöoberoende container-
+builddefinition för frontenden: [`Dockerfile`](Dockerfile). Detta
+implementerar Portal / Data Platforms sida av
+[ADR-0007](../docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md)s
+kontrakt — **inte** en persistent, deployad instans i Hosting Lab.
+
+### Bygga imagen
+
+Byggkontext är `frontend/`. Från repositoryts rot:
+
+```powershell
+docker build -t portal-frontend:local frontend
+```
+
+Bygget är en multi-stage build:
+
+1. **Build-stage** (`node:22-alpine`): `npm ci` mot den versionshanterade
+   `package-lock.json`, följt av repositoryts faktiska production-build
+   (`npm run build`, dvs. `ng build`). Ingår inte i den slutliga imagen.
+2. **Runtime-stage** (`nginxinc/nginx-unprivileged:1.27-alpine`): serverar
+   enbart den redan byggda, statiska artefakten. Ingen Node-runtime och
+   ingen `ng serve` i runtime-stagen.
+
+**Vald statisk webbserver:** `nginx-unprivileged` — en officiell nginx-
+variant byggd för att köra icke-root och lyssna på en icke-privilegierad
+port (`8080`) utan extra användar-/rättighetsuppsättning, vilket också
+ligger i linje med portalens dokumenterade framtida OpenShift-riktning
+(`docs/04_Systemarkitektur.md`). Servern konfigureras med en minimal
+[`nginx.conf`](nginx.conf) som ger Angular SPA-fallback (alla routes utan
+matchande fil faller tillbaka till `index.html`, så direkta djuplänkar
+fungerar). Detta är, i linje med ADR-0007, medvetet en
+implementationsdetalj — ingen reverse proxy mot `/api` implementeras i
+denna container; den externa same-origin-routingen ägs av Hosting Lab.
+
+### Runtime-config-kontrakt
+
+Angular CLI 22:s application-builder publicerar production-bygget under
+`dist/frontend/browser/` (verifierat lokalt), vilket blir
+`/usr/share/nginx/html/` i runtime-imagen. Den exakta containersökvägen för
+runtime-konfigurationen är därför:
+
+```text
+/usr/share/nginx/html/assets/config/runtime-config.json
+```
+
+Imagen innehåller den versionshanterade, säkra
+default-`runtime-config.json` (se
+[`public/assets/config/README.md`](public/assets/config/README.md)) med
+`apiBaseUrl: "/api"` (relativ, same-origin-kompatibel). För en miljöspecifik
+deployment ska Hosting Lab ersätta filen på ovanstående containersökväg
+externt vid körning (t.ex. via en fil-mount) — **utan att bygga om
+imagen**. Detta repository definierar enbart kontraktet (vilken fil, vilken
+sökväg, vilken struktur); den faktiska mount-/leveransmekanismen i Compose
+ägs av Hosting Lab.
+
+### `.dockerignore`
+
+[`.dockerignore`](.dockerignore) utesluter bland annat `node_modules/`,
+`dist/`, `.angular/` och den gitignorade, lokala
+`public/assets/config/runtime-config.local.json` från byggkontexten, så att
+en utvecklares lokala API-override aldrig kan hamna i imagen.
+
+### Deploymentstatus
+
+**Implementerat och tekniskt verifierat i detta AB:** ett reproducerbart,
+miljöoberoende container-buildkontrakt för frontenden, inklusive extern
+runtime-config-ersättning utan rebuild.
+
+**Inte gjort i detta AB:** ingen persistent, deployad instans finns i
+Hosting Lab. Den faktiska Compose-runtimen, reverse proxyn och
+secrets-/konfigurationsinjektionen ägs av Hosting Lab och ligger utanför
+detta repository (ADR-0007). Portalen körs fortsatt lokalt via `ng serve` i
+normal utveckling.
+
 ## Mer information
 
 Genererat med [Angular CLI](https://github.com/angular/angular-cli) 22. För kommandoreferens, se
