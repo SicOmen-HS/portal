@@ -33,9 +33,12 @@ RUN dotnet publish "Portal.Api.csproj" \
 
 # Normaliserar filrättigheter oberoende av källcheckoutens mode (kan variera
 # mellan build-miljöer, t.ex. en restriktiv umask vid en servercheckout).
-# Versal X lägger endast till exekveringsbiten på kataloger eller filer som
-# redan har den för någon - appsettings.json m.fl. blir läsbara, inte körbara.
-RUN chmod -R a+rX /app/publish
+# Filer och kataloger hanteras separat: filer får enbart läsrättighet
+# tillagd (befintliga exekveringsbitar, t.ex. på Microsoft.Data.SqlClient.dll,
+# ändras inte och inga nya läggs till på t.ex. appsettings.json), kataloger
+# får läs- och traverseringsrättighet.
+RUN find /app/publish -type f -exec chmod a+r {} + \
+    && find /app/publish -type d -exec chmod a+rx {} +
 
 # ---- Runtime-stage ----------------------------------------------------------
 # Enbart ASP.NET Core-runtime - ingen SDK.

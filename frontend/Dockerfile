@@ -31,10 +31,11 @@ RUN npm run build
 
 # Normaliserar filrättigheter oberoende av källcheckoutens mode (kan variera
 # mellan build-miljöer, t.ex. en restriktiv umask vid en servercheckout).
-# Versal X lägger endast till exekveringsbiten på kataloger eller filer som
-# redan har den för någon - vanliga innehållsfiler (JS/CSS/HTML/JSON) blir
-# läsbara, inte körbara.
-RUN chmod -R a+rX /app/dist/frontend/browser
+# Filer och kataloger hanteras separat: filer får enbart läsrättighet
+# tillagd (befintliga exekveringsbitar, t.ex. på binärer, ändras inte och
+# inga nya läggs till), kataloger får läs- och traverseringsrättighet.
+RUN find /app/dist/frontend/browser -type f -exec chmod a+r {} + \
+    && find /app/dist/frontend/browser -type d -exec chmod a+rx {} +
 
 # ---- Runtime-stage -------------------------------------------------------
 # Enbart en liten, produktionstjänlig statisk webbserver - ingen
