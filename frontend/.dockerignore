@@ -22,8 +22,9 @@ public/assets/config/runtime-config.local.json
 .DS_Store
 Thumbs.db
 
-# Dokumentation och Docker-relaterade filer behövs inte i imagen
+# Dokumentation och Docker-relaterade filer behövs inte i imagen.
+# OBS: nginx.conf undantas INTE - Dockerfiles final-stage kopierar in den
+# explicit (COPY nginx.conf ...), så den måste finnas i build-kontexten.
 README.md
 Dockerfile
 .dockerignore
-nginx.conf

@@ -63,10 +63,12 @@ Implemented and available:
   ADR-0007's container contract (AB-034): reproducible, environment-independent
   images, an externally replaceable frontend runtime-config path, and a documented
   backend runtime-configuration contract. The underlying `dotnet publish`/`ng build`
-  steps are verified locally; the Docker image build/run smoke tests themselves still
-  require a container runtime to be executed (see `backend/Portal.Api/README.md` and
-  `frontend/README.md` for the exact commands). No persistent instance is deployed in
-  Hosting Lab.
+  steps are verified locally, and the Docker image build/run smoke tests for both
+  images have since been completed and passed on the Hosting Lab server (2026-08-20;
+  see `docs/work-items/AB-034.md` for full results). A real build-context bug found
+  during that verification (`frontend/.dockerignore` incorrectly excluding
+  `nginx.conf`, which the Dockerfile copies into the image) has been fixed. No
+  persistent instance is deployed in Hosting Lab.
 
 Not currently implemented or not yet production-ready:
 
@@ -80,9 +82,9 @@ Not currently implemented or not yet production-ready:
   configuration-driven URL resolution, data-classification validation and search
   behavior. It is not yet broad production-level coverage.
 - A Portal-owned container build contract for ADR-0007's target deployment model
-  is implemented in AB-034 for both frontend and `Portal.Api`. Remaining Docker
-  build/run smoke verification is pending before review/completion; the
-  containerized persistent portal instance is not yet deployed.
+  is implemented in AB-034 for both frontend and `Portal.Api`, with Docker
+  build/run smoke verification completed and passed on the Hosting Lab server
+  (2026-08-20); the containerized persistent portal instance is not yet deployed.
 
 ## Current Architecture
 
@@ -90,7 +92,7 @@ Not currently implemented or not yet production-ready:
 | --- | --- | --- |
 | Application | Angular (standalone, signals) + Bootstrap 5/SCSS frontend; .NET Web API backend (`Portal.Api`) as a local proof-of-concept | `docs/04_Systemarkitektur.md`, `docs/13_Utvecklarguide.md`, `backend/Portal.Api/README.md` |
 | Data | Fictional local frontend mockdata (JSON); local SQL Server proof-of-concept for backend datasets/discovery; no application database yet | `frontend/public/assets/mock/README.md`, `backend/Portal.Api/README.md` |
-| Hosting | Target deployment model is decided (ADR-0007, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Accepterad: container-based). The Portal-owned container build contract for frontend and `Portal.Api` is implemented in AB-034; remaining Docker build/run smoke verification is pending and the containerized portal instance is not yet deployed. As an interim, Hosting Lab runs a verified persistent, non-containerized frontend instance with automatic restart; `Portal.Api` is not included in the interim. The actual persistent container runtime remains separate Hosting Lab-owned work | `docs/10_Release_och_deployment.md`, `backend/Portal.Api/README.md`, `frontend/README.md` |
+| Hosting | Target deployment model is decided (ADR-0007, `docs/adr/0007-containerbaserad-deployment-persistent-portalinstans.md`, status Accepterad: container-based). The Portal-owned container build contract for frontend and `Portal.Api` is implemented in AB-034, with Docker build/run smoke verification completed and passed on the Hosting Lab server; the containerized portal instance is not yet deployed. As an interim, Hosting Lab runs a verified persistent, non-containerized frontend instance with automatic restart; `Portal.Api` is not included in the interim. The actual persistent container runtime remains separate Hosting Lab-owned work | `docs/10_Release_och_deployment.md`, `backend/Portal.Api/README.md`, `frontend/README.md` |
 Keep this summary factual. Record approved reasoning in `DECISIONS.md` and technical
 detail in `docs/04_Systemarkitektur.md` or `docs/13_Utvecklarguide.md`.
 
