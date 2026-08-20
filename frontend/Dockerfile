@@ -29,6 +29,14 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# Normaliserar filrättigheter oberoende av källcheckoutens mode (kan variera
+# mellan build-miljöer, t.ex. en restriktiv umask vid en servercheckout).
+# Filer och kataloger hanteras separat: filer får enbart läsrättighet
+# tillagd (befintliga exekveringsbitar, t.ex. på binärer, ändras inte och
+# inga nya läggs till), kataloger får läs- och traverseringsrättighet.
+RUN find /app/dist/frontend/browser -type f -exec chmod a+r {} + \
+    && find /app/dist/frontend/browser -type d -exec chmod a+rx {} +
+
 # ---- Runtime-stage -------------------------------------------------------
 # Enbart en liten, produktionstjänlig statisk webbserver - ingen
 # Node-runtime, ingen `ng serve`. nginx-unprivileged körs icke-root och
@@ -37,7 +45,7 @@ RUN npm run build
 # OpenShift-riktning (docs/04_Systemarkitektur.md).
 FROM nginxinc/nginx-unprivileged:1.27-alpine AS final
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --chmod=644 nginx.conf /etc/nginx/conf.d/default.conf
 
 # Angular CLI 22:s application-builder publicerar produktionsbygget under
 # dist/<projektnamn>/browser/ (projektnamnet "frontend" i angular.json) -
