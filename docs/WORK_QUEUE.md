@@ -14,8 +14,6 @@
 
 ## Needs Review
 
-- AB-034 - Implementera container-buildkontrakt för portalinstansen
-  See: docs/work-items/AB-034.md
 
 - AB-035 - Dokumentera interim persistent portalinstans i labbmiljön
   See: docs/work-items/AB-035.md
@@ -40,6 +38,10 @@
   See: docs/work-items/AB-016.md
 
 ## Done
+
+- AB-034 - Implementera container-buildkontrakt för portalinstansen
+  See: docs/work-items/AB-034.md
+  Completed: 2026-08-20
 
 - AB-033 - Besluta deploymentmodell för persistent portalinstans i labbmiljön
   See: docs/work-items/AB-033.md
