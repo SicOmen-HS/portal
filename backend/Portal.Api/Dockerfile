@@ -31,6 +31,12 @@ RUN dotnet publish "Portal.Api.csproj" \
     --no-restore \
     /p:UseAppHost=false
 
+# Normaliserar filrättigheter oberoende av källcheckoutens mode (kan variera
+# mellan build-miljöer, t.ex. en restriktiv umask vid en servercheckout).
+# Versal X lägger endast till exekveringsbiten på kataloger eller filer som
+# redan har den för någon - appsettings.json m.fl. blir läsbara, inte körbara.
+RUN chmod -R a+rX /app/publish
+
 # ---- Runtime-stage ----------------------------------------------------------
 # Enbart ASP.NET Core-runtime - ingen SDK.
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final

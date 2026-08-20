@@ -29,6 +29,13 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# Normaliserar filrättigheter oberoende av källcheckoutens mode (kan variera
+# mellan build-miljöer, t.ex. en restriktiv umask vid en servercheckout).
+# Versal X lägger endast till exekveringsbiten på kataloger eller filer som
+# redan har den för någon - vanliga innehållsfiler (JS/CSS/HTML/JSON) blir
+# läsbara, inte körbara.
+RUN chmod -R a+rX /app/dist/frontend/browser
+
 # ---- Runtime-stage -------------------------------------------------------
 # Enbart en liten, produktionstjänlig statisk webbserver - ingen
 # Node-runtime, ingen `ng serve`. nginx-unprivileged körs icke-root och
@@ -37,7 +44,7 @@ RUN npm run build
 # OpenShift-riktning (docs/04_Systemarkitektur.md).
 FROM nginxinc/nginx-unprivileged:1.27-alpine AS final
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --chmod=644 nginx.conf /etc/nginx/conf.d/default.conf
 
 # Angular CLI 22:s application-builder publicerar produktionsbygget under
 # dist/<projektnamn>/browser/ (projektnamnet "frontend" i angular.json) -
